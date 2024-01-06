@@ -1,0 +1,20 @@
+{"name": "stylease",
+"version": "1.0.0",
+"description": "",
+"main": "index.js",
+"private": true,
+"scripts": {
+  "lerna:clean": "lerna clean --yes",
+  "start": "lerna run dev",
+  "dev:app": "yarn workspace app run dev",
+  "dev:home": "yarn workspace home run dev",
+  "version": "lerna version --conventional-commits --yes"
+},
+  "devDependencies": {
+    "lerna": "^8.0.2"
+  },
+  "workspaces": [
+    "home",
+    "app"
+  ]
+}
