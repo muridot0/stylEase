@@ -1,0 +1,43 @@
+---
+import ThemeToggle from "./ThemeToggle";
+---
+
+<header class="container flex items-center justify-between">
+  <div class="flex items-center">
+    <picture class="mr-4">
+      <source srcset="stylEase-light.svg" media="(prefers-color-scheme: light)" />
+      <source srcset="stylEase-dark.svg" media="(prefers-color-scheme: dark)" />
+      <img src="/stylEase-light.svg" alt="stylEase" />
+    </picture>
+    <h2>stylEase</h2>
+  </div>
+  <div class="flex">
+    <ThemeToggle client:only="preact" />
+    <!-- <button class="mr-8 flex items-center"> 
+      <span class="material-symbols-rounded mr-2 text-base">light_mode</span>
+      Light mode
+    </button> -->
+    <a href="#" class="flex">
+      <img class="mr-2" src="/github-dark.svg" alt="github-logo" />
+      <p>Github</p>
+    </a>
+  </div>
+</header>
+
+<!-- <script is:inline>
+  let BgTheme = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+  })();
+
+  const logo = document.querySelector('img[alt="stylEase"]')
+
+  if(logo) {
+    if (BgTheme === "light") {
+      logo.src = "/stylEase-light.svg";
+    } else {
+      logo.src = "/stylEase-dark.svg";
+    }
+  }
+</script> -->

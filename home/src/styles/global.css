@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Chilanka&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: 'hyperwave';
+  src: url(/Hyperwave.otf);
+}
+
+:root {
+  color-scheme: light dark;
+  font-family: 'Chilanka';
+  box-sizing: border-box;
+  font-size: 16px;
+  --home-bg-color: #E5E5E5;
+  --home-font-color: #222428;
+}
+
+body {
+  background-color: var(--home-bg-color);
+  color: var(--home-font-color);
+  min-height: 100vh;
+}
+
+.dark {
+  --home-bg-color: #222428;
+  --home-font-color: #EEEFEF;
+}
+
+h1 {
+  font-family: 'hyperwave';
+  font-weight: 700;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root{
+    background-color: #222428;
+    color: #EEEFEF;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root{
+    background-color: #E5E5E5;
+    color: #222428;
+  }
+}
+
+.container {
+	@apply mx-auto px-4 pt-6;
+}
