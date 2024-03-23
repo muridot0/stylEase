@@ -1,14 +1,36 @@
 ---
 import '../styles/global.css'
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
 ---
 
-<Layout title="stylEase">
-	<Header />
-	<main>
-		<div style="height: 600px;"></div>
-	</main>
-	<Footer />
+<Layout title='stylEase'>
+  <Header />
+  <main class='container h-dvh'>
+    <div class='mt-4 text-center'>
+      <div class='flex justify-center text-[3rem]'>
+        <h1 class='gradient'>
+          <div>
+            Introducing <span class='font-[Chilanka] font-normal'>
+              stylEase
+            </span>:
+          </div>
+          Transform Your Photos intos
+          <div>Masterpieces</div>
+        </h1>
+      </div>
+      <div class='mt-4'>
+        <h2 class='text-[1.25rem] text-[color:var(--text-muted)]'>
+          Achieve easy artistry for everyday photos using styleEase!
+        </h2>
+
+        <button
+          class='mt-4 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[var(--gradient-top)] to-[var(--gradient-bottom)] px-2 py-1 pt-2 font-medium text-[#eeefef] shadow-[inset_0_-5px_1px_-1px_var(--button-inner-shadow),0px_0px_0px_2px_var(--button-drop-shadow),0px_4px_6px_0px_var(--button-drop-shadow-light)] hover:brightness-125 active:brightness-100'>
+          Get started
+        </button>
+      </div>
+    </div>
+  </main>
+  <Footer />
 </Layout>

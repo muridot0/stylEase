@@ -1,11 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Chilanka&display=swap');
-@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0");
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0');
 @import url('https://fonts.cdnfonts.com/css/mena-grotesk');
-
 
 @font-face {
   font-family: 'hyperwave';
   src: url(/Hyperwave.otf);
+}
+
+::view-transition-old(root) {
+  z-index: -1;
+  animation: none;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+  animation: unclip 1s both;
+}
+
+@keyframes unclip {
+  0% {
+    clip-path: inset(0 0 100% 100%);
+  }
+  100% {
+    clip-path: inset(0 0 0 0)
+  }
 }
 
 :root {
@@ -14,13 +32,37 @@
   /* font-family: 'Mena Grotesk', sans-serif; */
   box-sizing: border-box;
   font-size: 16px;
-  --home-bg-color: #E5E5E5;
+  --home-bg-color: #e5e5e5;
   --home-font-color: #222428;
+  --text-muted: #222428;
+  --linear-gradient: linear-gradient(
+    180deg,
+    #6b7077 0%,
+    #4d5259 32.29%,
+    #222428 60.42%
+  );
+  --button-inner-shadow: rgb(37 99 235 / 1);
+  --button-drop-shadow: #1161aa;
+  --button-drop-shadow-light: #dbdbdb;
+  --gradient-top: #2186e3;
+  --gradient-bottom: #1c7ad0;
 }
 
 :root[data-theme='dark'] {
   --home-bg-color: #222428;
-  --home-font-color: #EEEFEF;
+  --home-font-color: #eeefef;
+  --text-muted: #6b7077;
+  --linear-gradient: linear-gradient(
+    180deg,
+    #fff 0%,
+    #eeefef 32.29%,
+    #cad0d9 60.42%
+  );
+  --button-inner-shadow: #2b323c;
+  --button-drop-shadow: var(--text-muted);
+  --button-drop-shadow-light: #272727;
+  --gradient-top: #161a22;
+  --gradient-bottom: #6b7077;
 }
 
 * {
@@ -39,17 +81,24 @@ h1 {
 }
 
 @media (prefers-color-scheme: dark) {
-  :root{
-    color: #EEEFEF;
+  :root {
+    color: #eeefef;
   }
 }
 
 @media (prefers-color-scheme: light) {
-  :root{
-  --home-font-color: #222428;
+  :root {
+    --home-font-color: #222428;
   }
 }
 
 .container {
-	@apply mx-auto px-4 pt-6;
+  @apply mx-auto px-4 pt-6;
+}
+
+.gradient {
+  background: var(--linear-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

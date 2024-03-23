@@ -4,7 +4,10 @@ export default function ThemeToggle() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') ?? 'light')
 
   const handleClick = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light')
+    if (!document.startViewTransition) {
+      return setTheme(theme === 'light' ? 'dark' : 'light')
+    }
+    document.startViewTransition(() => setTheme(theme === 'light' ? 'dark' : 'light'))
   }
 
   useEffect(() => {
@@ -48,17 +51,17 @@ export default function ThemeToggle() {
   }, [theme])
 
   return (
-    <button class='mr-8 flex items-center' onClick={handleClick}>
+    <button type="button" class="mr-8 flex items-center" onClick={handleClick}>
       {theme === 'light' ? (
         <>
-          <span class='material-symbols-rounded mr-2 !text-base'>
+          <span class="material-symbols-rounded mr-2 !text-base">
             dark_mode
           </span>
           <span class="mt-1">Dark mode</span>
         </>
       ) : (
         <>
-          <span class='material-symbols-rounded mr-2 !text-base'>
+          <span class="material-symbols-rounded mr-2 !text-base">
             light_mode
           </span>
           <span class="mt-1">Light mode</span>
