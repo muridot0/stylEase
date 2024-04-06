@@ -51,21 +51,11 @@ export default function ThemeToggle() {
   }, [theme])
 
   return (
-    <button type="button" class="mr-8 flex items-center" onClick={handleClick}>
+    <button type="button" class="rounded-full border border-[var(--text-muted)] p-1 mr-4 flex items-center" onClick={handleClick}>
       {theme === 'light' ? (
-        <>
-          <span class="material-symbols-rounded mr-2 !text-base">
-            dark_mode
-          </span>
-          <span class="mt-1">Dark mode</span>
-        </>
+          <span class="i-lucide-lightbulb-off" />
       ) : (
-        <>
-          <span class="material-symbols-rounded mr-2 !text-base">
-            light_mode
-          </span>
-          <span class="mt-1">Light mode</span>
-        </>
+          <span class="i-lucide-lightbulb" />
       )}
     </button>
   )

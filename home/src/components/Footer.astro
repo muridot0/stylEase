@@ -4,15 +4,24 @@ let year = date.getFullYear()
 ---
 
 <footer class="w-full bottom-0 relative">
-  <div class="border-t border-t-slate-400 sm:hidden w-full container" />
-  <div class="flex items-center justify-center">
-    <svg class="w-full hidden sm:block" xmlns="http://www.w3.org/2000/svg" width="1512" height="119" viewBox="0 0 1512 119" fill="none">
-      <path d="M0 119C195.097 45.9997 462.134 1 756.657 1C1050.52 1 1317.02 45.798 1512 118.509" stroke="#6B7077"/>
-    </svg>
+  <div class="border-t border-t-slate-400 sm:hidden w-full" />
+    <div class="sm:(flex items-center justify-center) max-sm:container">
+      <svg class="w-full hidden sm:block" xmlns="http://www.w3.org/2000/svg" width="1512" height="119" viewBox="0 0 1512 119" fill="none">
+        <path d="M0 119C195.097 45.9997 462.134 1 756.657 1C1050.52 1 1317.02 45.798 1512 118.509" stroke="#6B7077"/>
+      </svg>
     <div />
-    <div class="sm:absolute sm:text-center p-4 ">
+
+    <div class="sm:absolute sm:(flex items-center flex-col mt-8) max-sm:m-4">
       <p>Copyright © {year} stylEase.</p>
       <p>All Rights Reserved.</p>
+      <div class="rounded-full border border-[var(--text-muted)] gap-2 px-2 py-1 flex items-center w-max">
+        <a href="#" class="inline-flex gap-2" aria-label="Github">
+          <span class="i-lucide-github" title="My twitter" role="img"></span>
+        </a>
+        <a href="#" class="inline-flex gap-2" aria-label="Twitter">
+          <span class="i-lucide-twitter" title="My twitter" role="img"></span>
+        </a>
+      </div>
     </div>
   </div>
 
