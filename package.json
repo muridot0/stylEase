@@ -6,7 +6,8 @@
 "scripts": {
   "lerna:clean": "lerna clean --yes",
   "start": "lerna run dev",
-  "dev:app": "yarn workspace app run dev",
+  "build:client": "yarn workspace client build",
+  "dev:client": "yarn workspace client dev",
   "dev:home": "yarn workspace home run dev",
   "version": "lerna version --conventional-commits --yes"
 },
@@ -15,6 +16,6 @@
   },
   "workspaces": [
     "home",
-    "app"
+    "client"
   ]
 }

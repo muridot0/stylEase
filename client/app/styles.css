@@ -1,0 +1,31 @@
+@unocss;
+
+@font-face {
+  font-family: 'Zed Mono';
+  src: url('/fonts/zed-mono-regular.woff2');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Zed Mono';
+  src: url('/fonts/zed-mono-medium.woff2');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Zed Mono';
+  src: url('/fonts/zed-mono-bold.woff2');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Zed Mono';
+  src: url('/fonts/zed-mono-italic.woff2');
+  font-style: italic;
+}
+
+:root {
+  @apply bg-[#e5e5e5] dark:bg-[#222428];
+  color-scheme: light dark;
+  font-family: 'Zed Mono', sans-serif;
+}
