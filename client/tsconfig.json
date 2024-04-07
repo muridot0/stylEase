@@ -1,5 +1,6 @@
 {
   "include": [
+    "env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/.server/**/*.ts",

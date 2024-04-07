@@ -2458,7 +2458,7 @@
     magic-string "^0.30.8"
     postcss "^8.4.38"
 
-"@unocss/postcss@0.59.0":
+"@unocss/postcss@0.59.0", "@unocss/postcss@^0.59.0":
   version "0.59.0"
   resolved "https://registry.yarnpkg.com/@unocss/postcss/-/postcss-0.59.0.tgz#a21bb8ef184b2f41b0a36c69a77c6b9ae088b129"
   integrity sha512-1+kb6x+5cT5WiokBF8s3NgO1HxaF86vrPx3VAeOMSHTUNhzNvb72e6HBLRUp1Qu6kxbCLDixFpBtNZyH5ueoog==
@@ -2610,7 +2610,7 @@
   resolved "https://registry.npmjs.org/@unocss/reset/-/reset-0.58.9.tgz"
   integrity sha512-nA2pg3tnwlquq+FDOHyKwZvs20A6iBsKPU7Yjb48JrNnzoaXqE+O9oN6782IG2yKVW4AcnsAnAnM4cxXhGzy1w==
 
-"@unocss/reset@0.59.0":
+"@unocss/reset@0.59.0", "@unocss/reset@^0.59.0":
   version "0.59.0"
   resolved "https://registry.yarnpkg.com/@unocss/reset/-/reset-0.59.0.tgz#438bcdc198092947cdb5c20e1498d2f7ef51b830"
   integrity sha512-9f5DYoaqzlaFz2fAzAJOXWZ41Qmgg4u9WdzMQ7SYALeEq61khScaSrf8osNTKFZuRLKPWYwX6JErzdAkfIH/6A==

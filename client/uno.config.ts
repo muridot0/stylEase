@@ -1,9 +1,9 @@
-import { defineConfig, presetWind, presetIcons, transformerDirectives, transformerVariantGroup } from 'unocss'
+import { defineConfig, presetUno, presetIcons, transformerDirectives, transformerVariantGroup } from 'unocss'
 
 export default defineConfig({
   content: {
     filesystem: [
-      '**/*.{html,js,ts,jsx,tsx}'
+      "**/*.{html,js,ts,jsx,tsx}"
     ]
   },
   transformers: [
@@ -11,7 +11,7 @@ export default defineConfig({
     transformerVariantGroup()
   ],
   presets: [
-    presetWind({ dark: 'media' }),
+    presetUno({ dark: 'media' }),
     presetIcons()
   ]
 })

@@ -1,4 +1,8 @@
+// eslint-disable-next-line import/no-unresolved
+import 'virtual:uno.css'
+import "@unocss/reset/tailwind.css"
 import './styles.css'
+
 import {
   Links,
   Meta,
@@ -6,6 +10,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+// import { cssBundleHref } from "@remix-run/css-bundle"
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
