@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { Handle, Position } from 'reactflow'
 import type { HandleProps } from 'reactflow'
 
@@ -7,9 +8,17 @@ interface Props extends HandleProps {
 
 function NodeHandle({ className, ...props }: Props) {
   return (
-    <Handle {...props} className={className}>
-      <div className='w-full h-full bg-zinc-400 dark:bg-neutral-400 rounded-full pointer-events-none' />
-    </Handle>
+    <Handle
+      {...props}
+      className={clsx(
+        '!border-none !transform-none !w-[7px] !h-[7px] z-2 !bg-[--node-handle-color]',
+        {
+          '!left-[-0.55rem': props.position !== Position.Right,
+          '!right-[-0.125rem] !top-[1.65rem]': props.position === Position.Right
+        },
+        className
+      )}
+    ></Handle>
   )
 }
 

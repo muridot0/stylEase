@@ -28,13 +28,21 @@
   @apply bg-[#e5e5e5] dark:bg-[#222428] text-[#222428] dark:text-[#EEEFEF];
   color-scheme: light dark;
   font-family: 'Zed Mono', sans-serif;
+  font-size: 12px;
 
-
-  --node-bg-color: #EDEDEE;
-  --node-border-color: #BBBDC1;
+  --node-icons-color: #7a7c7e;
+  --node-bg-color: #ededee;
+  --node-border-color: #bbbdc1;
+  --node-handle-color: #4d5259;
 
   @media (prefers-color-scheme: dark) {
-    --node-bg-color: #3B4045;
-    --node-border-color: #4D5259;
+    --node-bg-color: #3b4045;
+    --node-border-color: #4d5259;
+    --node-handle-color: #bbbdc1;
+    --node-icons-color: #6b7077;
   }
+}
+
+h1 {
+  font-size: 14px;
 }
