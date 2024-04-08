@@ -1,14 +1,22 @@
+import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
 import { Position } from 'reactflow'
 
-function WrapperNode() {
+interface Props extends React.PropsWithChildren {
+  className?: string
+}
+
+function WrapperNode({ children, className }: Props) {
   return (
-    <div>
-      <NodeHandle position={Position.Left} type="target"></NodeHandle>
-      <div>
-        <label htmlFor="text">Text:</label>
-        <input id="text" name="text" className="nodrag" />
-      </div>
+    <div
+      className={clsx(
+        className,
+        'w-[13.5rem] bg-[--node-bg-color] border border-[--node-border-color] p-4 rounded-[8px]'
+      )}
+    >
+      <NodeHandle position={Position.Right} type='target' />
+
+      {children}
     </div>
   )
 }

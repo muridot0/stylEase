@@ -25,7 +25,16 @@
 }
 
 :root {
-  @apply bg-[#e5e5e5] dark:bg-[#222428];
+  @apply bg-[#e5e5e5] dark:bg-[#222428] text-[#222428] dark:text-[#EEEFEF];
   color-scheme: light dark;
   font-family: 'Zed Mono', sans-serif;
+
+
+  --node-bg-color: #EDEDEE;
+  --node-border-color: #BBBDC1;
+
+  @media (prefers-color-scheme: dark) {
+    --node-bg-color: #3B4045;
+    --node-border-color: #4D5259;
+  }
 }

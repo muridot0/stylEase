@@ -1,4 +1,5 @@
-import { Handle, HandleProps, Position } from 'reactflow'
+import { Handle, Position } from 'reactflow'
+import type { HandleProps } from 'reactflow'
 
 interface Props extends HandleProps {
   className?: string
