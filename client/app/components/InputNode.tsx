@@ -2,6 +2,7 @@ import Attachment from './Attachment'
 import WrapperNode from './WrapperNode'
 
 export default function InputNode() {
+  // TODO: add functionality for input node
   return (
     <WrapperNode nodeTitle='Style Node' iconClass='i-lucide-image-plus'>
       <div className='flex -right-[0.8rem] top-[1rem] absolute'>
