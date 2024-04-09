@@ -10,6 +10,7 @@ interface Props extends React.PropsWithChildren {
 }
 
 function WrapperNode({ children, className, iconClass, nodeTitle, position }: Props) {
+  //TODO: maybe add a way to size wrapper node with a prop so all nodes dont have to be same width
   const renderHandles = () => {
     switch(position) {
       case 'left':
