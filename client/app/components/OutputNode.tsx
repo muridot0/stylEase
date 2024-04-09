@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function OutputNode({data}: NodeProps<Props>) {
-  //TODO: create the output node component with functionality
+  //TODO: add functionality to output node
   return(
     <WrapperNode nodeTitle={data.title} iconClass={data.icon} position={Position.Left}>
       <Attachment label="display node" attachmentType="preview"/>

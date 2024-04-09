@@ -13,10 +13,10 @@ function WrapperNode({ children, className, iconClass, nodeTitle, position }: Pr
   const renderHandles = () => {
     switch(position) {
       case 'left':
-        return <NodeHandle position={Position.Left} type='target' />
+        return <NodeHandle type="target" position={Position.Left} type='target' />
         break;
       case 'right':
-        return <NodeHandle position={Position.Right} type='target' />
+        return <NodeHandle id='a' type="source" position={Position.Right} type='target' />
         break;
       default:
         return null;

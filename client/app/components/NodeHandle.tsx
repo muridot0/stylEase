@@ -7,7 +7,6 @@ interface Props extends HandleProps {
 }
 
 function NodeHandle({ className, ...props }: Props) {
-  //TODO: set up the position of the node handle when its on the left of the node
   return (
     <Handle
       {...props}
