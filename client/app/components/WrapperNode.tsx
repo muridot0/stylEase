@@ -27,7 +27,7 @@ function WrapperNode({ children, className, iconClass, nodeTitle, position }: Pr
     <div
       className={clsx(
         className,
-        'w-[13.5rem] bg-[--node-bg-color] border border-[--node-border-color] p-4 rounded-[8px] text-center'
+        'w-[214px] bg-[--node-bg-color] border border-[--node-border-color] py-6 px-8 rounded-[8px] text-center'
       )}
     >
       <section className='flex items-center gap-2 mb-2 justify-center'>
