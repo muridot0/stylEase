@@ -1,6 +1,17 @@
-export default function OutputNode() {
+import type { NodeProps } from "reactflow";
+import WrapperNode from "./WrapperNode";
+import { Position } from "reactflow";
+
+interface Props {
+  title: string
+  icon: string
+}
+
+export default function OutputNode({data}: NodeProps<Props>) {
   //TODO: create the output node component with functionality
   return(
-    <div>I will be the output node</div>
+    <WrapperNode nodeTitle={data.title} iconClass={data.icon} position={Position.Left}>
+
+    </WrapperNode>
   )
 }

@@ -10,18 +10,24 @@ import {
 import InputNode from '../components/InputNode'
 
 import 'reactflow/dist/style.css'
+import OutputNode from 'app/components/OutputNode'
 
 const initialNodes = [
   {
     id: '1',
     type: 'inputNode',
     position: { x: 50, y: 50 },
-    data: { label: '1' }
-  }
+    data: { title: 'Style Node', icon: 'i-lucide-image-plus' }
+  },
+  {
+    id: '2',
+    type: 'outputNode',
+    position: { x: 100, y: 100 },
+    data: { title: 'Display Node', icon: 'i-lucide-download' }
+  },
 ]
-// const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }]
 
-const nodeTypes = { inputNode: InputNode }
+const nodeTypes = { inputNode: InputNode, outputNode: OutputNode }
 
 export const meta: MetaFunction = () => {
   return [

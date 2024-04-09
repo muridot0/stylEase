@@ -46,3 +46,8 @@
 h1 {
   font-size: 14px;
 }
+
+.no-bg {
+  background: none !important;
+  border-right: none !important;
+}

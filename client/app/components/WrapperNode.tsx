@@ -6,10 +6,23 @@ interface Props extends React.PropsWithChildren {
   nodeTitle: string
   className?: string
   iconClass?: string
+  position: Position
 }
 
-function WrapperNode({ children, className, iconClass, nodeTitle }: Props) {
-  //TODO: set up wrapper node to accept connections from input nodes (i.e: handle position left)
+function WrapperNode({ children, className, iconClass, nodeTitle, position }: Props) {
+  const renderHandles = () => {
+    switch(position) {
+      case 'left':
+        return <NodeHandle position={Position.Left} type='target' />
+        break;
+      case 'right':
+        return <NodeHandle position={Position.Right} type='target' />
+        break;
+      default:
+        return null;
+    }
+  }
+
   return (
     <div
       className={clsx(
@@ -24,8 +37,7 @@ function WrapperNode({ children, className, iconClass, nodeTitle }: Props) {
         <h1>{nodeTitle}</h1>
       </section>
 
-      {/*TODO: conditionally render node handle based on a position prop*/}
-      <NodeHandle position={Position.Right} type='target' />
+      {renderHandles()}
 
       {children}
     </div>

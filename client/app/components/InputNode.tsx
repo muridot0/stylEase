@@ -1,10 +1,16 @@
+import { Position, type NodeProps } from 'reactflow';
 import Attachment from './Attachment'
 import WrapperNode from './WrapperNode'
 
-export default function InputNode() {
-  // TODO: add functionality for input node
+interface Props {
+  title: string;
+  icon: string;
+}
+
+
+export default function InputNode({data}: NodeProps<Props>) {
   return (
-    <WrapperNode nodeTitle='Style Node' iconClass='i-lucide-image-plus'>
+    <WrapperNode nodeTitle={data.title} iconClass={data.icon} position={Position.Right}>
       <div className='flex -right-[0.8rem] top-[1rem] absolute'>
         <picture className='w-4 h-4 right-[0.05rem] absolute -top-[0.35rem] pointer-events-none'>
           <source
