@@ -23,6 +23,7 @@ function Attachment({
   const [fileAttached, setFileAttached] = React.useState(false)
   const [file, setFile] = React.useState<File | null>(null)
 
+  // TODO: restrict file attachements of size greater than 3mb and add a nice error message (maybe with some animations to make the whole node shake)
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget
     if (!files) return
