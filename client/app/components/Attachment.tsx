@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import convertHEICtoJPEG, { blobToImage } from '../lib/convertHEIC'
+import convertHEICtoJPEG from '../lib/convertHEIC'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -25,13 +25,17 @@ function Attachment({
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget
     if (!files) return
-    if(files[0].type === 'image/heic'){
+    if (files[0].type === 'image/heic') {
       const convert = await convertHEICtoJPEG(files[0])
       console.log(convert)
-      const newFile = new File([convert as Blob], files[0].name.slice(0, files[0].name.indexOf('.')), {type: (convert as Blob).type})
+      const newFile = new File(
+        [convert as Blob],
+        files[0].name.slice(0, files[0].name.indexOf('.')),
+        { type: (convert as Blob).type }
+      )
       setFile(newFile)
       setFileAttached(true)
-      return;
+      return
     }
     setFile(files[0])
     console.log(file)
@@ -70,9 +74,8 @@ function Attachment({
   }
 
   const renderFileAttached = () => {
-
     return (
-        <img src={URL.createObjectURL(file!)} alt='' className="max-w-[100%]" />
+      <img src={URL.createObjectURL(file!)} alt='' className='max-w-[100%] rounded-[4px]' />
     )
   }
 
@@ -89,7 +92,8 @@ function Attachment({
     <section
       className={clsx(
         className,
-        'border-[--node-border-color] border text-center p-[1.75rem] rounded-[4px] relative max-w-[200px]'
+        'border-[--node-border-color] border text-center p-[1.75rem] rounded-[4px] relative max-w-[200px]',
+        { 'p-0 !border-none': fileAttached }
       )}
     >
       {attachmentType === 'preview' && fileAttached
