@@ -1,6 +1,7 @@
 import React from 'react'
 import clsx from 'clsx'
 import convertHEICtoJPEG from '../lib/convertHEIC'
+import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -42,6 +43,11 @@ function Attachment({
     setFileAttached(true)
   }
 
+  const handleFileDelete = () => {
+    setFile(null)
+    setFileAttached(false)
+  }
+
   const renderUploadJSX = () => {
     return (
       <>
@@ -68,14 +74,36 @@ function Attachment({
   const renderPreviewJSX = () => {
     return (
       <div>
-        <img src={URL.createObjectURL(file!)} alt='' />
+        {file && (
+          <>
+            <img src={URL.createObjectURL(file)} alt='' />
+            {/* <span>{convertBytestoMegabytes(file.size)}</span> */}
+            <span className='i-lucide-trash-2'></span>
+          </>
+        )}
       </div>
     )
   }
 
   const renderFileAttached = () => {
     return (
-      <img src={URL.createObjectURL(file!)} alt='' className='max-w-[100%] rounded-[4px]' />
+      <div>
+        {file && (
+          <>
+            <img
+              src={URL.createObjectURL(file)}
+              alt={file.name}
+              className='max-w-[100%] rounded-[4px]'
+            />
+            <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative'>
+              <p>{convertBytestoMegabytes(file.size)}mb</p>
+              <button className='border border-[--node-icons-color] bg-[--node-handle-color] rounded-full p-1' onClick={handleFileDelete}>
+                <span className='i-lucide-trash-2 flex text-[--node-bg-color]'></span>
+              </button>
+            </aside>
+          </>
+        )}
+      </div>
     )
   }
 
