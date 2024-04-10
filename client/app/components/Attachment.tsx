@@ -1,6 +1,6 @@
-import React, { ReactHTMLElement } from 'react'
+import React from 'react'
 import clsx from 'clsx'
-import convertHEICtoJPEG from '../lib/convertHEIC'
+import convertHEICtoJPEG, { blobToImage } from '../lib/convertHEIC'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -26,11 +26,12 @@ function Attachment({
     const { files } = e.currentTarget
     if (!files) return
     if(files[0].type === 'image/heic'){
-      // console.log('i am the convert', convertHEICtoJPEG(files[0]))
-      const convert = await convertHEICtoJPEG(files[0]).then((res) => console.log(res) );
+      const convert = await convertHEICtoJPEG(files[0])
       console.log(convert)
-      // setFile(convertHEICtoJPEG(files[0]))
-      console.log(files[0])
+      const newFile = new File([convert as Blob], files[0].name.slice(0, files[0].name.indexOf('.')), {type: (convert as Blob).type})
+      setFile(newFile)
+      setFileAttached(true)
+      return;
     }
     setFile(files[0])
     console.log(file)
@@ -71,9 +72,7 @@ function Attachment({
   const renderFileAttached = () => {
 
     return (
-      <div>
-        <img src={URL.createObjectURL(file!)} alt='' />
-      </div>
+        <img src={URL.createObjectURL(file!)} alt='' className="max-w-[100%]" />
     )
   }
 
