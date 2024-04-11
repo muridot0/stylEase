@@ -21,7 +21,7 @@ export default function InputNode({data}: NodeProps<Props>) {
         </picture>
         <div className='bg-[--node-bg-color] absolute dark:bg-[-node-bg-color] h-7 right-[0.9rem] top-[0.1rem] w-1 ' />
       </div>
-      <Attachment maxFileSize={500000} label='Input Node' className='nodrag' />
+      <Attachment maxFileSize={900000} label='Input Node' className='nodrag' />
     </WrapperNode>
   )
 }

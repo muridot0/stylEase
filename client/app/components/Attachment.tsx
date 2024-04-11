@@ -9,6 +9,9 @@ interface Props {
   className?: string
   attachmentType?: 'preview'
   label: string
+  /**
+   * maximum allowed file size in bytes
+   */
   maxFileSize?: number
 }
 
@@ -22,26 +25,33 @@ function Attachment({
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
   const [file, setFile] = React.useState<File | null>(null)
+  const [fileSizeExceeded, setFileSizeExceeded] = React.useState(false)
 
   // TODO: restrict file attachements of size greater than 3mb and add a nice error message (maybe with some animations to make the whole node shake)
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget
     if (!files) return
-    if (files[0].type === 'image/heic') {
-      const convert = await convertHEICtoJPEG(files[0])
-      console.log(convert)
-      const newFile = new File(
-        [convert as Blob],
-        files[0].name.slice(0, files[0].name.indexOf('.')),
-        { type: (convert as Blob).type }
-      )
-      setFile(newFile)
+    for (const file of files) {
+      if (file.size > maxFileSize) {
+        setFileSizeExceeded(true)
+        setFileAttached(false)
+        return
+      }
+      if (file.type === 'image/heic') {
+        const convert = await convertHEICtoJPEG(files[0])
+        console.log(convert)
+        const newFile = new File(
+          [convert as Blob],
+          file.name.slice(0, file.name.indexOf('.')),
+          { type: (convert as Blob).type }
+        )
+        setFile(newFile)
+        setFileAttached(true)
+        return
+      }
+      setFile(files[0])
       setFileAttached(true)
-      return
     }
-    setFile(files[0])
-    console.log(file)
-    setFileAttached(true)
   }
 
   const handleFileDelete = () => {
@@ -51,7 +61,7 @@ function Attachment({
 
   const renderUploadJSX = () => {
     return (
-      <>
+      <div>
         <label id='uploadLabel' htmlFor='image' className='hidden'>
           {label}
         </label>
@@ -64,11 +74,19 @@ function Attachment({
           className='opacity-0 block w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
           onChange={handleFileAttached}
         />
+        {//TODO: add shake animation here}
         <div className='flex flex-col items-center gap-1'>
           <span className='i-lucide-file-up flex text-[45px] text-[--node-icons-color]'></span>
-          <p>Upload file</p>
+          {!fileSizeExceeded ? (
+            <p>Upload file</p>
+          ) : (
+            <>
+              <p>The file size is too powerful!</p>
+              <p>Try a smaller file</p>
+            </>
+          )}
         </div>
-      </>
+      </div>
     )
   }
 
