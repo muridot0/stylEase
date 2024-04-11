@@ -96,10 +96,15 @@ function Attachment({
               alt={file.name}
               className='max-w-[100%] rounded-[4px]'
             />
-            <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative'>
-              <p>{convertBytestoMegabytes(file.size)}mb</p>
-              <button className='border border-[--node-icons-color] bg-[--node-handle-color] rounded-full p-1' onClick={handleFileDelete}>
-                <span className='i-lucide-trash-2 flex text-[--node-bg-color]'></span>
+            <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
+              <p className='border rounded-md border-amber-200 bg-amber-100 text-amber-500 dark:border-cyan-200 dark:bg-cyan-200 dark:text-cyan-500 px-1 text-sm'>
+                {convertBytestoMegabytes(file.size)}mb
+              </p>
+              <button
+                className=' bg-red-600 text-red-50 rounded-full p-1 text-sm'
+                onClick={handleFileDelete}
+              >
+                <span className='i-lucide-trash-2 flex'></span>
               </button>
             </aside>
           </>
