@@ -74,10 +74,9 @@ function Attachment({
           className='opacity-0 block w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
           onChange={handleFileAttached}
         />
-        {//TODO: add shake animation here}
         <div className='flex flex-col items-center gap-1'>
           <span className='i-lucide-file-up flex text-[45px] text-[--node-icons-color]'></span>
-          {!fileSizeExceeded ? (
+          {!fileSizeExceeded ? ( //TODO: add the shake animation to the parent div of this message
             <p>Upload file</p>
           ) : (
             <>
