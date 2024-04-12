@@ -81,9 +81,8 @@ function Attachment({
             <p>Upload file</p>
           ) : (
             <>
-              <p className="text-sm">The file size of {convertBytestoMegabytes(fileSizeExceeded.size)}mb is too powerful!</p>
-              <p className="text-sm">Try a smaller file</p>
-              <p className="text-xs">(File size limit {convertBytestoMegabytes(maxFileSize)}mb)</p>
+              <p className='font-medium'>The file size of {convertBytestoMegabytes(fileSizeExceeded.size)}mb is too powerful!</p>
+              <p className="text-sm font-italic">(File size limit {convertBytestoMegabytes(maxFileSize)}mb)</p>
             </>
           )}
         </div>
