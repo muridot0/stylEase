@@ -25,17 +25,29 @@ function Attachment({
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
   const [file, setFile] = React.useState<File | null>(null)
-  const [fileSizeExceeded, setFileSizeExceeded] = React.useState<{size: number, exceeded: boolean}>()
+  const [fileSizeExceeded, setFileSizeExceeded] = React.useState<{
+    size: number
+    exceeded: boolean
+  }>()
+  const [loading, setLoading] = React.useState(true)
 
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget
-    if (!files) return
+    setLoading(true)
+
+    if (!files) {
+      setLoading(false)
+      return
+    }
+
     for (const file of files) {
-      if (file.size > maxFileSize) {
-        setFileSizeExceeded({size: file.size, exceeded: true})
+      if (file.type !== 'image/heic' && file.size > maxFileSize) {
+        setFileSizeExceeded({ size: file.size, exceeded: true })
         setFileAttached(false)
+        setLoading(false)
         return
       }
+
       if (file.type === 'image/heic') {
         const convert = await convertHEICtoJPEG(files[0])
         console.log(convert)
@@ -44,14 +56,22 @@ function Attachment({
           file.name.slice(0, file.name.indexOf('.')),
           { type: (convert as Blob).type }
         )
+        if (newFile.size > maxFileSize) {
+          setFileSizeExceeded({ size: newFile.size, exceeded: true })
+          setFileAttached(false)
+          setLoading(false)
+          return
+        }
         setFile(newFile)
         setFileAttached(true)
-        setFileSizeExceeded({size: file.size, exceeded: false})
+        setFileSizeExceeded({ size: file.size, exceeded: false })
+        setLoading(false)
         return
       }
       setFile(file)
       setFileAttached(true)
-      setFileSizeExceeded({size: file.size, exceeded: false})
+      setFileSizeExceeded({ size: file.size, exceeded: false })
+      setLoading(false)
     }
   }
 
@@ -63,29 +83,52 @@ function Attachment({
   const renderUploadJSX = () => {
     return (
       <div>
-        <label id='uploadLabel' htmlFor='image' className='hidden'>
-          {label}
-        </label>
-        <input
-          id='image'
-          type='file'
-          name='image'
-          ref={fileRef}
-          accept='.jpg,.png,.jpeg,.heif,.heic'
-          className='opacity-0 block w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
-          onChange={handleFileAttached}
-        />
-        <div className={clsx('flex flex-col items-center gap-1', { 'text-red-600': fileSizeExceeded?.exceeded })}>
-          <span className={clsx('i-lucide-file-up flex text-[45px]', { 'text-[--node-icons-color]': !fileSizeExceeded?.exceeded })}></span>
-          {!fileSizeExceeded?.exceeded ? (
-            <p>Upload file</p>
-          ) : (
-            <>
-              <p className='font-medium'>The file size of {convertBytestoMegabytes(fileSizeExceeded.size)}mb is too powerful!</p>
-              <p className="text-sm font-italic">(File size limit {convertBytestoMegabytes(maxFileSize)}mb)</p>
-            </>
-          )}
-        </div>
+        {loading ? (
+          <div className='h-20 flex justify-center items-center flex-col'>
+            I am loading
+            <img src="/loading.svg" alt="" />
+          </div>
+        ) : (
+          <>
+            <label id='uploadLabel' htmlFor='image' className='hidden'>
+              {label}
+            </label>
+            <input
+              id='image'
+              type='file'
+              name='image'
+              ref={fileRef}
+              accept='.jpg,.png,.jpeg,.heif,.heic'
+              className='opacity-0 block w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
+              onChange={handleFileAttached}
+            />
+            <div
+              className={clsx('flex flex-col items-center gap-1', {
+                'text-red-600': fileSizeExceeded?.exceeded
+              })}
+            >
+              <span
+                className={clsx('i-lucide-file-up flex text-[45px]', {
+                  'text-[--node-icons-color]': !fileSizeExceeded?.exceeded
+                })}
+              ></span>
+              {!fileSizeExceeded?.exceeded ? (
+                <p>Upload file</p>
+              ) : (
+                <>
+                  <p className='font-medium'>
+                    The file size of{' '}
+                    {convertBytestoMegabytes(fileSizeExceeded.size)}mb is too
+                    powerful!
+                  </p>
+                  <p className='text-sm font-italic'>
+                    (File size limit {convertBytestoMegabytes(maxFileSize)}mb)
+                  </p>
+                </>
+              )}
+            </div>
+          </>
+        )}
       </div>
     )
   }
@@ -146,12 +189,12 @@ function Attachment({
         className,
         'border-[--node-border-color] border text-center p-[1.75rem] rounded-[4px] relative max-w-[200px]',
         { 'p-0 !border-none': fileAttached },
-        { 'shake': fileSizeExceeded?.exceeded}
+        { shake: fileSizeExceeded?.exceeded }
       )}
     >
-      {attachmentType === 'preview' && fileAttached
+      {attachmentType === 'preview' && fileAttached && !loading
         ? renderPreviewJSX()
-        : attachmentType === 'preview' && !fileAttached
+        : attachmentType === 'preview' && !fileAttached && !loading
           ? renderNoFileAttachedJSX()
           : fileAttached
             ? renderFileAttached()
