@@ -29,7 +29,7 @@ function Attachment({
     size: number
     exceeded: boolean
   }>()
-  const [loading, setLoading] = React.useState(true)
+  const [loading, setLoading] = React.useState(false)
 
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget
@@ -41,14 +41,20 @@ function Attachment({
     }
 
     for (const file of files) {
-      if (file.type !== 'image/heic' && file.size > maxFileSize) {
+      setFileSizeExceeded({ size: file.size, exceeded: false })
+      if (file.size > maxFileSize) {
         setFileSizeExceeded({ size: file.size, exceeded: true })
         setFileAttached(false)
         setLoading(false)
         return
       }
 
-      if (file.type === 'image/heic') {
+      if (file.type !== 'image/heic' && file.type !== 'image/heif') {
+        setFile(file)
+        setFileAttached(true)
+        setFileSizeExceeded({ size: file.size, exceeded: false })
+        setLoading(false)
+      } else {
         const convert = await convertHEICtoJPEG(files[0])
         console.log(convert)
         const newFile = new File(
@@ -66,12 +72,7 @@ function Attachment({
         setFileAttached(true)
         setFileSizeExceeded({ size: file.size, exceeded: false })
         setLoading(false)
-        return
       }
-      setFile(file)
-      setFileAttached(true)
-      setFileSizeExceeded({ size: file.size, exceeded: false })
-      setLoading(false)
     }
   }
 
@@ -85,8 +86,8 @@ function Attachment({
       <div>
         {loading ? (
           <div className='h-20 flex justify-center items-center flex-col'>
-            I am loading
-            <img src="/loading.svg" alt="" />
+            <span className='i-lucide-cog animate-spin text-[45px]'></span>
+            <p className='text-md'>Processing your picture ...</p>
           </div>
         ) : (
           <>
@@ -104,7 +105,7 @@ function Attachment({
             />
             <div
               className={clsx('flex flex-col items-center gap-1', {
-                'text-red-600': fileSizeExceeded?.exceeded
+                'text-red-600 dark:text-red-600': fileSizeExceeded?.exceeded
               })}
             >
               <span
@@ -113,7 +114,7 @@ function Attachment({
                 })}
               ></span>
               {!fileSizeExceeded?.exceeded ? (
-                <p>Upload file</p>
+                <p>Upload a picture</p>
               ) : (
                 <>
                   <p className='font-medium'>
