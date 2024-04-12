@@ -25,15 +25,14 @@ function Attachment({
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
   const [file, setFile] = React.useState<File | null>(null)
-  const [fileSizeExceeded, setFileSizeExceeded] = React.useState(false)
+  const [fileSizeExceeded, setFileSizeExceeded] = React.useState<{size: number, exceeded: boolean}>()
 
-  // TODO: restrict file attachements of size greater than 3mb and add a nice error message (maybe with some animations to make the whole node shake)
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget
     if (!files) return
     for (const file of files) {
       if (file.size > maxFileSize) {
-        setFileSizeExceeded(true)
+        setFileSizeExceeded({size: file.size, exceeded: true})
         setFileAttached(false)
         return
       }
@@ -47,10 +46,12 @@ function Attachment({
         )
         setFile(newFile)
         setFileAttached(true)
+        setFileSizeExceeded({size: file.size, exceeded: false})
         return
       }
-      setFile(files[0])
+      setFile(file)
       setFileAttached(true)
+      setFileSizeExceeded({size: file.size, exceeded: false})
     }
   }
 
@@ -74,14 +75,15 @@ function Attachment({
           className='opacity-0 block w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
           onChange={handleFileAttached}
         />
-        <div className='flex flex-col items-center gap-1'>
-          <span className='i-lucide-file-up flex text-[45px] text-[--node-icons-color]'></span>
-          {!fileSizeExceeded ? ( //TODO: add the shake animation to the parent div of this message
+        <div className={clsx('flex flex-col items-center gap-1', { 'text-red-600': fileSizeExceeded?.exceeded })}>
+          <span className={clsx('i-lucide-file-up flex text-[45px]', { 'text-[--node-icons-color]': !fileSizeExceeded?.exceeded })}></span>
+          {!fileSizeExceeded?.exceeded ? (
             <p>Upload file</p>
           ) : (
             <>
-              <p>The file size is too powerful!</p>
-              <p>Try a smaller file</p>
+              <p className="text-sm">The file size of {convertBytestoMegabytes(fileSizeExceeded.size)}mb is too powerful!</p>
+              <p className="text-sm">Try a smaller file</p>
+              <p className="text-xs">(File size limit {convertBytestoMegabytes(maxFileSize)}mb)</p>
             </>
           )}
         </div>
@@ -114,14 +116,14 @@ function Attachment({
               className='max-w-[100%] rounded-[4px]'
             />
             <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
-              <p className='border rounded-md border-amber-200 bg-amber-100 text-amber-500 dark:border-cyan-200 dark:bg-cyan-200 dark:text-cyan-500 px-1 text-sm'>
+              <p className='border font-medium rounded-md border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
                 {convertBytestoMegabytes(file.size)}mb
               </p>
               <button
-                className=' bg-red-600 text-red-50 rounded-full p-1 text-sm'
+                className=' bg-zinc-200 dark:bg-[--node-icons-color] rounded-full p-1 text-sm'
                 onClick={handleFileDelete}
               >
-                <span className='i-lucide-trash-2 flex'></span>
+                <span className='i-lucide-trash-2 flex text-zinc-600 dark:text-zinc-200'></span>
               </button>
             </aside>
           </>
@@ -144,7 +146,8 @@ function Attachment({
       className={clsx(
         className,
         'border-[--node-border-color] border text-center p-[1.75rem] rounded-[4px] relative max-w-[200px]',
-        { 'p-0 !border-none': fileAttached }
+        { 'p-0 !border-none': fileAttached },
+        { 'shake': fileSizeExceeded?.exceeded}
       )}
     >
       {attachmentType === 'preview' && fileAttached
