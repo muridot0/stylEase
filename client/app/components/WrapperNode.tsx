@@ -10,6 +10,7 @@ interface Props extends React.PropsWithChildren {
 }
 
 function WrapperNode({ children, className, iconClass, nodeTitle, position }: Props) {
+  //TODO: add functionality to delete node (should show delete icon on hover)
   const renderHandles = () => {
     switch(position) {
       case 'left':

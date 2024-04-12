@@ -21,7 +21,7 @@ function Attachment({
   maxFileSize = DEFAULT_FILE_SIZE_IN_BYTES,
   className
 }: Props) {
-  // TODO: add attachment storage and processing functionality
+  // TODO: add attachment storage functionality
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
   const [file, setFile] = React.useState<File | null>(null)
