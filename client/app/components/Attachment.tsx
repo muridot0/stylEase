@@ -53,7 +53,9 @@ function Attachment({
         setFile(file)
         setFileAttached(true)
         setFileSizeExceeded({ size: file.size, exceeded: false })
-        setLoading(false)
+        setTimeout(() => {
+          setLoading(false)
+        }, 300)
       } else {
         const convert = await convertHEICtoJPEG(files[0])
         console.log(convert)
@@ -89,6 +91,8 @@ function Attachment({
             <span className='i-lucide-cog animate-spin text-[45px]'></span>
             <p className='text-md'>Processing your picture ...</p>
           </div>
+        ) : !loading && fileAttached ? (
+          renderFileAttached()
         ) : (
           <>
             <label id='uploadLabel' htmlFor='image' className='hidden'>
@@ -189,17 +193,15 @@ function Attachment({
       className={clsx(
         className,
         'border-[--node-border-color] border text-center p-[1.75rem] rounded-[4px] relative max-w-[200px]',
-        { 'p-0 !border-none': fileAttached },
+        { 'p-0 !border-none': fileAttached && !loading },
         { shake: fileSizeExceeded?.exceeded }
       )}
     >
-      {attachmentType === 'preview' && fileAttached && !loading
+      {attachmentType === 'preview' && fileAttached
         ? renderPreviewJSX()
-        : attachmentType === 'preview' && !fileAttached && !loading
+        : attachmentType === 'preview' && !fileAttached
           ? renderNoFileAttachedJSX()
-          : fileAttached
-            ? renderFileAttached()
-            : renderUploadJSX()}
+          : renderUploadJSX()}
     </section>
   )
 }
