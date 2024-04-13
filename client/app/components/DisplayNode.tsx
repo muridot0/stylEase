@@ -8,14 +8,14 @@ interface Props {
   icon: string
 }
 
-export default function DisplayNode({ data }: NodeProps<Props>) {
+export default function DisplayNode({ data, selected }: NodeProps<Props>) {
   //TODO: add functionality to output node
-  console.log(data)
   return (
     <WrapperNode
       nodeTitle={data.title}
       iconClass={data.icon}
       position={Position.Left}
+      selected={selected}
     >
       <Attachment label='display node' attachmentType='preview' />
     </WrapperNode>

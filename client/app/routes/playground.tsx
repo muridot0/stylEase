@@ -5,10 +5,12 @@ import {
   useNodesState,
   useEdgesState,
   addEdge,
-  Background
+  Background,
+  BackgroundVariant
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
+import NodeDrawer from '~/components/NodeDrawer'
 import nodeTypes from '~/lib/nodetypes'
 import randomStr from '~/lib/randomStr'
 
@@ -16,14 +18,22 @@ const initialNodes = [
   {
     id: '1',
     type: 'style-node-type',
-    position: { x: 50, y: 50 },
-    data: { title: 'Style Node', icon: 'i-lucide-image-plus', id: `style-node-${randomStr(10)}` }
+    position: { x: 200, y: 200 },
+    data: {
+      title: 'Style Node',
+      icon: 'i-lucide-image-plus',
+      id: `style-node-${randomStr(10)}`
+    }
   },
   {
     id: '2',
     type: 'display-node-type',
-    position: { x: 100, y: 100 },
-    data: { title: 'Display Node', icon: 'i-lucide-download', id: `display-node-${randomStr(10)}` }
+    position: { x: 500, y: 200 },
+    data: {
+      title: 'Display Node',
+      icon: 'i-lucide-download',
+      id: `display-node-${randomStr(10)}`
+    }
   }
 ]
 
@@ -60,7 +70,8 @@ export default function Playground() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
       >
-        <Background variant='dots' />
+        <NodeDrawer />
+        <Background variant={BackgroundVariant.Dots} />
       </ReactFlow>
     </div>
   )
