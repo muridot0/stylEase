@@ -1,1 +1,9 @@
-//TODO: build the node drawer component
+import React from "react";
+
+interface Props {
+
+}
+
+export default function NodeDrawer({}: Props) {
+
+}

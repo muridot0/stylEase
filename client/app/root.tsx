@@ -10,7 +10,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-// import { cssBundleHref } from "@remix-run/css-bundle"
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

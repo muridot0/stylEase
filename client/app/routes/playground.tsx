@@ -10,19 +10,20 @@ import {
 
 import 'reactflow/dist/style.css'
 import nodeTypes from '~/lib/nodetypes'
+import randomStr from '~/lib/randomStr'
 
 const initialNodes = [
   {
     id: '1',
     type: 'style-node-type',
     position: { x: 50, y: 50 },
-    data: { title: 'Style Node', icon: 'i-lucide-image-plus' }
+    data: { title: 'Style Node', icon: 'i-lucide-image-plus', id: `style-node-${randomStr(10)}` }
   },
   {
     id: '2',
     type: 'display-node-type',
     position: { x: 100, y: 100 },
-    data: { title: 'Display Node', icon: 'i-lucide-download' }
+    data: { title: 'Display Node', icon: 'i-lucide-download', id: `display-node-${randomStr(10)}` }
   }
 ]
 
