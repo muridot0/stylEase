@@ -8,7 +8,7 @@ interface Props {
   icon: string
 }
 
-export default function OutputNode({data}: NodeProps<Props>) {
+export default function DisplayNode({data}: NodeProps<Props>) {
   //TODO: add functionality to output node
   return(
     <WrapperNode nodeTitle={data.title} iconClass={data.icon} position={Position.Left}>

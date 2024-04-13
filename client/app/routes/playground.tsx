@@ -7,31 +7,28 @@ import {
   addEdge,
   Background
 } from 'reactflow'
-import InputNode from '../components/InputNode'
 
 import 'reactflow/dist/style.css'
-import OutputNode from '../components/OutputNode'
+import nodeTypes from '~/lib/nodetypes'
 
-
-// TODO: add functionality to connect nodes together
 const initialNodes = [
   {
     id: '1',
-    type: 'inputNode',
+    type: 'style-node-type',
     position: { x: 50, y: 50 },
-    data: { title: 'Style Node', icon: 'i-lucide-image-plus'}
+    data: { title: 'Style Node', icon: 'i-lucide-image-plus' }
   },
   {
     id: '2',
-    type: 'outputNode',
+    type: 'display-node-type',
     position: { x: 100, y: 100 },
-    data: { title: 'Display Node', icon: 'i-lucide-download'}
-  },
+    data: { title: 'Display Node', icon: 'i-lucide-download' }
+  }
 ]
 
-const initialEdges = [{ id: 'e1-2', source: '1', sourceHandle: 'a', target: '2' }];
-
-const nodeTypes = { inputNode: InputNode, outputNode: OutputNode }
+const initialEdges = [
+  { id: 'e1-2', source: '1', sourceHandle: 'a', target: '2' }
+]
 
 export const meta: MetaFunction = () => {
   return [
@@ -42,12 +39,15 @@ export const meta: MetaFunction = () => {
 
 export default function Playground() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
   const onConnect = React.useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
-  );
+    (params) => {
+      console.log(params)
+      setEdges((eds) => addEdge(params, eds))
+    },
+    [setEdges]
+  )
 
   return (
     <div className='h-screen w-screen'>

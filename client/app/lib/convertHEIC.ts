@@ -1,5 +1,3 @@
-// TODO: finish handling HEIC file conversion
-
 function isHEIC(file: File) {
   console.log(file)
   const fileType = file.type
