@@ -3,6 +3,7 @@ import Attachment from './Attachment'
 import WrapperNode from './WrapperNode'
 import React from 'react'
 import clsx from 'clsx'
+import randomStr from '~/lib/randomStr'
 
 interface Props {
   title: string
@@ -62,5 +63,12 @@ export default React.memo(function StyleNode({
 })
 
 const STYLE_NODE_TYPE = 'style-node-type'
+
+// const STYLE_NODE_DATA = {
+//   id: `style-node-${randomStr(10)}`,
+//   title: 'Style Node',
+//   icon: 'i-lucide-image-plus',
+//   description: 'Upload an image to get it stylEased'
+// }
 
 export { STYLE_NODE_TYPE }

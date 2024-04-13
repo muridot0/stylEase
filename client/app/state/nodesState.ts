@@ -8,6 +8,8 @@ interface CustomNode {
   description?: string
 }
 
+// TODO: add type value to customNode
+
 const nodesState = signal<CustomNode[]>([])
 
 export default nodesState
