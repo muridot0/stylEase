@@ -12,6 +12,10 @@ export default defineConfig({
   ],
   presets: [
     presetUno({ dark: 'media' }),
-    presetIcons()
+    presetIcons({
+      collections: {
+        lucide: () => import('@iconify-json/lucide').then(i => i.default)
+      }
+    })
   ]
 })

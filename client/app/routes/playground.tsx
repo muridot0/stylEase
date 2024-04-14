@@ -31,7 +31,7 @@ const initialNodes = [
     position: { x: 500, y: 200 },
     data: {
       title: 'Display Node',
-      icon: 'i-lucide-download',
+      icon: 'i-lucide-view',
       id: `display-node-${randomStr(10)}`
     }
   }

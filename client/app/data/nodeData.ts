@@ -9,15 +9,15 @@ export const nodeData: CustomNode[] = [
     description: 'Upload an image to get it stylEased'
   },
   {
-    id: `display-node-${randomStr(10)}`,
-    title: 'Display Node',
-    icon: 'i-lucide-download',
-    description: 'View your stylEased image'
-  },
-  {
     id: `model-node-${randomStr(10)}`,
     title: 'Style Transfer Model',
     icon: 'i-lucide-brain-cog',
     description: 'Style transfer model: this model stylEases your images'
+  },
+  {
+    id: `display-node-${randomStr(10)}`,
+    title: 'Display Node',
+    icon: 'i-lucide-view',
+    description: 'View your stylEased image'
   }
 ]

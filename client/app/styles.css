@@ -30,12 +30,17 @@
   font-family: 'Zed Mono', sans-serif;
   font-size: 12px;
 
+  --hover-color: #e5e5e5;
+  --hover-bg-color: #222428;
   --node-icons-color: #7a7c7e;
   --node-bg-color: #ededee;
   --node-border-color: #bbbdc1;
   --node-handle-color: #4d5259;
 
   @media (prefers-color-scheme: dark) {
+    --hover-color: #222428;
+    --hover-bg-color: #EEEFEF;
+
     --node-bg-color: #3b4045;
     --node-border-color: #4d5259;
     --node-handle-color: #bbbdc1;
@@ -82,27 +87,47 @@ h1 {
   height: 12px;
   border-radius: 50%;
   display: block;
-  margin:15px auto;
+  margin: 15px auto;
   position: relative;
-  color: #FFF;
+  color: #fff;
   box-sizing: border-box;
   animation: animloader 2s linear infinite;
 }
 
 @keyframes animloader {
   0% {
-    box-shadow: 14px 0 0 -2px,  38px 0 0 -2px,  -14px 0 0 -2px,  -38px 0 0 -2px;
+    box-shadow:
+      14px 0 0 -2px,
+      38px 0 0 -2px,
+      -14px 0 0 -2px,
+      -38px 0 0 -2px;
   }
   25% {
-    box-shadow: 14px 0 0 -2px,  38px 0 0 -2px,  -14px 0 0 -2px,  -38px 0 0 2px;
+    box-shadow:
+      14px 0 0 -2px,
+      38px 0 0 -2px,
+      -14px 0 0 -2px,
+      -38px 0 0 2px;
   }
   50% {
-    box-shadow: 14px 0 0 -2px,  38px 0 0 -2px,  -14px 0 0 2px,  -38px 0 0 -2px;
+    box-shadow:
+      14px 0 0 -2px,
+      38px 0 0 -2px,
+      -14px 0 0 2px,
+      -38px 0 0 -2px;
   }
   75% {
-    box-shadow: 14px 0 0 2px,  38px 0 0 -2px,  -14px 0 0 -2px,  -38px 0 0 -2px;
+    box-shadow:
+      14px 0 0 2px,
+      38px 0 0 -2px,
+      -14px 0 0 -2px,
+      -38px 0 0 -2px;
   }
   100% {
-    box-shadow: 14px 0 0 -2px,  38px 0 0 2px,  -14px 0 0 -2px,  -38px 0 0 -2px;
+    box-shadow:
+      14px 0 0 -2px,
+      38px 0 0 2px,
+      -14px 0 0 -2px,
+      -38px 0 0 -2px;
   }
 }
