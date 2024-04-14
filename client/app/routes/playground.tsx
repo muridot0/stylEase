@@ -53,12 +53,24 @@ export default function Playground() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
   const onConnect = React.useCallback(
-    (params) => {
+    (params: any) => {
       console.log(params)
       setEdges((eds) => addEdge(params, eds))
     },
     [setEdges]
   )
+
+  const addNode = (id: string) => {
+    setNodes((nodes) => [
+      ...nodes,
+      {
+        data: {id: id, title: 'hey', icon: 'hey'},
+        position: {x: 100, y: 200},
+        type: 'sh',
+        id: randomStr()
+      }
+    ])
+  }
 
   return (
     <div className='h-screen w-screen'>
@@ -70,7 +82,7 @@ export default function Playground() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
       >
-        <NodeDrawer />
+        <NodeDrawer onSelect={addNode}/>
         <Background variant={BackgroundVariant.Dots} />
       </ReactFlow>
     </div>

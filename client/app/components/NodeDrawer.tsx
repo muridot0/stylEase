@@ -1,15 +1,22 @@
 import { Panel } from 'reactflow'
 import { nodeData } from '~/data/nodeData'
-import DrawerItem from './DrawerItem'
 import React from 'react'
 import clsx from 'clsx'
 
-export default function NodeDrawer() {
-  //TODO: complete node drawer component and add the option to close it down
+interface Props {
+  onSelect?: (id: string) => void | null
+}
+
+export default function NodeDrawer({onSelect}: Props) {
+  //TODO: add function to add nodes
   const [collapsed, setCollapsed] = React.useState(true)
 
   const collapseSidebar = () => {
     setCollapsed(!collapsed)
+  }
+
+  const addNode = (id: string) => {
+    onSelect?.(id)
   }
 
   return (
@@ -32,7 +39,7 @@ export default function NodeDrawer() {
       >
         {collapsed
           ? nodeData.map((data) => (
-              <li className='[&:not(:last-child)]:mr-4' key={data.id}>
+              <li className='[&:not(:last-child)]:mr-4' key={data.id} onClick={() => addNode(data.id)}>
                 <button className='flex p-3 border border-[--node-border-color] rounded-[4px] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'>
                   <span
                     className={clsx(`${data.icon} text-3xl flex`, {
@@ -43,7 +50,7 @@ export default function NodeDrawer() {
               </li>
             ))
           : nodeData.map((data) => (
-              <li className='border border-[--node-border-color] rounded-[4px] [&:not(:last-child)]:mb-4 p-2 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'>
+              <li className='cursor-pointer border border-[--node-border-color] rounded-[4px] [&:not(:last-child)]:mb-4 p-2 hover:bg-[--hover-bg-color] hover:text-[--hover-color]' onClick={() => addNode(data.id)}>
                 <div className='flex items-center justify-between text-xl'>
                   <p>{data.title}</p>
                   <span className={clsx(`${data.icon} flex`)}></span>
