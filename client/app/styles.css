@@ -30,16 +30,16 @@
   font-family: 'Zed Mono', sans-serif;
   font-size: 12px;
 
-  --hover-color: #e5e5e5;
-  --hover-bg-color: #222428;
+  --hover-color: #222428;
+  --hover-bg-color: #e5e5e5;
   --node-icons-color: #7a7c7e;
   --node-bg-color: #ededee;
   --node-border-color: #bbbdc1;
   --node-handle-color: #4d5259;
 
   @media (prefers-color-scheme: dark) {
-    --hover-color: #222428;
-    --hover-bg-color: #EEEFEF;
+    --hover-color: #EEEFEF;
+    --hover-bg-color: #222428;
 
     --node-bg-color: #3b4045;
     --node-border-color: #4d5259;
