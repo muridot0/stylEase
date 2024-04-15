@@ -6,11 +6,11 @@ import {
   useEdgesState,
   addEdge,
   Background,
-  BackgroundVariant,
+  BackgroundVariant
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
-import NodeDrawer from '~/components/NodeDrawer'
+import { NodeDrawer } from '~/components'
 import nodeTypes from '~/lib/nodetypes'
 import randomStr from '~/lib/randomStr'
 import { CustomNode } from '~/state/nodesState'

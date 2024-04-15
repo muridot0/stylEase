@@ -9,7 +9,6 @@ interface Props {
 }
 
 export default function NodeDrawer({ onSelect }: Props) {
-  //TODO: finish adding function to add nodes
   const [collapsed, setCollapsed] = React.useState(true)
 
   const collapseSidebar = () => {

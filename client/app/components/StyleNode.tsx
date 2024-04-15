@@ -9,7 +9,6 @@ interface Props {
   title: string
   icon: string
   content: File
-  edgeId: string
 }
 
 export default React.memo(function StyleNode({
@@ -18,7 +17,6 @@ export default React.memo(function StyleNode({
   ...props
 }: NodeProps<Props>) {
   return (
-    // TODO: conditionally set the iconClass based on whether user has uploaded an image (put a flag in signal to use)
     <WrapperNode
       nodeTitle={data.title}
       iconClass={data.icon}
@@ -63,12 +61,5 @@ export default React.memo(function StyleNode({
 })
 
 const STYLE_NODE_TYPE = 'style-node-type'
-
-// const STYLE_NODE_DATA = {
-//   id: `style-node-${randomStr(10)}`,
-//   title: 'Style Node',
-//   icon: 'i-lucide-image-plus',
-//   description: 'Upload an image to get it stylEased'
-// }
 
 export { STYLE_NODE_TYPE }

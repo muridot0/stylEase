@@ -2,14 +2,14 @@ import type { NodeProps } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import { Position } from 'reactflow'
 import Attachment from './Attachment'
+import React from 'react'
 
 interface Props {
   title: string
   icon: string
-  edgeId: string
 }
 
-export default function DisplayNode({ data, selected, ...props }: NodeProps<Props>) {
+export default React.memo(function DisplayNode({ data, selected, ...props }: NodeProps<Props>) {
   //TODO: add functionality to output node
   return (
     <WrapperNode
@@ -22,7 +22,7 @@ export default function DisplayNode({ data, selected, ...props }: NodeProps<Prop
       <Attachment label='display node' attachmentType='preview' />
     </WrapperNode>
   )
-}
+})
 
 const DISPLAY_NODE_TYPE = 'display-node-type'
 
