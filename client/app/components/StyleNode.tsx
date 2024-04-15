@@ -9,6 +9,7 @@ interface Props {
   title: string
   icon: string
   content: File
+  edgeId: string
 }
 
 export default React.memo(function StyleNode({
@@ -16,7 +17,6 @@ export default React.memo(function StyleNode({
   selected,
   ...props
 }: NodeProps<Props>) {
-  console.log(props, data, selected)
   return (
     // TODO: conditionally set the iconClass based on whether user has uploaded an image (put a flag in signal to use)
     <WrapperNode
@@ -24,6 +24,7 @@ export default React.memo(function StyleNode({
       iconClass={data.icon}
       position={Position.Right}
       selected={selected}
+      nodeId={props.id}
     >
       <div className='flex -right-[0.8rem] top-[1rem] absolute'>
           <svg

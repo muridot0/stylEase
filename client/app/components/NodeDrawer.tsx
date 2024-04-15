@@ -24,11 +24,11 @@ export default function NodeDrawer({ onSelect }: Props) {
     <Panel
       position='top-left'
       className={clsx(
-        'flex items-center top-[25rem] rounded-[8px] bg-[--node-bg-color] border border-[--node-border-color] p-4',
+        'flex flex-col gap-2 items-center top-[25rem] rounded-[8px] bg-[--node-bg-color] border border-[--node-border-color] p-4',
         { 'w-75': !collapsed }
       )}
-      style={{ top: 150 }}
     >
+      <h1 className='font-bold'>Node Drawer</h1>
       <ul
         className={clsx(
           'w-full',

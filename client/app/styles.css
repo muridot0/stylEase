@@ -94,6 +94,12 @@ h1 {
   animation: animloader 2s linear infinite;
 }
 
+.backdrop {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
 @keyframes animloader {
   0% {
     box-shadow:

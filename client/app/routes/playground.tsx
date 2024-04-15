@@ -6,7 +6,7 @@ import {
   useEdgesState,
   addEdge,
   Background,
-  BackgroundVariant
+  BackgroundVariant,
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -55,14 +55,12 @@ export default function Playground() {
 
   const onConnect = React.useCallback(
     (params: any) => {
-      console.log(params)
       setEdges((eds) => addEdge(params, eds))
     },
     [setEdges]
   )
 
   const addNode = (data: CustomNode) => {
-    console.log(data)
     setNodes((nodes) => [
       ...nodes,
       {

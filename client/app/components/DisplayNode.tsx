@@ -6,9 +6,10 @@ import Attachment from './Attachment'
 interface Props {
   title: string
   icon: string
+  edgeId: string
 }
 
-export default function DisplayNode({ data, selected }: NodeProps<Props>) {
+export default function DisplayNode({ data, selected, ...props }: NodeProps<Props>) {
   //TODO: add functionality to output node
   return (
     <WrapperNode
@@ -16,6 +17,7 @@ export default function DisplayNode({ data, selected }: NodeProps<Props>) {
       iconClass={data.icon}
       position={Position.Left}
       selected={selected}
+      nodeId={props.id}
     >
       <Attachment label='display node' attachmentType='preview' />
     </WrapperNode>

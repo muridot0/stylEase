@@ -58,7 +58,6 @@ function Attachment({
         }, 300)
       } else {
         const convert = await convertHEICtoJPEG(files[0])
-        console.log(convert)
         const newFile = new File(
           [convert as Blob],
           file.name.slice(0, file.name.indexOf('.')),
