@@ -30,7 +30,7 @@ function WrapperNode({
       case 'left':
         return <NodeHandle type='target' position={Position.Left} />
       case 'right':
-        return <NodeHandle id='a' type='source' position={Position.Right} />
+        return <NodeHandle id={nodeId} type='source' position={Position.Right} />
       default:
         return null
     }
@@ -57,10 +57,6 @@ function WrapperNode({
   }
 
   const deleteEdges = () => {
-    console.log(getConnectedEdges(reactflow.getNodes(), reactflow.getEdges()))
-    console.log(reactflow.getEdges())
-    console.log(reactflow.getNodes())
-    console.log('filtered', filterEdges())
     reactflow.deleteElements({ edges: filterEdges() })
   }
 

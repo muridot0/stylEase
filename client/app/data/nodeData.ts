@@ -1,6 +1,10 @@
-import randomStr from "~/lib/randomStr"
-import type { CustomNode } from "~/state/nodesState"
-import { STYLE_NODE_TYPE, DISPLAY_NODE_TYPE } from "~/components"
+import randomStr from '~/lib/randomStr'
+import type { CustomNode } from '~/state/nodesState'
+import {
+  STYLE_NODE_TYPE,
+  MODEL_NODE_TYPE,
+  DISPLAY_NODE_TYPE
+} from '~/components'
 
 export const nodeData: CustomNode[] = [
   {
@@ -13,7 +17,7 @@ export const nodeData: CustomNode[] = [
   {
     id: `model-node-${randomStr(10)}`,
     title: 'Style Transfer Model',
-    type: 'model-node-type',
+    type: MODEL_NODE_TYPE,
     icon: 'i-lucide-brain-cog',
     description: 'Style transfer model: this model stylEases your images'
   },

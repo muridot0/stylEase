@@ -28,18 +28,29 @@ const initialNodes = [
   },
   {
     id: '2',
-    type: 'display-node-type',
+    type: 'model-node-type',
     position: { x: 800, y: 200 },
+    data: {
+      title: 'Style Transfer Node',
+      icon: 'i-lucide-brain-cog',
+      id: `model-node-${randomStr(10)}`
+    }
+  },
+  {
+    id: '3',
+    type: 'display-node-type',
+    position: { x: 1100, y: 200 },
     data: {
       title: 'Display Node',
       icon: 'i-lucide-aperture',
       id: `display-node-${randomStr(10)}`
     }
-  }
+  },
 ]
 
 const initialEdges = [
-  { id: 'e1-2', source: '1', sourceHandle: 'a', target: '2' }
+  { id: 'e1-2', source: '1', sourceHandle: '1', target: '2' },
+  {id: 'e2-3', source: '2', sourceHandle: '2', target: '3'}
 ]
 
 export const meta: MetaFunction = () => {
