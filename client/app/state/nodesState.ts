@@ -6,6 +6,7 @@ interface CustomNode {
   icon: string
   content?: File
   description?: string
+  type: string
 }
 
 // TODO: add type value to customNode
