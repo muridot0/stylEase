@@ -1,8 +1,10 @@
 import React from 'react'
-import { Connection, NodeProps, Position, useReactFlow } from 'reactflow'
+import { NodeProps, Position } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
+import { modelNodeConnectedState } from '~/routes/playground'
+import { computed, effect } from '@preact/signals'
 
 interface Props {
   title: string
@@ -15,9 +17,20 @@ export default React.memo(function ModelNode({
   isConnectable,
   ...props
 }: NodeProps<Props>) {
-  const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
+  // const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
-  const reactflow = useReactFlow()
+  const styleNodeConnected = computed(() => {
+    return modelNodeConnectedState.value.styleNodeConnected
+  })
+  // console.log(modelNodeConnectedState.value)
+  // React.useEffect(() => {
+  //   modelNodeConnectedState.subscribe((params) => {setStyleNodeConnected(params.styleNodeConnected)})
+  //   console.log(styleNodeConnected, modelNodeConnectedState.value)
+  // }, [modelNodeConnectedState])
+  console.log(styleNodeConnected.value)
+  effect(() => {console.log(styleNodeConnected.value)})
+
+
 
   //TODO: finish functionality
   return (
@@ -66,12 +79,6 @@ export default React.memo(function ModelNode({
             className='!top-[4.6rem]'
             type='target'
             position={Position.Left}
-            isValidConnection={(connection) => {
-              console.log(connection)
-              setStyleNodeConnected(true)
-              return true
-            }}
-            onConnect={(params) => console.log(params)}
             isConnectable={isConnectable}
           />
           <NodeHandle
@@ -85,23 +92,23 @@ export default React.memo(function ModelNode({
         <div className=''>
           <p
             className={clsx('pb-2 text-left', {
-              'text-[--node-icons-color]': !styleNodeConnected
+              '!text-[--node-icons-color]': !styleNodeConnected.value
             })}
           >
-            {!styleNodeConnected ? 'Attach a style node ...' : 'Style node'}
+            {!styleNodeConnected.value ? 'Attach a style node ...' : 'Style node'}
           </p>
           <p
             className={clsx('text-left', {
-              'text-[--node-icons-color]': !contentNodeConnected
+              'text-[--node-icons-color]': !modelNodeConnectedState.value.contentNodeConnected
             })}
           >
-            {!contentNodeConnected
+            {!modelNodeConnectedState.value.contentNodeConnected
               ? 'Attach a content node ...'
               : 'Content node'}
           </p>
         </div>
       </WrapperNode>
-      {styleNodeConnected && contentNodeConnected && (
+      {modelNodeConnectedState.value.styleNodeConnected && modelNodeConnectedState.value.contentNodeConnected && (
         <button className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[9.5rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'>
           <span className='i-lucide-play flex' /> stylEase!
         </button>

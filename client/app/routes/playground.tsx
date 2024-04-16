@@ -1,3 +1,4 @@
+import { signal } from '@preact/signals'
 import type { MetaFunction } from '@remix-run/node'
 import React from 'react'
 import {
@@ -6,7 +7,8 @@ import {
   useEdgesState,
   addEdge,
   Background,
-  BackgroundVariant
+  BackgroundVariant,
+  Connection
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -14,6 +16,11 @@ import { NodeDrawer } from '~/components'
 import nodeTypes from '~/lib/nodetypes'
 import randomStr from '~/lib/randomStr'
 import { CustomNode } from '~/state/nodesState'
+
+const modelNodeConnectedState = signal<{
+  contentNodeConnected: boolean
+  styleNodeConnected: boolean
+}>({ contentNodeConnected: false, styleNodeConnected: false })
 
 const initialNodes = [
   {
@@ -45,12 +52,12 @@ const initialNodes = [
       icon: 'i-lucide-aperture',
       id: `display-node-${randomStr(10)}`
     }
-  },
+  }
 ]
 
 const initialEdges = [
   { id: 'e1-2', source: '1', sourceHandle: '1', target: '2' },
-  {id: 'e2-3', source: '2', sourceHandle: '2', target: '3'}
+  { id: 'e2-3', source: '2', sourceHandle: '2', target: '3' }
 ]
 
 export const meta: MetaFunction = () => {
@@ -64,12 +71,19 @@ export default function Playground() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
-  const onConnect = React.useCallback(
-    (params: any) => {
-      setEdges((eds) => addEdge(params, eds))
-    },
-    [setEdges]
-  )
+  // const modelNodeConnected = modelNodeConnectedState.value
+
+  const onConnect = (params: Connection) => {
+    if(params.source === '1' && params.target === '2') {
+      modelNodeConnectedState.value.styleNodeConnected = true
+      console.log('i go in', params)
+      console.log(modelNodeConnectedState.value)
+    } else {
+      console.log(modelNodeConnectedState.value)
+      modelNodeConnectedState.value.styleNodeConnected = false
+    }
+    setEdges((eds) => addEdge(params, eds))
+  }
 
   const addNode = (data: CustomNode) => {
     setNodes((nodes) => [
@@ -99,3 +113,5 @@ export default function Playground() {
     </div>
   )
 }
+
+export { modelNodeConnectedState }
