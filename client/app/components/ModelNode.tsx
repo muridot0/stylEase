@@ -1,5 +1,5 @@
 import React from 'react'
-import { NodeProps, Position } from 'reactflow'
+import { Connection, NodeProps, Position, useReactFlow } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
@@ -12,10 +12,13 @@ interface Props {
 export default React.memo(function ModelNode({
   data,
   selected,
+  isConnectable,
   ...props
 }: NodeProps<Props>) {
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
+  const reactflow = useReactFlow()
+
   //TODO: finish functionality
   return (
     <>
@@ -63,12 +66,20 @@ export default React.memo(function ModelNode({
             className='!top-[4.6rem]'
             type='target'
             position={Position.Left}
+            isValidConnection={(connection) => {
+              console.log(connection)
+              setStyleNodeConnected(true)
+              return true
+            }}
+            onConnect={(params) => console.log(params)}
+            isConnectable={isConnectable}
           />
           <NodeHandle
             id='content-input'
             className='!top-[6.6rem]'
             type='target'
             position={Position.Left}
+            // onConnect={(connection) => console.log(connection)}
           />
         </div>
         <div className=''>
