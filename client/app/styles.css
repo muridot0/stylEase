@@ -3,13 +3,19 @@
 @font-face {
   font-family: 'Zed Mono';
   src: url('/fonts/zed-mono-regular.woff2');
-  font-weight: 400;
+  font-weight: 300;
 }
 
 @font-face {
   font-family: 'Zed Mono';
   src: url('/fonts/zed-mono-medium.woff2');
   font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Zed Mono';
+  src: url('/fonts/zed-mono-semibold.ttf');
+  font-weight: 600;
 }
 
 @font-face {
@@ -29,6 +35,9 @@
   color-scheme: light dark;
   font-family: 'Zed Mono', sans-serif;
   font-size: 12px;
+  font-weight: 300;
+
+  --stroke-color: #808080;
 
   --hover-color: #222428;
   --hover-bg-color: #e5e5e5;
@@ -38,6 +47,8 @@
   --node-handle-color: #4d5259;
 
   @media (prefers-color-scheme: dark) {
+    --stroke-color: #b3b3b3;
+
     --hover-color: #EEEFEF;
     --hover-bg-color: #222428;
 
@@ -46,6 +57,10 @@
     --node-handle-color: #bbbdc1;
     --node-icons-color: #6b7077;
   }
+}
+
+button:active {
+  border-color: var(--stroke-color)
 }
 
 h1 {

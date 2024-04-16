@@ -70,7 +70,7 @@ function WrapperNode({
         className={clsx(
           className,
           'relative w-full min-w-[200px] bg-[--node-bg-color] border border-[--node-border-color] py-6 px-10 rounded-[8px] text-center',
-          { 'dark:border-[#b3b3b3] light:border-[#808080]': selected }
+          { 'border-[--stroke-color]': selected }
         )}
       >
         <section className='flex items-center gap-2 mb-4 justify-center'>
@@ -79,7 +79,7 @@ function WrapperNode({
               className={clsx(iconClass, 'flex text-[--node-icons-color]')}
             />
           )}
-          <h1>{nodeTitle}</h1>
+          <h1 className='text-xl font-semibold'>{nodeTitle}</h1>
         </section>
 
         {renderHandles()}
