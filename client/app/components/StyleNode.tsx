@@ -3,7 +3,6 @@ import Attachment from './Attachment'
 import WrapperNode from './WrapperNode'
 import React from 'react'
 import clsx from 'clsx'
-import randomStr from '~/lib/randomStr'
 
 interface Props {
   title: string

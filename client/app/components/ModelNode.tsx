@@ -1,14 +1,14 @@
 import React from 'react'
-import { NodeProps, Position } from 'reactflow'
+import { Node, NodeProps, Position, getIncomers, useReactFlow } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
-import { modelNodeConnectedState } from '~/routes/playground'
-import { computed, effect } from '@preact/signals'
 
 interface Props {
   title: string
   icon: string
+  styleNodeConnected: boolean
+  contentNodeConnected: boolean
 }
 
 export default React.memo(function ModelNode({
@@ -17,24 +17,42 @@ export default React.memo(function ModelNode({
   isConnectable,
   ...props
 }: NodeProps<Props>) {
-  // const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
+  const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
-  const styleNodeConnected = computed(() => {
-    return modelNodeConnectedState.value.styleNodeConnected
-  })
-  // console.log(modelNodeConnectedState.value)
-  // React.useEffect(() => {
-  //   modelNodeConnectedState.subscribe((params) => {setStyleNodeConnected(params.styleNodeConnected)})
-  //   console.log(styleNodeConnected, modelNodeConnectedState.value)
-  // }, [modelNodeConnectedState])
-  console.log(styleNodeConnected.value)
-  effect(() => {console.log(styleNodeConnected.value)})
+  const reactflow = useReactFlow()
 
-
+  //TODO: finish this function move this function into a signal state
+  //TODO: to finish need to add a method to toggle the connected state when edge is removed could probably use the incommers
+  React.useEffect(() => {
+    const incommers = getIncomers(
+      reactflow.getNode(props.id)!,
+      reactflow.getNodes(),
+      reactflow.getEdges()
+    )
+    console.log(incommers)
+    for (const node of incommers) {
+      if (node.type === 'style-node-type') {
+        setStyleNodeConnected(true)
+      }
+    }
+    reactflow.setNodes((nodes) => {
+      const arr = nodes.map((node) => {
+        if (node.id === props.id && node.data !== data)  {
+          node.data = {
+            ...node.data,
+            styleNodeConnected: true,
+            contentNodeConnected: true
+          }
+        }
+        return node
+      })
+      return arr
+    })
+  }, [reactflow.getNodes()])
 
   //TODO: finish functionality
   return (
-    <>
+    <div>
       <WrapperNode
         nodeTitle={data.title}
         iconClass={data.icon}
@@ -92,28 +110,28 @@ export default React.memo(function ModelNode({
         <div className=''>
           <p
             className={clsx('pb-2 text-left', {
-              '!text-[--node-icons-color]': !styleNodeConnected.value
+              '!text-[--node-icons-color]': !styleNodeConnected
             })}
           >
-            {!styleNodeConnected.value ? 'Attach a style node ...' : 'Style node'}
+            {!styleNodeConnected ? 'Attach a style node ...' : 'Style node'}
           </p>
           <p
             className={clsx('text-left', {
-              'text-[--node-icons-color]': !modelNodeConnectedState.value.contentNodeConnected
+              'text-[--node-icons-color]': !contentNodeConnected
             })}
           >
-            {!modelNodeConnectedState.value.contentNodeConnected
+            {!contentNodeConnected
               ? 'Attach a content node ...'
               : 'Content node'}
           </p>
         </div>
       </WrapperNode>
-      {modelNodeConnectedState.value.styleNodeConnected && modelNodeConnectedState.value.contentNodeConnected && (
+      {styleNodeConnected && contentNodeConnected && (
         <button className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[9.5rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'>
           <span className='i-lucide-play flex' /> stylEase!
         </button>
       )}
-    </>
+    </div>
   )
 })
 

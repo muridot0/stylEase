@@ -5,8 +5,7 @@ interface CustomNode {
   title: string
   icon: string
   content?: File
-  description?: string
-  type: string
+  type?: string,
 }
 
 const nodesState = signal<CustomNode[]>([])

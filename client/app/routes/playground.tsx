@@ -1,6 +1,4 @@
-import { signal } from '@preact/signals'
 import type { MetaFunction } from '@remix-run/node'
-import React from 'react'
 import {
   ReactFlow,
   useNodesState,
@@ -12,15 +10,10 @@ import {
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
-import { NodeDrawer } from '~/components'
+import { MODEL_NODE_TYPE, NodeDrawer } from '~/components'
 import nodeTypes from '~/lib/nodetypes'
 import randomStr from '~/lib/randomStr'
 import { CustomNode } from '~/state/nodesState'
-
-const modelNodeConnectedState = signal<{
-  contentNodeConnected: boolean
-  styleNodeConnected: boolean
-}>({ contentNodeConnected: false, styleNodeConnected: false })
 
 const initialNodes = [
   {
@@ -71,21 +64,12 @@ export default function Playground() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
-  // const modelNodeConnected = modelNodeConnectedState.value
-
   const onConnect = (params: Connection) => {
-    if(params.source === '1' && params.target === '2') {
-      modelNodeConnectedState.value.styleNodeConnected = true
-      console.log('i go in', params)
-      console.log(modelNodeConnectedState.value)
-    } else {
-      console.log(modelNodeConnectedState.value)
-      modelNodeConnectedState.value.styleNodeConnected = false
-    }
     setEdges((eds) => addEdge(params, eds))
   }
 
   const addNode = (data: CustomNode) => {
+    // TODO: hook up node array signal to this function
     setNodes((nodes) => [
       ...nodes,
       {
@@ -113,5 +97,3 @@ export default function Playground() {
     </div>
   )
 }
-
-export { modelNodeConnectedState }

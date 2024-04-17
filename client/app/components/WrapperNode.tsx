@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
 import { Position } from 'reactflow'
 import React from 'react'
-import { useReactFlow, getConnectedEdges } from 'reactflow'
+import { useReactFlow } from 'reactflow'
 
 interface Props extends React.PropsWithChildren {
   nodeTitle: string
