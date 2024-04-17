@@ -1,23 +1,54 @@
 import clsx from 'clsx'
-import { Handle, Position } from 'reactflow'
+import React from 'react'
+import {
+  Handle,
+  Position,
+  getConnectedEdges,
+  useNodeId,
+  useStore
+} from 'reactflow'
 import type { HandleProps } from 'reactflow'
 
 interface Props extends HandleProps {
   className?: string
 }
 
+const selector = (s: any) => ({
+  nodeInternals: s.nodeInternals,
+  edges: s.edges
+})
+
 function NodeHandle({ className, ...props }: Props) {
+  const { nodeInternals, edges } = useStore(selector)
+  const nodeId = useNodeId()
+
+  const isHandleConnectable = React.useMemo(() => {
+    const node = nodeInternals.get(nodeId)
+    const connectedEdges = getConnectedEdges([node], edges)
+    console.log(node)
+
+    //TODO: issue is model nodes have more than 1 handle
+    //another issue is that when you allow 2 for model node the user can connect 2 edges
+    //so probably look into using edge id to also restrict
+
+    if (connectedEdges.length > 1) return false
+    return true
+  }, [nodeInternals, edges, nodeId, props.isConnectable])
+
   return (
     <Handle
       {...props}
       className={clsx(
         '!transform-none',
         {
-          '!left-0 !rounded-none !border-t-4 !border-b-4 !border-l-8 !border-t-transparent !border-b-transparent !border-l-[--node-handle-color] !dark:border-l-[#6B7077] no-bg': props.position !== Position.Right,
-          '!right-[-0.125rem] !border-none !w-[7px] !h-[7px] !top-[1.65rem] z-2 !bg-[--node-handle-color]': props.position === Position.Right
+          '!left-0 !rounded-none !border-t-4 !border-b-4 !border-l-8 !border-t-transparent !border-b-transparent !border-l-[--node-handle-color] !dark:border-l-[#6B7077] no-bg':
+            props.position !== Position.Right,
+          '!right-[-0.125rem] !border-none !w-[7px] !h-[7px] !top-[1.65rem] z-2 !bg-[--node-handle-color]':
+            props.position === Position.Right
         },
         className
       )}
+      isConnectable={isHandleConnectable}
     ></Handle>
   )
 }

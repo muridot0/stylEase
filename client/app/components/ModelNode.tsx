@@ -97,14 +97,12 @@ export default React.memo(function ModelNode({
             className='!top-[4.6rem]'
             type='target'
             position={Position.Left}
-            isConnectable={isConnectable}
           />
           <NodeHandle
             id='content-input'
             className='!top-[6.6rem]'
             type='target'
             position={Position.Left}
-            // onConnect={(connection) => console.log(connection)}
           />
         </div>
         <div className=''>
