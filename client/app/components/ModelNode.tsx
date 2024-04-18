@@ -29,7 +29,6 @@ export default React.memo(function ModelNode({
       reactflow.getNodes(),
       reactflow.getEdges()
     )
-    console.log(incommers)
     for (const node of incommers) {
       if (node.type === 'style-node-type') {
         setStyleNodeConnected(true)

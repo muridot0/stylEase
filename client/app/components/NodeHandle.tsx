@@ -5,15 +5,16 @@ import {
   Position,
   getConnectedEdges,
   useNodeId,
-  useStore
+  useStore,
+  useReactFlow
 } from 'reactflow'
-import type { HandleProps } from 'reactflow'
+import type { HandleProps, ReactFlowState } from 'reactflow'
 
 interface Props extends HandleProps {
   className?: string
 }
 
-const selector = (s: any) => ({
+const selector = (s: ReactFlowState) => ({
   nodeInternals: s.nodeInternals,
   edges: s.edges
 })
@@ -21,19 +22,34 @@ const selector = (s: any) => ({
 function NodeHandle({ className, ...props }: Props) {
   const { nodeInternals, edges } = useStore(selector)
   const nodeId = useNodeId()
+  const reactflow = useReactFlow()
 
   const isHandleConnectable = React.useMemo(() => {
-    const node = nodeInternals.get(nodeId)
-    const connectedEdges = getConnectedEdges([node], edges)
-    console.log(node)
+    const node = nodeInternals.get(nodeId!)
+    const connectedEdges = getConnectedEdges([node!], edges)
+
+    // const edgesOnNode = reactflow.getEdges().filter((edge) => edge.target === nodeId)
+    // console.log(edgesOnNode, node)
 
     //TODO: issue is model nodes have more than 1 handle
     //another issue is that when you allow 2 for model node the user can connect 2 edges
     //so probably look into using edge id to also restrict
+    console.log(node)
+    if (node!.type === 'model-node-type') {
+      if (connectedEdges.length > 2 && props.type === 'target') {
+        return false
+      }
+    }
 
-    if (connectedEdges.length > 1) return false
+    if (connectedEdges.length > 1 && props.type === 'target') {
+      return false
+    }
+
     return true
-  }, [nodeInternals, edges, nodeId, props.isConnectable])
+
+    // if (connectedEdges.length > 1) return false
+
+  }, [nodeInternals, edges, nodeId])
 
   return (
     <Handle
