@@ -25,12 +25,26 @@ function WrapperNode({
   const [hovering, setHovering] = React.useState(false)
   const reactflow = useReactFlow()
 
+  const node = reactflow.getNode(nodeId)
+
+  const findId = () => {
+    return node?.type === 'style-node-type'
+      ? 'style-node'
+      : node?.type === 'content-node-type'
+        ? 'content-node'
+        : node?.type === 'model-node-type'
+          ? 'model-node'
+          : undefined
+  }
+
   const renderHandles = () => {
     switch (position) {
       case 'left':
         return <NodeHandle type='target' position={Position.Left} />
       case 'right':
-        return <NodeHandle id={nodeId} type='source' position={Position.Right} />
+        return (
+          <NodeHandle id={findId()} type='source' position={Position.Right} />
+        )
       default:
         return null
     }

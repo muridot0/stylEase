@@ -1,3 +1,4 @@
+import { signal } from '@preact/signals'
 import clsx from 'clsx'
 import { Handle, Position, useStore } from 'reactflow'
 import type { Connection, HandleProps } from 'reactflow'
@@ -5,6 +6,11 @@ import type { Connection, HandleProps } from 'reactflow'
 interface Props extends HandleProps {
   className?: string
 }
+
+const modelNodeSignal = signal({
+  styleNodeConnected: false,
+  contentNodeConnected: true
+})
 
 function NodeHandle({ className, ...props }: Props) {
   const isSourceConnected = useStore((s) =>
@@ -15,6 +21,11 @@ function NodeHandle({ className, ...props }: Props) {
   )
 
   function isValidHandle(connection: Connection) {
+    if(connection.sourceHandle === 'style-node'){
+      modelNodeSignal.value.styleNodeConnected = true
+      console.log(modelNodeSignal)
+      return connection.targetHandle === 'style-input'
+    }
     return connection.source !== connection.target
   }
 
@@ -31,7 +42,7 @@ function NodeHandle({ className, ...props }: Props) {
         },
         className
       )}
-      isValidConnection={isValidHandle}
+      isValidConnection={props.isValidConnection ? props.isValidConnection : isValidHandle}
       isConnectableStart={
         props.type === 'target' ? false : isSourceConnected ? false : true
       }

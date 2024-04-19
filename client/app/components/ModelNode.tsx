@@ -22,56 +22,68 @@ export default React.memo(function ModelNode({
   const reactflow = useReactFlow()
 
   //TODO: to finish need to add a method to toggle the connected state when edge is removed could probably use the incommers
-  // console.log(incommers)
-  const node = reactflow.getNode(props.id)
+  const incommers = getIncomers(
+    reactflow.getNode(props.id)!,
+    reactflow.getNodes(),
+    reactflow.getEdges()
+  )
 
-  React.useEffect(() => {
-    const incommers = getIncomers(
-      reactflow.getNode(props.id)!,
-      reactflow.getNodes(),
-      reactflow.getEdges()
-    )
 
-    console.log(incommers)
+  // React.useEffect(() => {
+  //   reactflow.setNodes((nodes) => nodes)
+  // }, [styleNodeConnected])
+  // React.useEffect(() => {
+  //   const incommers = getIncomers(
+  //     reactflow.getNode(props.id)!,
+  //     reactflow.getNodes(),
+  //     reactflow.getEdges()
+  //   )
 
-    for (const node of incommers) {
-      if (node.type === 'style-node-type') {
-        setStyleNodeConnected(true)
-        data.styleNodeConnected = true;
-        reactflow.setNodes((nodes) => {
-          //maybe pop node and push it back in
-          // can filter the node out and do work on it and then push it back into the nodes arr
-          return nodes.map((node) => {
-            if(node.id === props.id && node.data.styleNodeConnected !== data.styleNodeConnected ) {
-              console.log('i go in')
-              node.data = {
-                ...data
-              }
-            }
-            return node
-          })
-        })
-      }
-      if(node.type === 'content-node-type') {
-        setContentNodeConnected(true)
-        data.contentNodeConnected = true
-      }
-    }
-    reactflow.setNodes((nodes) => {
-      const arr = nodes.map((node) => {
-        if (node.id === props.id && node.data !== data)  {
-          console.log('i go in')
-          node.data = {
-            ...node.data,
-            styleNodeConnected: styleNodeConnected,
-            contentNodeConnected: contentNodeConnected
-          }
-        }
-        return node
-      })
-      return arr
-    })
-  }, [styleNodeConnected, contentNodeConnected, data])
+  //   console.log(reactflow.getEdges())
+
+  //   console.log(incommers)
+
+  //   for (const node of incommers) {
+  //     if (node.type === 'style-node-type') {
+  //       console.log('connected')
+  //       setStyleNodeConnected(true)
+  //       return reactflow.setNodes((nodes) => {
+  //         //maybe pop node and push it back in
+  //         // can filter the node out and do work on it and then push it back into the nodes arr
+  //         return nodes.map((node) => {
+  //           console.log('data here', node.data)
+  //           console.log('data here 2', data)
+  //           if(node.data.styleNodeConnected !== data.styleNodeConnected) {
+  //             console.log('i go in')
+  //             node.data = {
+  //               ...data,
+  //               styleNodeConnected: styleNodeConnected
+  //             }
+  //           }
+  //           return node
+  //         })
+  //       })
+  //     }
+  //     if(node.type === 'content-node-type') {
+  //       setContentNodeConnected(true)
+  //       data.contentNodeConnected = true
+  //     }
+  //   }
+  //   // reactflow.setNodes((nodes) => {
+  //   //   const arr = nodes.map((node) => {
+  //   //     if (node.id === props.id && node.data !== data)  {
+  //   //       console.log('i go in')
+  //   //       node.data = {
+  //   //         ...node.data,
+  //   //         styleNodeConnected: styleNodeConnected,
+  //   //         contentNodeConnected: contentNodeConnected
+  //   //       }
+  //   //     }
+  //   //     return node
+  //   //   })
+  //   //   return arr
+  //   // })
+  // }, [styleNodeConnected, contentNodeConnected, data, reactflow.getNodes(), reactflow.getEdges])
 
   //TODO: finish functionality
   return (
