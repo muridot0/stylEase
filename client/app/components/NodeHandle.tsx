@@ -13,7 +13,6 @@ function NodeHandle({ className, ...props }: Props) {
   const isTargetConnected = useStore((s) =>
     s.edges.some((edge) => edge.target === props.id)
   )
-  console.log(isSourceConnected)
 
   function isValidHandle(connection: Connection) {
     return connection.source !== connection.target

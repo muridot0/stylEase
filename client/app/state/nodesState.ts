@@ -7,6 +7,8 @@ interface CustomNode {
   content?: File
   description?: string
   type?: string,
+  contentNodeConnected?: boolean
+  styleNodeConnected?: boolean
 }
 
 const nodesState = signal<CustomNode[]>([])

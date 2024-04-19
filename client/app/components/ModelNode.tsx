@@ -11,7 +11,7 @@ interface Props {
   contentNodeConnected: boolean
 }
 
-export default function ModelNode({
+export default React.memo(function ModelNode({
   data,
   selected,
   isConnectable,
@@ -22,32 +22,56 @@ export default function ModelNode({
   const reactflow = useReactFlow()
 
   //TODO: to finish need to add a method to toggle the connected state when edge is removed could probably use the incommers
+  // console.log(incommers)
+  const node = reactflow.getNode(props.id)
+
   React.useEffect(() => {
     const incommers = getIncomers(
       reactflow.getNode(props.id)!,
       reactflow.getNodes(),
       reactflow.getEdges()
     )
+
+    console.log(incommers)
+
     for (const node of incommers) {
       if (node.type === 'style-node-type') {
         setStyleNodeConnected(true)
+        data.styleNodeConnected = true;
+        reactflow.setNodes((nodes) => {
+          //maybe pop node and push it back in
+          // can filter the node out and do work on it and then push it back into the nodes arr
+          return nodes.map((node) => {
+            if(node.id === props.id && node.data.styleNodeConnected !== data.styleNodeConnected ) {
+              console.log('i go in')
+              node.data = {
+                ...data
+              }
+            }
+            return node
+          })
+        })
       }
       if(node.type === 'content-node-type') {
         setContentNodeConnected(true)
+        data.contentNodeConnected = true
       }
     }
     reactflow.setNodes((nodes) => {
       const arr = nodes.map((node) => {
-        if (node.id === props.id)  {
+        if (node.id === props.id && node.data !== data)  {
+          console.log('i go in')
           node.data = {
             ...node.data,
+            styleNodeConnected: styleNodeConnected,
+            contentNodeConnected: contentNodeConnected
           }
         }
         return node
       })
       return arr
     })
-  }, [reactflow.getNodes()])
+  }, [styleNodeConnected, contentNodeConnected, data])
 
   //TODO: finish functionality
   return (
@@ -130,7 +154,7 @@ export default function ModelNode({
       )}
     </div>
   )
-}
+})
 
 const MODEL_NODE_TYPE = 'model-node-type'
 
