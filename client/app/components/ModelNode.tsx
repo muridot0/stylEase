@@ -11,7 +11,7 @@ interface Props {
   contentNodeConnected: boolean
 }
 
-export default React.memo(function ModelNode({
+export default function ModelNode({
   data,
   selected,
   isConnectable,
@@ -21,7 +21,6 @@ export default React.memo(function ModelNode({
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
   const reactflow = useReactFlow()
 
-  //TODO: finish this function move this function into a signal state
   //TODO: to finish need to add a method to toggle the connected state when edge is removed could probably use the incommers
   React.useEffect(() => {
     const incommers = getIncomers(
@@ -33,14 +32,15 @@ export default React.memo(function ModelNode({
       if (node.type === 'style-node-type') {
         setStyleNodeConnected(true)
       }
+      if(node.type === 'content-node-type') {
+        setContentNodeConnected(true)
+      }
     }
     reactflow.setNodes((nodes) => {
       const arr = nodes.map((node) => {
-        if (node.id === props.id && node.data !== data)  {
+        if (node.id === props.id)  {
           node.data = {
             ...node.data,
-            styleNodeConnected: true,
-            contentNodeConnected: true
           }
         }
         return node
@@ -130,7 +130,7 @@ export default React.memo(function ModelNode({
       )}
     </div>
   )
-})
+}
 
 const MODEL_NODE_TYPE = 'model-node-type'
 
