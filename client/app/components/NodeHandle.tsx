@@ -8,10 +8,6 @@ interface Props extends HandleProps {
   className?: string
 }
 
-const modelNodeSignal = signal({
-  styleNodeConnected: false,
-  contentNodeConnected: false
-})
 
 function NodeHandle({ className, ...props }: Props) {
   const reactflow = useReactFlow()
@@ -23,6 +19,7 @@ function NodeHandle({ className, ...props }: Props) {
   )
 
   function isValidHandle(connection: Connection) {
+    //TODO: add functionality to remove the style when edge is disconnected
     if (connection.sourceHandle === 'style-node') {
       console.log(connection)
       globalNodeState.value.map((node) => {
@@ -40,8 +37,6 @@ function NodeHandle({ className, ...props }: Props) {
           })
         })
       })
-      modelNodeSignal.value.styleNodeConnected = true
-      // console.log(modelNodeSignal.value)
       return connection.targetHandle === 'style-input'
     }
     return connection.source !== connection.target
@@ -71,5 +66,3 @@ function NodeHandle({ className, ...props }: Props) {
 }
 
 export default NodeHandle
-
-export { modelNodeSignal }

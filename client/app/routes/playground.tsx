@@ -34,7 +34,9 @@ const initialNodes = [
     data: {
       title: 'Style Transfer Node',
       icon: 'i-lucide-brain-cog',
-      id: `model-node-${randomStr(10)}`
+      id: `model-node-${randomStr(10)}`,
+      styleNodeConnected: true,
+      contentNodeConnected: true
     }
   },
   {

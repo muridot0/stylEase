@@ -2,7 +2,7 @@ import React from 'react'
 import { NodeProps, Position, getIncomers, useReactFlow } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
-import NodeHandle, { modelNodeSignal } from './NodeHandle'
+import NodeHandle from './NodeHandle'
 import globalNodeState from '~/state/nodesState'
 
 interface Props {
@@ -20,83 +20,17 @@ export default React.memo(function ModelNode({
 }: NodeProps<Props>) {
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
-  const reactflow = useReactFlow()
-
-  //TODO: to finish need to add a method to toggle the connected state when edge is removed could probably use the incommers
-  const incommer = getIncomers(
-    reactflow.getNode(props.id)!,
-    reactflow.getNodes(),
-    reactflow.getEdges()
-  )
-
 
   React.useEffect(() => {
+    //TODO: handle remove style when edge is disconnected here
     globalNodeState.value.map((node) => {
       if(node.id === props.id) {
         console.log('you got me', node.id, props.id)
         console.log(node)
         setStyleNodeConnected(node.data.styleNodeConnected!)
-        // modelNodeSignal.subscribe(({styleNodeConnected, contentNodeConnected}) => {
-        //   console.log(styleNodeConnected, contentNodeConnected)
-        //   setStyleNodeConnected(styleNodeConnected)
-        // })
       }
     })
   }, [globalNodeState.value])
-  // React.useEffect(() => {
-  //   const incommers = getIncomers(
-  //     reactflow.getNode(props.id)!,
-  //     reactflow.getNodes(),
-  //     reactflow.getEdges()
-  //   )
-
-  //   console.log(reactflow.getEdges())
-
-  //   console.log(incommers)
-
-  //   for (const node of incommers) {
-  //     if (node.type === 'style-node-type') {
-  //       console.log('connected')
-  //       setStyleNodeConnected(true)
-  //       return reactflow.setNodes((nodes) => {
-  //         //maybe pop node and push it back in
-  //         // can filter the node out and do work on it and then push it back into the nodes arr
-  //         return nodes.map((node) => {
-  //           console.log('data here', node.data)
-  //           console.log('data here 2', data)
-  //           if(node.data.styleNodeConnected !== data.styleNodeConnected) {
-  //             console.log('i go in')
-  //             node.data = {
-  //               ...data,
-  //               styleNodeConnected: styleNodeConnected
-  //             }
-  //           }
-  //           return node
-  //         })
-  //       })
-  //     }
-  //     if(node.type === 'content-node-type') {
-  //       setContentNodeConnected(true)
-  //       data.contentNodeConnected = true
-  //     }
-  //   }
-  //   // reactflow.setNodes((nodes) => {
-  //   //   const arr = nodes.map((node) => {
-  //   //     if (node.id === props.id && node.data !== data)  {
-  //   //       console.log('i go in')
-  //   //       node.data = {
-  //   //         ...node.data,
-  //   //         styleNodeConnected: styleNodeConnected,
-  //   //         contentNodeConnected: contentNodeConnected
-  //   //       }
-  //   //     }
-  //   //     return node
-  //   //   })
-  //   //   return arr
-  //   // })
-  // }, [styleNodeConnected, contentNodeConnected, data, reactflow.getNodes(), reactflow.getEdges])
-
-  //TODO: finish functionality
   return (
     <div>
       <WrapperNode
