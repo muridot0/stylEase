@@ -8,48 +8,52 @@ import {
   useStore,
   useReactFlow
 } from 'reactflow'
-import type { HandleProps, ReactFlowState } from 'reactflow'
+import type { Connection, HandleProps, ReactFlowState } from 'reactflow'
 
 interface Props extends HandleProps {
   className?: string
 }
 
-const selector = (s: ReactFlowState) => ({
-  nodeInternals: s.nodeInternals,
-  edges: s.edges
-})
+// const selector = (s: ReactFlowState) => ({
+//   nodeInternals: s.nodeInternals,
+//   edges: s.edges
+// })
 
 function NodeHandle({ className, ...props }: Props) {
-  const { nodeInternals, edges } = useStore(selector)
-  const nodeId = useNodeId()
+  // const { nodeInternals, edges } = useStore(selector)
+  // const nodeId = useNodeId()
   const reactflow = useReactFlow()
 
-  const isHandleConnectable = React.useMemo(() => {
-    const node = nodeInternals.get(nodeId!)
-    const connectedEdges = getConnectedEdges([node!], edges)
+  // const isHandleConnectable = React.useMemo(() => {
+  //   const node = nodeInternals.get(nodeId!)
+  //   const connectedEdges = getConnectedEdges([node!], edges)
 
-    // const edgesOnNode = reactflow.getEdges().filter((edge) => edge.target === nodeId)
-    // console.log(edgesOnNode, node)
+  //   // const edgesOnNode = reactflow.getEdges().filter((edge) => edge.target === nodeId)
+  //   // console.log(edgesOnNode, node)
 
-    //TODO: issue is model nodes have more than 1 handle
-    //another issue is that when you allow 2 for model node the user can connect 2 edges
-    //so probably look into using edge id to also restrict
-    console.log(node)
-    if (node!.type === 'model-node-type') {
-      if (connectedEdges.length > 2 && props.type === 'target') {
-        return false
-      }
-    }
+  //   //TODO: issue is model nodes have more than 1 handle
+  //   //another issue is that when you allow 2 for model node the user can connect 2 edges
+  //   //so probably look into using edge id to also restrict
+  //   console.log(node)
+  //   if (node!.type === 'model-node-type') {
+  //     if (connectedEdges.length > 2 && props.type === 'target') {
+  //       return false
+  //     }
+  //   }
 
-    if (connectedEdges.length > 1 && props.type === 'target') {
-      return false
-    }
+  //   if (connectedEdges.length > 1 && props.type === 'target') {
+  //     return false
+  //   }
 
-    return true
+  //   return true
 
-    // if (connectedEdges.length > 1) return false
+  //   // if (connectedEdges.length > 1) return false
 
-  }, [nodeInternals, edges, nodeId])
+  // }, [nodeInternals, edges, nodeId])
+
+  const handleOnConnect = (params: Connection) => {
+    console.log(params, reactflow.getEdges())
+  }
 
   return (
     <Handle
@@ -64,7 +68,8 @@ function NodeHandle({ className, ...props }: Props) {
         },
         className
       )}
-      isConnectable={isHandleConnectable}
+      // isConnectable={isHandleConnectable}
+      onConnect={handleOnConnect}
     ></Handle>
   )
 }

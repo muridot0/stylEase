@@ -5,6 +5,7 @@ interface CustomNode {
   title: string
   icon: string
   content?: File
+  description?: string
   type?: string,
 }
 
