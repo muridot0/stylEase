@@ -1,4 +1,5 @@
 import type { MetaFunction } from '@remix-run/node'
+import React from 'react'
 import {
   ReactFlow,
   useNodesState,
@@ -13,7 +14,7 @@ import 'reactflow/dist/style.css'
 import { MODEL_NODE_TYPE, NodeDrawer } from '~/components'
 import nodeTypes from '~/lib/nodetypes'
 import randomStr from '~/lib/randomStr'
-import { CustomNode } from '~/state/nodesState'
+import globalNodeState, { CustomNode } from '~/state/nodesState'
 
 const initialNodes = [
   {
@@ -63,6 +64,8 @@ export const meta: MetaFunction = () => {
 export default function Playground() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+
+  globalNodeState.value = nodes
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))

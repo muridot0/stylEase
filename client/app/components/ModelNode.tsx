@@ -1,8 +1,9 @@
 import React from 'react'
-import { Connection, ConnectionStatus, Node, NodeProps, Position, getIncomers, useReactFlow } from 'reactflow'
+import { NodeProps, Position, getIncomers, useReactFlow } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
-import NodeHandle from './NodeHandle'
+import NodeHandle, { modelNodeSignal } from './NodeHandle'
+import globalNodeState from '~/state/nodesState'
 
 interface Props {
   title: string
@@ -29,9 +30,19 @@ export default React.memo(function ModelNode({
   )
 
 
-  // React.useEffect(() => {
-  //   reactflow.setNodes((nodes) => nodes)
-  // }, [styleNodeConnected])
+  React.useEffect(() => {
+    globalNodeState.value.map((node) => {
+      if(node.id === props.id) {
+        console.log('you got me', node.id, props.id)
+        console.log(node)
+        setStyleNodeConnected(node.data.styleNodeConnected!)
+        // modelNodeSignal.subscribe(({styleNodeConnected, contentNodeConnected}) => {
+        //   console.log(styleNodeConnected, contentNodeConnected)
+        //   setStyleNodeConnected(styleNodeConnected)
+        // })
+      }
+    })
+  }, [globalNodeState.value])
   // React.useEffect(() => {
   //   const incommers = getIncomers(
   //     reactflow.getNode(props.id)!,

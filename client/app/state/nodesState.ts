@@ -1,4 +1,5 @@
 import { signal } from "@preact/signals"
+import { Node } from "reactflow"
 
 interface CustomNode {
   id: string
@@ -11,7 +12,7 @@ interface CustomNode {
   styleNodeConnected?: boolean
 }
 
-const nodesState = signal<CustomNode[]>([])
+const globalNodeState = signal<Node<CustomNode>[]>([])
 
-export default nodesState
+export default globalNodeState
 export type { CustomNode }

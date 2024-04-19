@@ -1,7 +1,8 @@
 import { signal } from '@preact/signals'
 import clsx from 'clsx'
-import { Handle, Position, useStore } from 'reactflow'
+import { Handle, Position, useReactFlow, useStore } from 'reactflow'
 import type { Connection, HandleProps } from 'reactflow'
+import globalNodeState from '~/state/nodesState'
 
 interface Props extends HandleProps {
   className?: string
@@ -9,10 +10,11 @@ interface Props extends HandleProps {
 
 const modelNodeSignal = signal({
   styleNodeConnected: false,
-  contentNodeConnected: true
+  contentNodeConnected: false
 })
 
 function NodeHandle({ className, ...props }: Props) {
+  const reactflow = useReactFlow()
   const isSourceConnected = useStore((s) =>
     s.edges.some((edge) => edge.source === props.id)
   )
@@ -21,9 +23,25 @@ function NodeHandle({ className, ...props }: Props) {
   )
 
   function isValidHandle(connection: Connection) {
-    if(connection.sourceHandle === 'style-node'){
+    if (connection.sourceHandle === 'style-node') {
+      console.log(connection)
+      globalNodeState.value.map((node) => {
+        reactflow.setNodes((nodes) => {
+          return nodes.map((node) => {
+            if (node.id === connection.target) {
+              console.log('connect', node.id, connection.source)
+              node.data = {
+                ...node.data,
+                styleNodeConnected: true
+              }
+              return node
+            }
+            return node
+          })
+        })
+      })
       modelNodeSignal.value.styleNodeConnected = true
-      console.log(modelNodeSignal)
+      // console.log(modelNodeSignal.value)
       return connection.targetHandle === 'style-input'
     }
     return connection.source !== connection.target
@@ -42,7 +60,9 @@ function NodeHandle({ className, ...props }: Props) {
         },
         className
       )}
-      isValidConnection={props.isValidConnection ? props.isValidConnection : isValidHandle}
+      isValidConnection={
+        props.isValidConnection ? props.isValidConnection : isValidHandle
+      }
       isConnectableStart={
         props.type === 'target' ? false : isSourceConnected ? false : true
       }
@@ -51,3 +71,5 @@ function NodeHandle({ className, ...props }: Props) {
 }
 
 export default NodeHandle
+
+export { modelNodeSignal }
