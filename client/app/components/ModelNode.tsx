@@ -11,11 +11,6 @@ interface Props {
   contentNodeConnected: boolean
 }
 
-interface ConnectionsState {
-  'style-input': string | null;
-  'content-input': string | null;
-}
-
 export default React.memo(function ModelNode({
   data,
   selected,
@@ -25,33 +20,6 @@ export default React.memo(function ModelNode({
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
   const reactflow = useReactFlow()
-
-  const [connections, setConnections] = React.useState({
-    'style-input': null,
-    'content-input': null
-  })
-
-  const handleConnect = (params: Connection) => {
-    const { source, target, targetHandle } = params;
-    console.log('i go in')
-
-    // Check if the target handle is already connected
-    if (target && connections[targetHandle as keyof ConnectionsState] !== null) {
-      // Only allow one edge per target handle
-      return false;
-    }
-
-    // Update the connections state
-    setConnections((prevConnections) => ({
-      ...prevConnections,
-      [targetHandle as keyof ConnectionsState]: source
-    }));
-
-    console.log(connections)
-
-    // Continue with the connection
-    return true;
-  }
 
   //TODO: finish this function move this function into a signal state
   //TODO: to finish need to add a method to toggle the connected state when edge is removed could probably use the incommers
@@ -128,14 +96,12 @@ export default React.memo(function ModelNode({
             className='!top-[4.6rem]'
             type='target'
             position={Position.Left}
-            onConnect={(params) => handleConnect(params)}
           />
           <NodeHandle
             id='content-input'
             className='!top-[6.6rem]'
             type='target'
             position={Position.Left}
-            onConnect={(params) => handleConnect(params)}
           />
         </div>
         <div className=''>

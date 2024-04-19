@@ -3,8 +3,6 @@ import React from 'react'
 import {
   Handle,
   Position,
-  getConnectedEdges,
-  useNodeId,
   useStore,
   useReactFlow
 } from 'reactflow'
@@ -14,45 +12,13 @@ interface Props extends HandleProps {
   className?: string
 }
 
-// const selector = (s: ReactFlowState) => ({
-//   nodeInternals: s.nodeInternals,
-//   edges: s.edges
-// })
-
 function NodeHandle({ className, ...props }: Props) {
-  // const { nodeInternals, edges } = useStore(selector)
-  // const nodeId = useNodeId()
-  const reactflow = useReactFlow()
+  const isSourceConnected = useStore(s => s.edges.some((edge) => edge.source === props.id))
+  const isTargetConnected = useStore(s => s.edges.some((edge) => edge.target === props.id))
+  console.log(isSourceConnected)
 
-  // const isHandleConnectable = React.useMemo(() => {
-  //   const node = nodeInternals.get(nodeId!)
-  //   const connectedEdges = getConnectedEdges([node!], edges)
-
-  //   // const edgesOnNode = reactflow.getEdges().filter((edge) => edge.target === nodeId)
-  //   // console.log(edgesOnNode, node)
-
-  //   //TODO: issue is model nodes have more than 1 handle
-  //   //another issue is that when you allow 2 for model node the user can connect 2 edges
-  //   //so probably look into using edge id to also restrict
-  //   console.log(node)
-  //   if (node!.type === 'model-node-type') {
-  //     if (connectedEdges.length > 2 && props.type === 'target') {
-  //       return false
-  //     }
-  //   }
-
-  //   if (connectedEdges.length > 1 && props.type === 'target') {
-  //     return false
-  //   }
-
-  //   return true
-
-  //   // if (connectedEdges.length > 1) return false
-
-  // }, [nodeInternals, edges, nodeId])
-
-  const handleOnConnect = (params: Connection) => {
-    console.log(params, reactflow.getEdges())
+  function isValidHandle(connection: Connection) {
+    return connection.source !== connection.target
   }
 
   return (
@@ -68,8 +34,10 @@ function NodeHandle({ className, ...props }: Props) {
         },
         className
       )}
+      isValidConnection={isValidHandle}
+      isConnectableStart={isSourceConnected ? false : true}
+      isConnectableEnd={isTargetConnected ? false : true}
       // isConnectable={isHandleConnectable}
-      onConnect={handleOnConnect}
     ></Handle>
   )
 }
