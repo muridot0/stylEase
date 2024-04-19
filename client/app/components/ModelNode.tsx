@@ -22,7 +22,7 @@ export default React.memo(function ModelNode({
   const reactflow = useReactFlow()
 
   //TODO: to finish need to add a method to toggle the connected state when edge is removed could probably use the incommers
-  const incommers = getIncomers(
+  const incommer = getIncomers(
     reactflow.getNode(props.id)!,
     reactflow.getNodes(),
     reactflow.getEdges()
