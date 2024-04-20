@@ -67,7 +67,13 @@ export default function Playground() {
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNode>(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
+  // console.log('i am called')
   globalNodeState.value = nodes
+  // React.useEffect(() => {
+  //   console.log('i am called')
+  //   globalNodeState.value = nodes
+  //   // setNodes((nodes))
+  // }, [globalNodeState.value])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))

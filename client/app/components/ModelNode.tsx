@@ -1,5 +1,12 @@
 import React from 'react'
-import { NodeProps, Position, getIncomers, useReactFlow } from 'reactflow'
+import {
+  NodeProps,
+  Position,
+  getIncomers,
+  useReactFlow,
+  useStore,
+  useStoreApi
+} from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
@@ -12,6 +19,11 @@ interface Props {
   contentNodeConnected: boolean
 }
 
+const selector = (s: any) => ({
+  nodeInternals: s.nodeInternals,
+  edges: s.edges
+})
+
 export default React.memo(function ModelNode({
   data,
   selected,
@@ -20,44 +32,50 @@ export default React.memo(function ModelNode({
 }: NodeProps<Props>) {
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
+  const store = useStoreApi()
   const reactflow = useReactFlow()
 
-  const incommers = getIncomers(
-    reactflow.getNode(props.id)!,
-    reactflow.getNodes(),
-    reactflow.getEdges()
-  )
+  store.subscribe((state) => {
+    console.log(state.edges)
+  })
 
   React.useEffect(() => {
     //TODO: handle remove style when edge is disconnected here
-    globalNodeState.value.map((node) => {
-      if(node.id === props.id) {
-        console.log(incommers)
-        if(!incommers) {
-          console.log('first barrier')
-          globalNodeState.value.map((node) => {
-            reactflow.setNodes((nodes) => {
-              return nodes.map((node) => {
-                console.log('i get here')
-                if (node.id === props.id) {
-                  console.log('connect', node.id, props.id)
-                  node.data = {
-                    ...node.data,
-                    styleNodeConnected: false
-                  }
-                  return node
-                }
-                return node
-              })
-            })
-          })
-          setStyleNodeConnected(false)
+
+    const incommers = getIncomers(
+      reactflow.getNode(props.id)!,
+      reactflow.getNodes(),
+      reactflow.getEdges()
+    )
+    console.log(incommers)
+    globalNodeState.value.map((node): void => {
+      if (incommers && incommers.length !== 0 && node.id === props.id) {
+        node.data = {
+          ...node.data,
+          styleNodeConnected: true
         }
-        console.log('final')
+
+        setStyleNodeConnected(node.data.styleNodeConnected!)
+      } else if (incommers && incommers.length === 0 && node.id === props.id) {
+        console.log('i go in')
+        node.data = {
+          ...node.data,
+          styleNodeConnected: false
+        }
         setStyleNodeConnected(node.data.styleNodeConnected!)
       }
+
+      // if(node.id === props.id) {
+      //   setStyleNodeConnected(node.data.styleNodeConnected!)
+      // }
+      // if no incommers set the node.data.styleNodeConnected value of the current node to false and set the state to false
     })
-  }, [globalNodeState.value, incommers])
+  }, [globalNodeState.value])
+
+  React.useEffect(() => {
+    console.log('i am called')
+    reactflow.setNodes(globalNodeState.value)
+  }, [globalNodeState.value])
   return (
     <div>
       <WrapperNode

@@ -1,5 +1,6 @@
 import { signal } from '@preact/signals'
 import clsx from 'clsx'
+import React from 'react'
 import { Handle, Position, useReactFlow, useStore } from 'reactflow'
 import type { Connection, HandleProps } from 'reactflow'
 import globalNodeState from '~/state/nodesState'
@@ -22,23 +23,20 @@ function NodeHandle({ className, ...props }: Props) {
     //TODO: add functionality to remove the style when edge is disconnected
     if (connection.sourceHandle === 'style-node') {
       globalNodeState.value.map((node) => {
-        reactflow.setNodes((nodes) => {
-          return nodes.map((node) => {
-            if (node.id === connection.target) {
-              node.data = {
-                ...node.data,
-                styleNodeConnected: true
-              }
-              return node
-            }
-            return node
-          })
-        })
+        if (node.id === connection.target) {
+          node.data = {
+            ...node.data,
+            styleNodeConnected: true
+          }
+          return node
+        }
       })
       return connection.targetHandle === 'style-input'
     }
     return connection.source !== connection.target
   }
+
+  React.useEffect(() => { console.log('i am called'); reactflow.setNodes(globalNodeState.value)}, [globalNodeState.value])
 
   return (
     <Handle
