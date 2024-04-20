@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
-import { Position } from 'reactflow'
+import { NodeProps, Position } from 'reactflow'
 import React from 'react'
 import { useReactFlow } from 'reactflow'
 

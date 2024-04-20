@@ -7,7 +7,8 @@ import {
   addEdge,
   Background,
   BackgroundVariant,
-  Connection
+  Connection,
+  Edge
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -52,7 +53,13 @@ const initialNodes = [
 ]
 
 const initialEdges = [
-  { id: 'e1-2', source: '1', sourceHandle: '1', target: '2', targetHandle: 'style-input' },
+  {
+    id: 'e1-2',
+    source: '1',
+    sourceHandle: '1',
+    target: '2',
+    targetHandle: 'style-input'
+  },
   { id: 'e2-3', source: '2', sourceHandle: '2', target: '3' }
 ]
 
@@ -64,7 +71,8 @@ export const meta: MetaFunction = () => {
 }
 
 export default function Playground() {
-  const [nodes, setNodes, onNodesChange] = useNodesState<CustomNode>(initialNodes)
+  const [nodes, setNodes, onNodesChange] =
+    useNodesState<CustomNode>(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
   // console.log('i am called')
@@ -75,7 +83,13 @@ export default function Playground() {
   //   // setNodes((nodes))
   // }, [globalNodeState.value])
 
+  React.useEffect(() => {
+    // console.log('i am called', edges)
+    setNodes(globalNodeState.value)
+  }, [globalNodeState.value, nodes])
+
   const onConnect = (params: Connection) => {
+    console.log('connected', params)
     setEdges((eds) => addEdge(params, eds))
   }
 
@@ -91,6 +105,22 @@ export default function Playground() {
     ])
   }
 
+  const handleEdgeDelete = (edges: Edge[]) => {
+    edges.map((edge): void => {
+      if (edge.targetHandle === 'style-input') {
+        console.log('edge here', edge)
+        globalNodeState.value.map((node): void => {
+          if (edge.target === node.id) {
+            node.data = {
+              ...node.data,
+              styleNodeConnected: !node.data.styleNodeConnected
+            }
+          }
+        })
+      }
+    })
+  }
+
   return (
     <div className='h-screen w-screen'>
       <ReactFlow
@@ -100,6 +130,7 @@ export default function Playground() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onEdgesDelete={handleEdgeDelete}
       >
         <NodeDrawer onSelect={addNode} />
         <Background variant={BackgroundVariant.Dots} />

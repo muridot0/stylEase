@@ -1,42 +1,46 @@
 import React from 'react'
 import {
+  Connection,
   NodeProps,
   Position,
   getIncomers,
   useReactFlow,
   useStore,
-  useStoreApi
+  useStoreApi,
+  OnEdgesDelete
 } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
 import globalNodeState from '~/state/nodesState'
+import { signal } from '@preact/signals'
 
 interface Props {
   title: string
   icon: string
   styleNodeConnected: boolean
   contentNodeConnected: boolean
+
 }
 
-const selector = (s: any) => ({
-  nodeInternals: s.nodeInternals,
-  edges: s.edges
-})
 
 export default React.memo(function ModelNode({
   data,
   selected,
   isConnectable,
+  onConnect,
   ...props
-}: NodeProps<Props>) {
+}: NodeProps<Props> & any) {
+  const styleSignal = signal({styleNodeConnected: false, contentNodeConnected: false})
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
   const store = useStoreApi()
   const reactflow = useReactFlow()
 
+  let edges
   store.subscribe((state) => {
-    console.log(state.edges)
+    edges = state.edges
+    // console.log(state.edges)
   })
 
   React.useEffect(() => {
@@ -57,11 +61,11 @@ export default React.memo(function ModelNode({
 
         setStyleNodeConnected(node.data.styleNodeConnected!)
       } else if (incommers && incommers.length === 0 && node.id === props.id) {
-        console.log('i go in')
-        node.data = {
-          ...node.data,
-          styleNodeConnected: false
-        }
+        // console.log('i go in')
+        // node.data = {
+        //   ...node.data,
+        //   styleNodeConnected: false
+        // }
         setStyleNodeConnected(node.data.styleNodeConnected!)
       }
 
@@ -72,10 +76,6 @@ export default React.memo(function ModelNode({
     })
   }, [globalNodeState.value])
 
-  React.useEffect(() => {
-    console.log('i am called')
-    reactflow.setNodes(globalNodeState.value)
-  }, [globalNodeState.value])
   return (
     <div>
       <WrapperNode
@@ -122,12 +122,14 @@ export default React.memo(function ModelNode({
             className='!top-[4.6rem]'
             type='target'
             position={Position.Left}
+            onConnect={onConnect}
           />
           <NodeHandle
             id='content-input'
             className='!top-[6.6rem]'
             type='target'
             position={Position.Left}
+            onConnect={onConnect}
           />
         </div>
         <div className=''>
