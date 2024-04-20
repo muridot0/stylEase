@@ -20,17 +20,44 @@ export default React.memo(function ModelNode({
 }: NodeProps<Props>) {
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
+  const reactflow = useReactFlow()
+
+  const incommers = getIncomers(
+    reactflow.getNode(props.id)!,
+    reactflow.getNodes(),
+    reactflow.getEdges()
+  )
 
   React.useEffect(() => {
     //TODO: handle remove style when edge is disconnected here
     globalNodeState.value.map((node) => {
       if(node.id === props.id) {
-        console.log('you got me', node.id, props.id)
-        console.log(node)
+        console.log(incommers)
+        if(!incommers) {
+          console.log('first barrier')
+          globalNodeState.value.map((node) => {
+            reactflow.setNodes((nodes) => {
+              return nodes.map((node) => {
+                console.log('i get here')
+                if (node.id === props.id) {
+                  console.log('connect', node.id, props.id)
+                  node.data = {
+                    ...node.data,
+                    styleNodeConnected: false
+                  }
+                  return node
+                }
+                return node
+              })
+            })
+          })
+          setStyleNodeConnected(false)
+        }
+        console.log('final')
         setStyleNodeConnected(node.data.styleNodeConnected!)
       }
     })
-  }, [globalNodeState.value])
+  }, [globalNodeState.value, incommers])
   return (
     <div>
       <WrapperNode

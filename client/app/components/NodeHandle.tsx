@@ -21,12 +21,10 @@ function NodeHandle({ className, ...props }: Props) {
   function isValidHandle(connection: Connection) {
     //TODO: add functionality to remove the style when edge is disconnected
     if (connection.sourceHandle === 'style-node') {
-      console.log(connection)
       globalNodeState.value.map((node) => {
         reactflow.setNodes((nodes) => {
           return nodes.map((node) => {
             if (node.id === connection.target) {
-              console.log('connect', node.id, connection.source)
               node.data = {
                 ...node.data,
                 styleNodeConnected: true

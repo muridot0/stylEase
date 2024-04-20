@@ -64,7 +64,7 @@ export const meta: MetaFunction = () => {
 }
 
 export default function Playground() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
+  const [nodes, setNodes, onNodesChange] = useNodesState<CustomNode>(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
   globalNodeState.value = nodes
@@ -74,7 +74,6 @@ export default function Playground() {
   }
 
   const addNode = (data: CustomNode) => {
-    // TODO: hook up node array signal to this function
     setNodes((nodes) => [
       ...nodes,
       {
