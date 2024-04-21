@@ -128,7 +128,7 @@ export default React.memo(function ModelNode({
           </p>
         </div>
       </WrapperNode>
-      //TODO: add another flag to only display when all elements the model node is also connected to the display node
+      {/*TODO: add another flag to only display when all elements the model node is also connected to the display node*/}
       {styleNodeConnected && contentNodeConnected && (
         <button className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[9.5rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'>
           <span className='i-lucide-play flex' /> stylEase!

@@ -102,18 +102,18 @@ function WrapperNode({
       </div>
 
       {hovering && (
-        <div className='flex gap-2 bg-transparent w-fit  mt-1 rounded-[8px] px-2 py-1'>
+        <div className='flex gap-2 bg-transparent w-fit mt-[0.3rem] rounded-[8px] pt-1'>
           <button
-            className='flex border bg-[--node-bg-color] border-[--node-border-color] p-1 rounded-1 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
+            className='flex border items-center bg-[--node-bg-color] border-[--node-border-color] p-1 rounded-1 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
             onClick={deleteEdges}
           >
-            <span className='i-lucide-unlink text-xs'></span>
+            <span className='i-lucide-unlink flex'></span>
           </button>
           <button
-            className='flex border bg-[--node-bg-color] border-[--node-border-color] p-1 rounded-1 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
+            className='flex border items-center bg-[--node-bg-color] border-[--node-border-color] p-1 rounded-1 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
             onClick={deleteNode}
           >
-            <span className='i-lucide-trash-2 text-xs'></span>
+            <span className='i-lucide-trash-2 flex'></span>
           </button>
         </div>
       )}
