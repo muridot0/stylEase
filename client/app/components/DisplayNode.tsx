@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default React.memo(function DisplayNode({ data, selected, ...props }: NodeProps<Props>) {
-  //TODO: add functionality to output node
+  //TODO: start working on functionality next
   return (
     <WrapperNode
       nodeTitle={data.title}
