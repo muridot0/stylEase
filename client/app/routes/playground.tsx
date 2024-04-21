@@ -1,4 +1,3 @@
-import { signal } from '@preact/signals'
 import type { MetaFunction } from '@remix-run/node'
 import React from 'react'
 import {

@@ -10,7 +10,7 @@ interface Props {
   content: File
 }
 
-export default React.memo(function StyleNode({
+export default React.memo(function InputNode({
   data,
   selected,
   ...props
@@ -60,5 +60,6 @@ export default React.memo(function StyleNode({
 })
 
 const STYLE_NODE_TYPE = 'style-node-type'
+const CONTENT_NODE_TYPE = 'content-node-type'
 
-export { STYLE_NODE_TYPE }
+export { STYLE_NODE_TYPE, CONTENT_NODE_TYPE }

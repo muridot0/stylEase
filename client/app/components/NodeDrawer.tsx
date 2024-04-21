@@ -47,7 +47,7 @@ export default function NodeDrawer({ onSelect }: Props) {
                 <button className='flex p-3 border border-[--node-border-color] rounded-[4px] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'>
                   <span
                     className={clsx(`${data.icon} text-3xl flex`, {
-                      'i-lucide-brain-cog': data.icon === 'i-lucide-brain-cog'
+                      'i-lucide-paintbrush': data.type === 'content-node-type'
                     })}
                   ></span>
                 </button>
