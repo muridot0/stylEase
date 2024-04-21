@@ -12,7 +12,13 @@ import {
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
-import { MODEL_NODE_TYPE, NodeDrawer } from '~/components'
+import {
+  STYLE_NODE_TYPE,
+  DISPLAY_NODE_TYPE,
+  CONTENT_NODE_TYPE,
+  MODEL_NODE_TYPE,
+  NodeDrawer
+} from '~/components'
 import nodeTypes from '~/lib/nodetypes'
 import randomStr from '~/lib/randomStr'
 import globalNodeState, { CustomNode } from '~/state/nodesState'
@@ -20,8 +26,8 @@ import globalNodeState, { CustomNode } from '~/state/nodesState'
 const initialNodes = [
   {
     id: '1',
-    type: 'style-node-type',
-    position: { x: 500, y: 200 },
+    type: STYLE_NODE_TYPE,
+    position: { x: 490, y: 223 },
     data: {
       title: 'Style Node',
       icon: 'i-lucide-image-plus',
@@ -30,8 +36,18 @@ const initialNodes = [
   },
   {
     id: '2',
-    type: 'model-node-type',
-    position: { x: 800, y: 200 },
+    type: CONTENT_NODE_TYPE,
+    position: { x: 490, y: 532 },
+    data: {
+      title: 'Content Node',
+      icon: 'i-lucide-paintbrush',
+      id: `style-node-${randomStr(10)}`
+    }
+  },
+  {
+    id: '3',
+    type: MODEL_NODE_TYPE,
+    position: { x: 813, y: 379 },
     data: {
       title: 'Style Transfer Node',
       icon: 'i-lucide-brain-cog',
@@ -41,9 +57,9 @@ const initialNodes = [
     }
   },
   {
-    id: '3',
-    type: 'display-node-type',
-    position: { x: 1100, y: 200 },
+    id: '4',
+    type: DISPLAY_NODE_TYPE,
+    position: { x: 1133, y: 352 },
     data: {
       title: 'Display Node',
       icon: 'i-lucide-aperture',
@@ -57,10 +73,11 @@ const initialEdges = [
     id: 'e1-2',
     source: '1',
     sourceHandle: '1',
-    target: '2',
+    target: '3',
     targetHandle: 'style-input'
   },
-  { id: 'e2-3', source: '2', sourceHandle: '2', target: '3' }
+  { id: 'e2-3', source: '2', sourceHandle: '2', target: '3', targetHandle: 'content-input' },
+  {id: 'e3-4', source: '3', sourceHandle: '3', target: '4'}
 ]
 
 export const meta: MetaFunction = () => {
@@ -75,10 +92,10 @@ export default function Playground() {
     useNodesState<CustomNode>(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
-    React.useEffect(() => {
-      globalNodeState.value = nodes
-      setNodes(globalNodeState.value)
-    }, [nodes])
+  React.useEffect(() => {
+    globalNodeState.value = nodes
+    setNodes(globalNodeState.value)
+  }, [nodes])
 
   const onConnect = (params: Connection) => {
     console.log('connected', params)
@@ -106,6 +123,18 @@ export default function Playground() {
               node.data = {
                 ...node.data,
                 styleNodeConnected: false
+              }
+            }
+            return node
+          })
+        })
+      } else if (edge.targetHandle === 'content-input') {
+        setNodes((nodes) => {
+          return nodes.map((node) => {
+            if (edge.target === node.id) {
+              node.data = {
+                ...node.data,
+                contentNodeConnected: false
               }
             }
             return node

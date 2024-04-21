@@ -1,23 +1,17 @@
 import React from 'react'
-import {
-  NodeProps,
-  Position,
-  getIncomers,
-  useReactFlow,
-} from 'reactflow'
+import { NodeProps, Position, getIncomers, useReactFlow } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
 import globalNodeState from '~/state/nodesState'
+import { CONTENT_NODE_TYPE, STYLE_NODE_TYPE } from './InputNode'
 
 interface Props {
   title: string
   icon: string
   styleNodeConnected: boolean
   contentNodeConnected: boolean
-
 }
-
 
 export default React.memo(function ModelNode({
   data,
@@ -38,13 +32,25 @@ export default React.memo(function ModelNode({
       reactflow.getNodes(),
       reactflow.getEdges()
     )
-    globalNodeState.subscribe((nodes) => {nodes.map((node) => {
-      if (incommers && incommers.length !== 0 && node.id === props.id) {
-        setStyleNodeConnected(node.data.styleNodeConnected!)
-      } else if (incommers && incommers.length === 0 && node.id === props.id) {
-        setStyleNodeConnected(node.data.styleNodeConnected!)
-      }
-    })})
+
+    console.log(incommers)
+
+    globalNodeState.subscribe((nodes) => {
+      nodes.map((node) => {
+        if (incommers && incommers.length !== 0) {
+          incommers.map((incommer) => {
+            if (node.id === props.id && incommer.type === STYLE_NODE_TYPE) {
+              setStyleNodeConnected(node.data.styleNodeConnected!)
+            } else if (
+              node.id === props.id &&
+              incommer.type === CONTENT_NODE_TYPE
+            ) {
+              setContentNodeConnected(node.data.contentNodeConnected!)
+            }
+          })
+        }
+      })
+    })
   }, [globalNodeState.value])
 
   return (

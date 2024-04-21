@@ -32,11 +32,20 @@ function NodeHandle({ className, ...props }: Props) {
         }
       })
       return connection.targetHandle === 'style-input'
+    } else if (connection.sourceHandle === 'content-node') {
+      globalNodeState.value.map((node) => {
+        if (node.id === connection.target) {
+          node.data = {
+            ...node.data,
+            contentNodeConnected: true
+          }
+          return node
+        }
+      })
+      return connection.targetHandle === 'content-input'
     }
     return connection.source !== connection.target
   }
-
-  // React.useEffect(() => { reactflow.setNodes(globalNodeState.value)}, [globalNodeState.value])
 
   return (
     <Handle
