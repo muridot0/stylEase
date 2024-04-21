@@ -36,7 +36,7 @@ function NodeHandle({ className, ...props }: Props) {
     return connection.source !== connection.target
   }
 
-  React.useEffect(() => { console.log('i am called'); reactflow.setNodes(globalNodeState.value)}, [globalNodeState.value])
+  // React.useEffect(() => { reactflow.setNodes(globalNodeState.value)}, [globalNodeState.value])
 
   return (
     <Handle

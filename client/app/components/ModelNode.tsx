@@ -7,7 +7,7 @@ import {
   useReactFlow,
   useStore,
   useStoreApi,
-  OnEdgesDelete
+  useOnSelectionChange
 } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
@@ -43,6 +43,12 @@ export default React.memo(function ModelNode({
     // console.log(state.edges)
   })
 
+  useOnSelectionChange({
+    onChange: ({edges}) => {
+      console.log('edges here', edges)
+    }
+  })
+
   React.useEffect(() => {
     //TODO: handle remove style when edge is disconnected here
 
@@ -52,12 +58,12 @@ export default React.memo(function ModelNode({
       reactflow.getEdges()
     )
     console.log(incommers)
-    globalNodeState.value.map((node): void => {
+    globalNodeState.subscribe((nodes) => {nodes.map((node) => {
       if (incommers && incommers.length !== 0 && node.id === props.id) {
-        node.data = {
-          ...node.data,
-          styleNodeConnected: true
-        }
+        // node.data = {
+        //   ...node.data,
+        //   styleNodeConnected: true
+        // }
 
         setStyleNodeConnected(node.data.styleNodeConnected!)
       } else if (incommers && incommers.length === 0 && node.id === props.id) {
@@ -68,12 +74,29 @@ export default React.memo(function ModelNode({
         // }
         setStyleNodeConnected(node.data.styleNodeConnected!)
       }
+    })})
+    // globalNodeState.value.map((node): void => {
+    //   if (incommers && incommers.length !== 0 && node.id === props.id) {
+    //     // node.data = {
+    //     //   ...node.data,
+    //     //   styleNodeConnected: true
+    //     // }
 
-      // if(node.id === props.id) {
-      //   setStyleNodeConnected(node.data.styleNodeConnected!)
-      // }
-      // if no incommers set the node.data.styleNodeConnected value of the current node to false and set the state to false
-    })
+    //     setStyleNodeConnected(node.data.styleNodeConnected!)
+    //   } else if (incommers && incommers.length === 0 && node.id === props.id) {
+    //     // console.log('i go in')
+    //     // node.data = {
+    //     //   ...node.data,
+    //     //   styleNodeConnected: false
+    //     // }
+    //     setStyleNodeConnected(node.data.styleNodeConnected!)
+    //   }
+
+    //   // if(node.id === props.id) {
+    //   //   setStyleNodeConnected(node.data.styleNodeConnected!)
+    //   // }
+    //   // if no incommers set the node.data.styleNodeConnected value of the current node to false and set the state to false
+    // })
   }, [globalNodeState.value])
 
   return (

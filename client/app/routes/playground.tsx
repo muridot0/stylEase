@@ -76,17 +76,20 @@ export default function Playground() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
   // console.log('i am called')
-  globalNodeState.value = nodes
   // React.useEffect(() => {
-  //   console.log('i am called')
-  //   globalNodeState.value = nodes
-  //   // setNodes((nodes))
-  // }, [globalNodeState.value])
+    //   console.log('i am called')
+    //   globalNodeState.value = nodes
+    //   // setNodes((nodes))
+    // }, [globalNodeState.value])
+    React.useEffect(() => {
+      console.log('here')
+      globalNodeState.value = nodes
+    }, [nodes, edges])
 
-  React.useEffect(() => {
-    // console.log('i am called', edges)
-    setNodes(globalNodeState.value)
-  }, [globalNodeState.value, nodes])
+  //   React.useEffect(() => {
+  //   console.log('i am called', edges)
+  //   setNodes(globalNodeState.value)
+  // }, [globalNodeState.value, edges.length])
 
   const onConnect = (params: Connection) => {
     console.log('connected', params)
@@ -109,14 +112,25 @@ export default function Playground() {
     edges.map((edge): void => {
       if (edge.targetHandle === 'style-input') {
         console.log('edge here', edge)
-        globalNodeState.value.map((node): void => {
+        nodes.map((node): void => {
           if (edge.target === node.id) {
             node.data = {
               ...node.data,
               styleNodeConnected: !node.data.styleNodeConnected
             }
+            console.log('called immediately', node.data.styleNodeConnected)
           }
         })
+        globalNodeState.value = nodes
+        // globalNodeState.value.map((node): void => {
+        //   if (edge.target === node.id) {
+        //     node.data = {
+        //       ...node.data,
+        //       styleNodeConnected: !node.data.styleNodeConnected
+        //     }
+        //     console.log('called immediately', node.data.styleNodeConnected)
+        //   }
+        // })
       }
     })
   }
