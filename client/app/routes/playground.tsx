@@ -1,3 +1,4 @@
+import { signal } from '@preact/signals'
 import type { MetaFunction } from '@remix-run/node'
 import React from 'react'
 import {
@@ -75,21 +76,10 @@ export default function Playground() {
     useNodesState<CustomNode>(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
-  // console.log('i am called')
-  // React.useEffect(() => {
-    //   console.log('i am called')
-    //   globalNodeState.value = nodes
-    //   // setNodes((nodes))
-    // }, [globalNodeState.value])
     React.useEffect(() => {
-      console.log('here')
       globalNodeState.value = nodes
-    }, [nodes, edges])
-
-  //   React.useEffect(() => {
-  //   console.log('i am called', edges)
-  //   setNodes(globalNodeState.value)
-  // }, [globalNodeState.value, edges.length])
+      setNodes(globalNodeState.value)
+    }, [nodes])
 
   const onConnect = (params: Connection) => {
     console.log('connected', params)
@@ -111,26 +101,17 @@ export default function Playground() {
   const handleEdgeDelete = (edges: Edge[]) => {
     edges.map((edge): void => {
       if (edge.targetHandle === 'style-input') {
-        console.log('edge here', edge)
-        nodes.map((node): void => {
-          if (edge.target === node.id) {
-            node.data = {
-              ...node.data,
-              styleNodeConnected: !node.data.styleNodeConnected
+        setNodes((nodes) => {
+          return nodes.map((node) => {
+            if (edge.target === node.id) {
+              node.data = {
+                ...node.data,
+                styleNodeConnected: false
+              }
             }
-            console.log('called immediately', node.data.styleNodeConnected)
-          }
+            return node
+          })
         })
-        globalNodeState.value = nodes
-        // globalNodeState.value.map((node): void => {
-        //   if (edge.target === node.id) {
-        //     node.data = {
-        //       ...node.data,
-        //       styleNodeConnected: !node.data.styleNodeConnected
-        //     }
-        //     console.log('called immediately', node.data.styleNodeConnected)
-        //   }
-        // })
       }
     })
   }

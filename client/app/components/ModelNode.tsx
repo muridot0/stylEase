@@ -1,19 +1,14 @@
 import React from 'react'
 import {
-  Connection,
   NodeProps,
   Position,
   getIncomers,
   useReactFlow,
-  useStore,
-  useStoreApi,
-  useOnSelectionChange
 } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
 import globalNodeState from '~/state/nodesState'
-import { signal } from '@preact/signals'
 
 interface Props {
   title: string
@@ -31,23 +26,9 @@ export default React.memo(function ModelNode({
   onConnect,
   ...props
 }: NodeProps<Props> & any) {
-  const styleSignal = signal({styleNodeConnected: false, contentNodeConnected: false})
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
-  const store = useStoreApi()
   const reactflow = useReactFlow()
-
-  let edges
-  store.subscribe((state) => {
-    edges = state.edges
-    // console.log(state.edges)
-  })
-
-  useOnSelectionChange({
-    onChange: ({edges}) => {
-      console.log('edges here', edges)
-    }
-  })
 
   React.useEffect(() => {
     //TODO: handle remove style when edge is disconnected here
@@ -57,46 +38,13 @@ export default React.memo(function ModelNode({
       reactflow.getNodes(),
       reactflow.getEdges()
     )
-    console.log(incommers)
     globalNodeState.subscribe((nodes) => {nodes.map((node) => {
       if (incommers && incommers.length !== 0 && node.id === props.id) {
-        // node.data = {
-        //   ...node.data,
-        //   styleNodeConnected: true
-        // }
-
         setStyleNodeConnected(node.data.styleNodeConnected!)
       } else if (incommers && incommers.length === 0 && node.id === props.id) {
-        // console.log('i go in')
-        // node.data = {
-        //   ...node.data,
-        //   styleNodeConnected: false
-        // }
         setStyleNodeConnected(node.data.styleNodeConnected!)
       }
     })})
-    // globalNodeState.value.map((node): void => {
-    //   if (incommers && incommers.length !== 0 && node.id === props.id) {
-    //     // node.data = {
-    //     //   ...node.data,
-    //     //   styleNodeConnected: true
-    //     // }
-
-    //     setStyleNodeConnected(node.data.styleNodeConnected!)
-    //   } else if (incommers && incommers.length === 0 && node.id === props.id) {
-    //     // console.log('i go in')
-    //     // node.data = {
-    //     //   ...node.data,
-    //     //   styleNodeConnected: false
-    //     // }
-    //     setStyleNodeConnected(node.data.styleNodeConnected!)
-    //   }
-
-    //   // if(node.id === props.id) {
-    //   //   setStyleNodeConnected(node.data.styleNodeConnected!)
-    //   // }
-    //   // if no incommers set the node.data.styleNodeConnected value of the current node to false and set the state to false
-    // })
   }, [globalNodeState.value])
 
   return (
