@@ -17,7 +17,8 @@ import {
   DISPLAY_NODE_TYPE,
   CONTENT_NODE_TYPE,
   MODEL_NODE_TYPE,
-  NodeDrawer
+  NodeDrawer,
+  Header
 } from '~/components'
 import nodeTypes from '~/lib/nodetypes'
 import randomStr from '~/lib/randomStr'
@@ -162,20 +163,23 @@ export default function Playground() {
   }
 
   return (
-    <div className='h-screen w-screen'>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onEdgesDelete={handleEdgeDelete}
-        snapToGrid={true}
-      >
-        <NodeDrawer onSelect={addNode} />
-        <Background variant={BackgroundVariant.Dots} />
-      </ReactFlow>
-    </div>
+    <>
+      <div className='h-screen w-screen'>
+      <Header />
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          nodeTypes={nodeTypes}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          onEdgesDelete={handleEdgeDelete}
+          snapToGrid={true}
+        >
+          <NodeDrawer onSelect={addNode} />
+          <Background variant={BackgroundVariant.Dots} />
+        </ReactFlow>
+      </div>
+    </>
   )
 }

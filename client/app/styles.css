@@ -31,7 +31,7 @@
 }
 
 :root {
-  @apply bg-[#e5e5e5] dark:bg-[#222428] text-[#222428] dark:text-[#EEEFEF];
+  @apply bg-[#e8e8e8] dark:bg-[#222428] text-[#222428] dark:text-[#EEEFEF];
   color-scheme: light dark;
   font-family: 'Zed Mono', sans-serif;
   font-size: 12px;

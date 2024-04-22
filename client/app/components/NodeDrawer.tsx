@@ -23,7 +23,7 @@ export default function NodeDrawer({ onSelect }: Props) {
     <Panel
       position='top-left'
       className={clsx(
-        'flex flex-col gap-2 items-center top-[25rem] rounded-[8px] bg-[--node-bg-color] border border-[--node-border-color] p-4',
+        'flex flex-col gap-2 items-center !top-[6rem] rounded-[8px] bg-[--node-bg-color] border border-[--node-border-color] p-4',
         { 'w-75': !collapsed }
       )}
     >
