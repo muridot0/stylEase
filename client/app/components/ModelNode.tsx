@@ -1,10 +1,9 @@
 import React from 'react'
-import { NodeProps, Position, getIncomers, useReactFlow } from 'reactflow'
+import { NodeProps, Position } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
 import globalNodeState from '~/state/nodesState'
-import { CONTENT_NODE_TYPE, STYLE_NODE_TYPE } from './InputNode'
 
 interface Props {
   title: string
@@ -22,52 +21,16 @@ export default React.memo(function ModelNode({
 }: NodeProps<Props> & any) {
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
-  const reactflow = useReactFlow()
+  const [displayNodeConnected, setDisplayNodeConnected] = React.useState(false)
 
   React.useEffect(() => {
-    //TODO: handle remove style when edge is disconnected here
-
-    const incommers = getIncomers(
-      reactflow.getNode(props.id)!,
-      reactflow.getNodes(),
-      reactflow.getEdges()
-    )
-
     globalNodeState.subscribe((nodes) => {
       const currentNode = nodes.find((node) => node.id === props.id)
 
+      console.log(currentNode)
       setStyleNodeConnected(currentNode?.data.styleNodeConnected!)
       setContentNodeConnected(currentNode?.data.contentNodeConnected!)
-
-      // nodes.map((node) => {
-      //   // if (incommers && incommers.length !== 0) {
-      //   //   incommers.map((incommer) => {
-      //   //     if (node.id === props.id && incommer.type === STYLE_NODE_TYPE) {
-      //   //       setStyleNodeConnected(node.data.styleNodeConnected!)
-      //   //     } else if (
-      //   //       node.id === props.id &&
-      //   //       incommer.type === CONTENT_NODE_TYPE
-      //   //     ) {
-      //   //       setContentNodeConnected(node.data.contentNodeConnected!)
-      //   //     }
-      //   //   })
-      //   // }
-      //       if (node.id === props.id) {
-      //         console.log('connected', node)
-      //         // if(node.data.contentNodeConnected) {
-      //         //   setContentNodeConnected(node.data.contentNodeConnected)
-      //         // }
-      //         // if(node.data.styleNodeConnected){
-      //         //   setStyleNodeConnected(node.data.styleNodeConnected)
-      //         // }
-      //         setStyleNodeConnected(node.data.styleNodeConnected!)
-      //         setContentNodeConnected(node.data.contentNodeConnected!)
-      //       } else if (incommers.length <= 0) {
-      //         console.log('incommers', node)
-      //         setStyleNodeConnected(node.data.styleNodeConnected!)
-      //         setContentNodeConnected(node.data.contentNodeConnected!)
-      //       }
-      // })
+      setDisplayNodeConnected(currentNode?.data.displayNodeConnected!)
     })
   }, [globalNodeState.value, styleNodeConnected, contentNodeConnected])
 
@@ -147,7 +110,7 @@ export default React.memo(function ModelNode({
         </div>
       </WrapperNode>
       {/*TODO: add another flag to only display when all elements the model node is also connected to the display node*/}
-      {styleNodeConnected && contentNodeConnected && (
+      {styleNodeConnected && contentNodeConnected && displayNodeConnected && (
         <button className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[9.5rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'>
           <span className='i-lucide-play flex' /> stylEase!
         </button>

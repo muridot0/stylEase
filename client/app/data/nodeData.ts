@@ -29,7 +29,8 @@ export const nodeData: CustomNode[] = [
     icon: 'i-lucide-brain-cog',
     description: 'Style transfer model: this model stylEases your images',
     styleNodeConnected: false,
-    contentNodeConnected: false
+    contentNodeConnected: false,
+    displayNodeConnected: false
   },
   {
     id: `display-node-${randomStr(10)}`,

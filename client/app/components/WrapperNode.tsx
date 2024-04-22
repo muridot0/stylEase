@@ -3,6 +3,7 @@ import NodeHandle from './NodeHandle'
 import { NodeProps, Position } from 'reactflow'
 import React from 'react'
 import { useReactFlow } from 'reactflow'
+import { DISPLAY_NODE_TYPE } from './DisplayNode'
 
 interface Props extends React.PropsWithChildren {
   nodeTitle: string
@@ -34,13 +35,15 @@ function WrapperNode({
         ? 'content-node'
         : node?.type === 'model-node-type'
           ? 'model-node'
-          : undefined
+          : node?.type === DISPLAY_NODE_TYPE
+            ? 'display-node'
+            : undefined
   }
 
   const renderHandles = () => {
     switch (position) {
       case 'left':
-        return <NodeHandle type='target' position={Position.Left} />
+        return <NodeHandle id="model-input" type='target' position={Position.Left} />
       case 'right':
         return (
           <NodeHandle id={findId()} type='source' position={Position.Right} />

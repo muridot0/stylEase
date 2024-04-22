@@ -10,6 +10,7 @@ interface CustomNode {
   type?: string,
   contentNodeConnected?: boolean
   styleNodeConnected?: boolean
+  displayNodeConnected?: boolean
 }
 
 const globalNodeState = signal<Node<CustomNode>[]>([])

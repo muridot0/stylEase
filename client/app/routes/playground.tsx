@@ -53,7 +53,8 @@ const initialNodes = [
       icon: 'i-lucide-brain-cog',
       id: `model-node-${randomStr(10)}`,
       styleNodeConnected: true,
-      contentNodeConnected: true
+      contentNodeConnected: true,
+      displayNodeConnected: true
     }
   },
   {
@@ -77,7 +78,7 @@ const initialEdges = [
     targetHandle: 'style-input'
   },
   { id: 'e2-3', source: '2', sourceHandle: '2', target: '3', targetHandle: 'content-input' },
-  {id: 'e3-4', source: '3', sourceHandle: '3', target: '4'}
+  {id: 'e3-4', source: '3', sourceHandle: '3', target: '4', targetHandle: 'model-input'}
 ]
 
 export const meta: MetaFunction = () => {
@@ -97,6 +98,7 @@ export default function Playground() {
   }, [nodes])
 
   const onConnect = (params: Connection) => {
+    console.log(params)
     setEdges((eds) => addEdge(params, eds))
     //force a rerender everytime a node is connected
     const newNodes = [...nodes]
@@ -118,7 +120,6 @@ export default function Playground() {
   const handleEdgeDelete = (edges: Edge[]) => {
     edges.map((edge): void => {
       if (edge.targetHandle === 'style-input') {
-        const targetNode = nodes.find((node) => node.id === edge.target)
         setNodes((nodes) => {
           return nodes.map((node) => {
             if (edge.target === node.id) {
@@ -131,12 +132,26 @@ export default function Playground() {
           })
         })
       } else if (edge.targetHandle === 'content-input') {
+        console.log(edge)
         setNodes((nodes) => {
           return nodes.map((node) => {
             if (edge.target === node.id) {
               node.data = {
                 ...node.data,
                 contentNodeConnected: false
+              }
+            }
+            return node
+          })
+        })
+      } else if (edge.targetHandle === 'model-input') {
+        setNodes((nodes) => {
+          return nodes.map((node) => {
+            if (edge.source === node.id) {
+              console.log('in here', edge, node)
+              node.data = {
+                ...node.data,
+                displayNodeConnected: false
               }
             }
             return node
