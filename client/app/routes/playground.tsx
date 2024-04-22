@@ -94,11 +94,13 @@ export default function Playground() {
 
   React.useEffect(() => {
     globalNodeState.value = nodes
-    setNodes(globalNodeState.value)
   }, [nodes])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
+    //force a rerender everytime a node is connected
+    const newNodes = [...nodes]
+    setNodes(newNodes)
   }
 
   const addNode = (data: CustomNode) => {
@@ -116,6 +118,7 @@ export default function Playground() {
   const handleEdgeDelete = (edges: Edge[]) => {
     edges.map((edge): void => {
       if (edge.targetHandle === 'style-input') {
+        const targetNode = nodes.find((node) => node.id === edge.target)
         setNodes((nodes) => {
           return nodes.map((node) => {
             if (edge.target === node.id) {
