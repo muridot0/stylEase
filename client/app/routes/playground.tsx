@@ -98,7 +98,6 @@ export default function Playground() {
   }, [nodes])
 
   const onConnect = (params: Connection) => {
-    console.log('connected', params)
     setEdges((eds) => addEdge(params, eds))
   }
 
@@ -154,6 +153,7 @@ export default function Playground() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onEdgesDelete={handleEdgeDelete}
+        snapToGrid={true}
       >
         <NodeDrawer onSelect={addNode} />
         <Background variant={BackgroundVariant.Dots} />

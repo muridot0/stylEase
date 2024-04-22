@@ -9,7 +9,6 @@ interface Props extends HandleProps {
   className?: string
 }
 
-
 function NodeHandle({ className, ...props }: Props) {
   const reactflow = useReactFlow()
   const isSourceConnected = useStore((s) =>
@@ -21,37 +20,63 @@ function NodeHandle({ className, ...props }: Props) {
 
   function isValidHandle(connection: Connection) {
     //TODO: add functionality to remove the style when edge is disconnected
-    if (connection.sourceHandle === 'style-node') {
-      globalNodeState.value.map((node) => {
-        if (node.id === connection.target) {
-          node.data = {
-            ...node.data,
-            styleNodeConnected: true
+    switch (connection.sourceHandle) {
+      case 'style-node':
+        globalNodeState.value.map((node) => {
+          if (node.id === connection.target) {
+            node.data = {
+              ...node.data,
+              styleNodeConnected: true
+            }
+            // return node
           }
-          return node
-        }
-      })
-      return connection.targetHandle === 'style-input'
-    } else if (connection.sourceHandle === 'content-node') {
-      globalNodeState.value.map((node) => {
-        if (node.id === connection.target) {
-          node.data = {
-            ...node.data,
-            contentNodeConnected: true
+        })
+        return connection.targetHandle === 'style-input'
+      case 'content-node':
+        globalNodeState.value.map((node) => {
+          if (node.id === connection.target) {
+            node.data = {
+              ...node.data,
+              contentNodeConnected: true
+            }
+            // return node
           }
-          return node
-        }
-      })
-      return connection.targetHandle === 'content-input'
+        })
+        return connection.targetHandle === 'content-input'
+      default:
+        return connection.source !== connection.target
     }
-    return connection.source !== connection.target
+    // if (connection.sourceHandle === 'style-node') {
+    //   globalNodeState.value.map((node) => {
+    //     if (node.id === connection.target) {
+    //       node.data = {
+    //         ...node.data,
+    //         styleNodeConnected: true
+    //       }
+    //       return node
+    //     }
+    //   })
+    //   return connection.targetHandle === 'style-input'
+    // } else if (connection.sourceHandle === 'content-node') {
+    //   globalNodeState.value.map((node) => {
+    //     if (node.id === connection.target) {
+    //       node.data = {
+    //         ...node.data,
+    //         contentNodeConnected: true
+    //       }
+    //       return node
+    //     }
+    //   })
+    //   return connection.targetHandle === 'content-input'
+    // }
+    // return connection.source !== connection.target
   }
 
   return (
     <Handle
       {...props}
       className={clsx(
-        '!transform-none',
+        '!transform-none !pointer-events-auto',
         {
           '!left-0 !rounded-none !border-t-4 !border-b-4 !border-l-8 !border-t-transparent !border-b-transparent !border-l-[--node-handle-color] !dark:border-l-[#6B7077] no-bg':
             props.position !== Position.Right,
@@ -60,9 +85,7 @@ function NodeHandle({ className, ...props }: Props) {
         },
         className
       )}
-      isValidConnection={
-        props.isValidConnection ? props.isValidConnection : isValidHandle
-      }
+      isValidConnection={isValidHandle}
       isConnectableStart={
         props.type === 'target' ? false : isSourceConnected ? false : true
       }

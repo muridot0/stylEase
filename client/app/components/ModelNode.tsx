@@ -33,22 +33,35 @@ export default React.memo(function ModelNode({
       reactflow.getEdges()
     )
 
-    console.log(incommers)
-
     globalNodeState.subscribe((nodes) => {
       nodes.map((node) => {
-        if (incommers && incommers.length !== 0) {
-          incommers.map((incommer) => {
-            if (node.id === props.id && incommer.type === STYLE_NODE_TYPE) {
+        // if (incommers && incommers.length !== 0) {
+        //   incommers.map((incommer) => {
+        //     if (node.id === props.id && incommer.type === STYLE_NODE_TYPE) {
+        //       setStyleNodeConnected(node.data.styleNodeConnected!)
+        //     } else if (
+        //       node.id === props.id &&
+        //       incommer.type === CONTENT_NODE_TYPE
+        //     ) {
+        //       setContentNodeConnected(node.data.contentNodeConnected!)
+        //     }
+        //   })
+        // }
+            if (node.id === props.id) {
+              console.log('connected', node)
+              // if(node.data.contentNodeConnected) {
+              //   setContentNodeConnected(node.data.contentNodeConnected)
+              // }
+              // if(node.data.styleNodeConnected){
+              //   setStyleNodeConnected(node.data.styleNodeConnected)
+              // }
               setStyleNodeConnected(node.data.styleNodeConnected!)
-            } else if (
-              node.id === props.id &&
-              incommer.type === CONTENT_NODE_TYPE
-            ) {
+              setContentNodeConnected(node.data.contentNodeConnected!)
+            } else if (incommers.length <= 0) {
+              console.log('incommers', node)
+              setStyleNodeConnected(node.data.styleNodeConnected!)
               setContentNodeConnected(node.data.contentNodeConnected!)
             }
-          })
-        }
       })
     })
   }, [globalNodeState.value])
