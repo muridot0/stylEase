@@ -10,16 +10,11 @@ interface Props extends HandleProps {
 }
 
 function NodeHandle({ className, ...props }: Props) {
-  const reactflow = useReactFlow()
   const isSourceConnected = useStore((s) =>
     s.edges.some((edge) => edge.source === props.id)
   )
-  const isTargetConnected = useStore((s) =>
-    s.edges.some((edge) => edge.target === props.id)
-  )
 
   function isValidHandle(connection: Connection) {
-    //TODO: add functionality to remove the style when edge is disconnected
     switch (connection.sourceHandle) {
       case 'style-node':
         globalNodeState.value.map((node) => {

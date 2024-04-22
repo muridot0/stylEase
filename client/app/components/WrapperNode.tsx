@@ -4,6 +4,8 @@ import { NodeProps, Position } from 'reactflow'
 import React from 'react'
 import { useReactFlow } from 'reactflow'
 import { DISPLAY_NODE_TYPE } from './DisplayNode'
+import { CONTENT_NODE_TYPE, STYLE_NODE_TYPE } from './InputNode'
+import { MODEL_NODE_TYPE } from './ModelNode'
 
 interface Props extends React.PropsWithChildren {
   nodeTitle: string
@@ -29,11 +31,11 @@ function WrapperNode({
   const node = reactflow.getNode(nodeId)
 
   const findId = () => {
-    return node?.type === 'style-node-type'
+    return node?.type === STYLE_NODE_TYPE
       ? 'style-node'
-      : node?.type === 'content-node-type'
+      : node?.type === CONTENT_NODE_TYPE
         ? 'content-node'
-        : node?.type === 'model-node-type'
+        : node?.type === MODEL_NODE_TYPE
           ? 'model-node'
           : node?.type === DISPLAY_NODE_TYPE
             ? 'display-node'
