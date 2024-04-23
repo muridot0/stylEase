@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React from 'react'
 
 export default function Header() {
@@ -27,7 +28,7 @@ export default function Header() {
         >
           <span className='i-lucide-menu flex text-2xl' />
         </button>
-        {toggleMenu && <div className='absolute mt-2 right-8 border bg-[--node-bg-color] border-[--node-border-color] w-40 h-40 p-4 rounded-[8px] transition ease-in-out delay-[5s]'>here i am </div>}
+        <div className={clsx('absolute mt-2 right-8 border bg-[--node-bg-color] border-[--node-border-color] w-40 h-40 p-4 rounded-[8px] transition-opacity ease-in-out', {'opacity-100': toggleMenu}, {'opacity-0': !toggleMenu} )}>here i am </div>
       </div>
     </div>
   )
