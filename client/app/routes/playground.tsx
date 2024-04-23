@@ -1,4 +1,4 @@
-import { effect } from '@preact/signals'
+import { computed, effect } from '@preact/signals'
 import type { MetaFunction } from '@remix-run/node'
 import React from 'react'
 import {
@@ -96,11 +96,17 @@ export default function Playground() {
     useNodesState<CustomNode>(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
-  let background = backgroundState.value
+  let background = computed(() => backgroundState.value)
+
+  effect(() => {
+    background = computed(() => backgroundState.value)
+  })
+
+
 
   React.useEffect(() => {
-    background = backgroundState.value
-    console.log(backgroundState.value)
+    // background = backgroundState.value
+    // console.log(backgroundState.value)
   }, [backgroundState.value])
 
   React.useEffect(() => {
@@ -186,7 +192,7 @@ export default function Playground() {
           snapToGrid={true}
         >
           <NodeDrawer onSelect={addNode} />
-          <Background variant={background} />
+          <Background variant={background.value} />
         </ReactFlow>
       </div>
     </>

@@ -14,7 +14,7 @@ export default function RadioItem({ value }: Props) {
   const handleSelectedItem = (event: any) => {
     const selectedValue = event.target.value.toLowerCase()
     effect(() => {
-      backgroundState.value = selectedValue as BackgroundVariant
+      backgroundState.value = selectedValue
     })
     console.log(backgroundState.value, checked.value)
   }
