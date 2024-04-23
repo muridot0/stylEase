@@ -100,7 +100,8 @@ export default function Playground() {
 
   React.useEffect(() => {
     background = backgroundState.value
-  }, [ background])
+    console.log(backgroundState.value)
+  }, [backgroundState.value])
 
   React.useEffect(() => {
     globalNodeState.value = nodes
