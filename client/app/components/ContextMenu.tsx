@@ -24,28 +24,18 @@ export default function ContextMenu({ toggleMenu }: Props) {
         { 'opacity-0': !toggleMenu }
       )}
     >
-      <div>
-        <h2>Background Variant</h2>
-        {(
-          Object.keys(BackgroundVariant) as Array<
-            BackgroundVariant
-          >
-        ).map((key) => (
-          <RadioItemWithProvider value={key} key={key} />
-        ))}
-        <li className='font-light'>Cross</li>
-        <li className='font-light'>lines</li>
+      <div className='mb-2'>
+        <h2 className='font-semibold text-lg'>Background Variant</h2>
+        {(Object.keys(BackgroundVariant) as Array<BackgroundVariant>).map(
+          (key) => (
+            <RadioItemWithProvider value={key} key={key} />
+          )
+        )}
       </div>
-      <div className='mt-2'>
-        <h2>Actions</h2>
-        <li className='font-light'>Clear nodes</li>
-        <li className='font-light'>Clear connections</li>
-      </div>
-      <div className='mt-2'>
-        <h2>Controls</h2>
-        <li className='font-light'>Dots</li>
-        <li className='font-light'>Cross</li>
-      </div>
+      <hr className='border-t-[--node-border-color]'/>
+      <h2 className='font-semibold text-lg mt-2'>Actions</h2>
+      <li className='font-light'>Clear nodes</li>
+      <li className='font-light'>Clear connections</li>
     </ul>
   )
 }

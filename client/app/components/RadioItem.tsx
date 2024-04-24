@@ -17,17 +17,13 @@ function RadioItem({ value }: Props) {
 
   const handleSelectedItem = (event: any) => {
     const selectedValue = event.target.value.toLowerCase()
-      backgroundState.value = selectedValue
-      console.log(backgroundState.value, checked.value)
-    const nodes = reactflow.getNodes()
-    const newNodes = [...nodes]
-    reactflow.setNodes(newNodes)
+    backgroundState.value = selectedValue
   }
 
   return (
-    <div className='flex items-center gap-2'>
+    <li className='flex items-center gap-2'>
       <input
-        className='cursor-pointer bg-[--node-bg-color]'
+        className='cursor-pointer appearance-none border border-[--node-border-color] rounded-full checked:bg-[--node-handle-color] checked:border-transparent h-4 w-4'
         type='radio'
         id={value}
         name='background-variants'
@@ -36,7 +32,7 @@ function RadioItem({ value }: Props) {
         checked={value.toLowerCase() === checked.value}
       />
       <label htmlFor={value}>{value}</label>
-    </div>
+    </li>
   )
 }
 

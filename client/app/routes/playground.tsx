@@ -102,7 +102,6 @@ export default function Playground() {
     backgroundState.subscribe((value) => {
       setBackground(value)
     })
-    console.log(background)
   }, [backgroundState.value])
 
   React.useEffect(() => {
@@ -188,7 +187,7 @@ export default function Playground() {
           snapToGrid={true}
         >
           <NodeDrawer onSelect={addNode} />
-          <Background variant={background} className='[&>path]:[&>pattern]:stroke-[--node-border-color]'/>
+          <Background variant={background} gap={15} className='[&>path]:[&>pattern]:stroke-[--node-border-color]'/>
         </ReactFlow>
       </div>
     </>
