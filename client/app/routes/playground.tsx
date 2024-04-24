@@ -9,7 +9,8 @@ import {
   Background,
   BackgroundVariant,
   Connection,
-  Edge
+  Edge,
+  ReactFlowProvider
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -80,8 +81,20 @@ const initialEdges = [
     target: '3',
     targetHandle: 'style-input'
   },
-  { id: 'e2-3', source: '2', sourceHandle: '2', target: '3', targetHandle: 'content-input' },
-  {id: 'e3-4', source: '3', sourceHandle: '3', target: '4', targetHandle: 'model-input'}
+  {
+    id: 'e2-3',
+    source: '2',
+    sourceHandle: '2',
+    target: '3',
+    targetHandle: 'content-input'
+  },
+  {
+    id: 'e3-4',
+    source: '3',
+    sourceHandle: '3',
+    target: '4',
+    targetHandle: 'model-input'
+  }
 ]
 
 export const meta: MetaFunction = () => {
@@ -96,7 +109,9 @@ export default function Playground() {
     useNodesState<CustomNode>(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
-  const [background, setBackground] = React.useState<BackgroundVariant | undefined>()
+  const [background, setBackground] = React.useState<
+    BackgroundVariant | undefined
+  >()
 
   React.useEffect(() => {
     backgroundState.subscribe((value) => {
@@ -175,20 +190,26 @@ export default function Playground() {
   return (
     <>
       <div className='h-screen w-screen'>
-      <Header />
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          nodeTypes={nodeTypes}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onEdgesDelete={handleEdgeDelete}
-          snapToGrid={true}
-        >
-          <NodeDrawer onSelect={addNode} />
-          <Background variant={background} gap={15} className='[&>path]:[&>pattern]:stroke-[--node-border-color]'/>
-        </ReactFlow>
+        <ReactFlowProvider>
+          <Header />
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            nodeTypes={nodeTypes}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onEdgesDelete={handleEdgeDelete}
+            snapToGrid={true}
+          >
+            <NodeDrawer onSelect={addNode} />
+            <Background
+              variant={background}
+              gap={15}
+              className='[&>path]:[&>pattern]:stroke-[--node-border-color]'
+            />
+          </ReactFlow>
+        </ReactFlowProvider>
       </div>
     </>
   )

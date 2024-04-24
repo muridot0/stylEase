@@ -1,6 +1,6 @@
-import { computed, effect } from '@preact/signals'
+import { computed } from '@preact/signals'
 import React from 'react'
-import { BackgroundVariant, ReactFlowProvider, useReactFlow } from 'reactflow'
+import { BackgroundVariant, ReactFlowProvider } from 'reactflow'
 import backgroundState from '~/state/backgroundState'
 
 interface Props {
@@ -8,12 +8,9 @@ interface Props {
 }
 
 function RadioItem({ value }: Props) {
-  const reactflow = useReactFlow()
-
   const checked = computed(() => backgroundState.value)
 
-  React.useEffect(() => {
-  }, [backgroundState.value])
+  React.useEffect(() => {}, [backgroundState.value])
 
   const handleSelectedItem = (event: any) => {
     const selectedValue = event.target.value.toLowerCase()
@@ -36,7 +33,7 @@ function RadioItem({ value }: Props) {
   )
 }
 
-export default function RadioItemWithProvider({value}: Props) {
+export default function RadioItemWithProvider({ value }: Props) {
   return (
     <ReactFlowProvider>
       <RadioItem value={value}></RadioItem>

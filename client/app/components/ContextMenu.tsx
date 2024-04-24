@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import React from 'react'
-import { BackgroundVariant } from 'reactflow'
+import { BackgroundVariant, useReactFlow } from 'reactflow'
 import RadioItemWithProvider from './RadioItem'
 
 interface Props {
@@ -9,11 +9,19 @@ interface Props {
 
 export default function ContextMenu({ toggleMenu }: Props) {
   //TODO: add functionality to close menu when click outside of menu
-
   const ulRef = React.useRef<HTMLUListElement>(null)
 
-  // React.useEffect(() => {
-  // }, [])
+  const reactflow = useReactFlow()
+
+  const clearNodes = () => {
+    const nodes = reactflow.getNodes()
+    reactflow.deleteElements({nodes})
+  }
+
+  const clearConnections = () => {
+    const edges = reactflow.getEdges()
+    reactflow.deleteElements({edges})
+  }
 
   return (
     <ul
@@ -25,17 +33,31 @@ export default function ContextMenu({ toggleMenu }: Props) {
       )}
     >
       <div className='mb-2'>
-        <h2 className='font-semibold text-lg'>Background Variant</h2>
+        <h2 className='font-semibold text-lg mb-2'>Background Variant</h2>
         {(Object.keys(BackgroundVariant) as Array<BackgroundVariant>).map(
           (key) => (
             <RadioItemWithProvider value={key} key={key} />
           )
         )}
       </div>
-      <hr className='border-t-[--node-border-color]'/>
+      <hr className='border-t-[--node-border-color]' />
       <h2 className='font-semibold text-lg mt-2'>Actions</h2>
-      <li className='font-light'>Clear nodes</li>
-      <li className='font-light'>Clear connections</li>
+      <li className='mt-2'>
+        <button
+          className='flex items-center gap-2'
+          onClick={clearConnections}
+        >
+          <span className='i-lucide-unlink flex' /> Clear connections
+        </button>
+      </li>
+      <li className='mt-2'>
+        <button
+          className='flex items-center gap-2 text-red-500'
+          onClick={clearNodes}
+        >
+          <span className='i-lucide-trash2 flex' /> Clear nodes
+        </button>
+      </li>
     </ul>
   )
 }

@@ -26,8 +26,6 @@ export default React.memo(function ModelNode({
   React.useEffect(() => {
     globalNodeState.subscribe((nodes) => {
       const currentNode = nodes.find((node) => node.id === props.id)
-
-      console.log(currentNode)
       setStyleNodeConnected(currentNode?.data.styleNodeConnected!)
       setContentNodeConnected(currentNode?.data.contentNodeConnected!)
       setDisplayNodeConnected(currentNode?.data.displayNodeConnected!)
