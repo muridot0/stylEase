@@ -188,7 +188,7 @@ export default function Playground() {
           snapToGrid={true}
         >
           <NodeDrawer onSelect={addNode} />
-          <Background variant={background} color="#929292" />
+          <Background variant={background} className='[&>path]:[&>pattern]:stroke-[--node-border-color]'/>
         </ReactFlow>
       </div>
     </>
