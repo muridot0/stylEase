@@ -14,6 +14,7 @@ export default function ContextMenu({ toggleMenu }: Props) {
   const reactflow = useReactFlow()
 
   const clearNodes = () => {
+    //TODO: use react toastify to query user if they really wanna delete all nodes
     const nodes = reactflow.getNodes()
     reactflow.deleteElements({nodes})
   }
