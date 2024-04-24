@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import React from 'react'
-import RadioItem from './RadioItem'
-import { Background, BackgroundProps, BackgroundVariant } from 'reactflow'
+import { BackgroundVariant } from 'reactflow'
+import RadioItemWithProvider from './RadioItem'
 
 interface Props {
   toggleMenu: boolean
@@ -31,7 +31,7 @@ export default function ContextMenu({ toggleMenu }: Props) {
             BackgroundVariant
           >
         ).map((key) => (
-          <RadioItem value={key} />
+          <RadioItemWithProvider value={key} key={key} />
         ))}
         <li className='font-light'>Cross</li>
         <li className='font-light'>lines</li>

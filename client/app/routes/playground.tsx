@@ -96,17 +96,13 @@ export default function Playground() {
     useNodesState<CustomNode>(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
 
-  let background = computed(() => backgroundState.value)
-
-  effect(() => {
-    background = computed(() => backgroundState.value)
-  })
-
-
+  const [background, setBackground] = React.useState<BackgroundVariant | undefined>()
 
   React.useEffect(() => {
-    // background = backgroundState.value
-    // console.log(backgroundState.value)
+    backgroundState.subscribe((value) => {
+      setBackground(value)
+    })
+    console.log(background)
   }, [backgroundState.value])
 
   React.useEffect(() => {
@@ -192,7 +188,7 @@ export default function Playground() {
           snapToGrid={true}
         >
           <NodeDrawer onSelect={addNode} />
-          <Background variant={background.value} />
+          <Background variant={background} color="#929292" />
         </ReactFlow>
       </div>
     </>
