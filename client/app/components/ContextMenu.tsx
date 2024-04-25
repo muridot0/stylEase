@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import React from 'react'
 import { BackgroundVariant, useReactFlow } from 'reactflow'
 import RadioItemWithProvider from './RadioItem'
-import { Bounce, ToastContainer, toast } from 'react-toastify'
+import { Bounce, Id, ToastContainer, toast } from 'react-toastify'
 import DeleteMsg from './DeleteMsg'
 
 interface Props {
@@ -12,20 +12,34 @@ interface Props {
 export default function ContextMenu({ toggleMenu }: Props) {
   //TODO: add functionality to close menu when click outside of menu
   const ulRef = React.useRef<HTMLUListElement>(null)
+  const toastRef = React.useRef<Id | null>(null)
 
   const reactflow = useReactFlow()
 
+  const deleteNodes = () => {
+    const nodes = reactflow.getNodes()
+    reactflow.deleteElements({nodes})
+    if(toastRef.current){
+      toast.dismiss(toastRef.current)
+    }
+  }
+
+  const cancelDelete = () => {
+    if(toastRef.current) {
+      toast.dismiss(toastRef.current)
+    }
+  }
+
   const clearNodes = () => {
-    //TODO: use react toastify to query user if they really wanna delete all nodes
-    // const nodes = reactflow.getNodes()
-    // reactflow.deleteElements({nodes})
-    return toast(<DeleteMsg onClick={() => console.log('deleted')}/>, {
+    toastRef.current =  toast(<DeleteMsg onDelete={deleteNodes} onCancel={cancelDelete}/>, {
       position: "top-center",
       autoClose: false,
       pauseOnHover: true,
       draggable: true,
       transition: Bounce,
       });
+
+    return toastRef.current
   }
 
   const clearConnections = () => {
