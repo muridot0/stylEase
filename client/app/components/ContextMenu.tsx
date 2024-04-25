@@ -3,6 +3,7 @@ import React from 'react'
 import { BackgroundVariant, useReactFlow } from 'reactflow'
 import RadioItemWithProvider from './RadioItem'
 import { Bounce, ToastContainer, toast } from 'react-toastify'
+import DeleteMsg from './DeleteMsg'
 
 interface Props {
   toggleMenu: boolean
@@ -18,10 +19,9 @@ export default function ContextMenu({ toggleMenu }: Props) {
     //TODO: use react toastify to query user if they really wanna delete all nodes
     // const nodes = reactflow.getNodes()
     // reactflow.deleteElements({nodes})
-    return toast('🦄 Wow so easy!', {
+    return toast(<DeleteMsg onClick={() => console.log('deleted')}/>, {
       position: "top-center",
       autoClose: false,
-      closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       transition: Bounce,
