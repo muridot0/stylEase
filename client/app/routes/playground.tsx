@@ -1,4 +1,3 @@
-import { computed, effect } from '@preact/signals'
 import type { MetaFunction } from '@remix-run/node'
 import React from 'react'
 import { ToastContainer } from 'react-toastify'
@@ -107,6 +106,7 @@ export const meta: MetaFunction = () => {
   ]
 }
 
+//TODO: work on holding the data in local storage so that data persists on refresh
 export default function Playground() {
   const [nodes, setNodes, onNodesChange] =
     useNodesState<CustomNode>(initialNodes)
