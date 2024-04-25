@@ -127,7 +127,6 @@ export default function Playground() {
   }, [nodes])
 
   const onConnect = (params: Connection) => {
-    console.log(params)
     setEdges((eds) => addEdge(params, eds))
     //force a rerender everytime a node is connected
     const newNodes = [...nodes]
@@ -161,7 +160,6 @@ export default function Playground() {
           })
         })
       } else if (edge.targetHandle === 'content-input') {
-        console.log(edge)
         setNodes((nodes) => {
           return nodes.map((node) => {
             if (edge.target === node.id) {
@@ -177,7 +175,6 @@ export default function Playground() {
         setNodes((nodes) => {
           return nodes.map((node) => {
             if (edge.source === node.id) {
-              console.log('in here', edge, node)
               node.data = {
                 ...node.data,
                 displayNodeConnected: false

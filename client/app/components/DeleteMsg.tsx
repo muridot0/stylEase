@@ -9,7 +9,7 @@ export default function DeleteMsg({ onDelete, onCancel }: Props) {
       <h1 className='font-bold text-red-500'>Delete all nodes?</h1>
 
       <p className='dark:text-[#EEEFEF] text-[#222428]'>
-        This is an irreversible action
+        This is an irreversible action!
       </p>
 
       <div className='flex justify-center mt-2 gap-2 text-lg'>
