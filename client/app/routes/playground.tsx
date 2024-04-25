@@ -1,6 +1,7 @@
 import { computed, effect } from '@preact/signals'
 import type { MetaFunction } from '@remix-run/node'
 import React from 'react'
+import { ToastContainer } from 'react-toastify'
 import {
   ReactFlow,
   useNodesState,
@@ -14,6 +15,8 @@ import {
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
+import 'react-toastify/dist/ReactToastify.css'
+
 import {
   STYLE_NODE_TYPE,
   DISPLAY_NODE_TYPE,
@@ -192,6 +195,7 @@ export default function Playground() {
       <div className='h-screen w-screen'>
         <ReactFlowProvider>
           <Header />
+          <ToastContainer />
           <ReactFlow
             nodes={nodes}
             edges={edges}

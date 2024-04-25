@@ -22,6 +22,7 @@
     "isbot": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-toastify": "^10.0.5",
     "reactflow": "^11.11.0"
   },
   "devDependencies": {

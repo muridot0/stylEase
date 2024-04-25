@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import React from 'react'
 import { BackgroundVariant, useReactFlow } from 'reactflow'
 import RadioItemWithProvider from './RadioItem'
+import { Bounce, ToastContainer, toast } from 'react-toastify'
 
 interface Props {
   toggleMenu: boolean
@@ -15,8 +16,16 @@ export default function ContextMenu({ toggleMenu }: Props) {
 
   const clearNodes = () => {
     //TODO: use react toastify to query user if they really wanna delete all nodes
-    const nodes = reactflow.getNodes()
-    reactflow.deleteElements({nodes})
+    // const nodes = reactflow.getNodes()
+    // reactflow.deleteElements({nodes})
+    return toast('🦄 Wow so easy!', {
+      position: "top-center",
+      autoClose: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      transition: Bounce,
+      });
   }
 
   const clearConnections = () => {
