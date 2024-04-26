@@ -11,7 +11,8 @@ import {
   Connection,
   Edge,
   ReactFlowProvider,
-  ReactFlowInstance
+  ReactFlowInstance,
+  ReactFlowJsonObject
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -116,12 +117,13 @@ export default function Playground() {
   const [background, setBackground] = React.useState<
     BackgroundVariant | undefined
   >()
-  const [flowInstance, setFlowInstance] = React.useState<ReactFlowInstance>(ReactFlowInstance)
+  const [flowInstance, setFlowInstance] = React.useState<ReactFlowInstance>()
 
   React.useEffect(() => {
     backgroundState.subscribe((value) => {
       setBackground(value)
     })
+
   }, [backgroundState.value])
 
   React.useEffect(() => {
@@ -129,8 +131,23 @@ export default function Playground() {
   }, [nodes])
 
   React.useEffect(() => {
-    console.log(flowInstance?.toObject())
+    if (!flowInstance) return
+    const flow = flowInstance.toObject()
+    localStorage.setItem('stylEase', JSON.stringify(flow))
   }, [nodes])
+
+  React.useEffect(() => {
+    const existingFlow = localStorage.getItem('stylEase')
+
+    if(!existingFlow) return;
+    const parsedExistingFlow: ReactFlowJsonObject = JSON.parse(existingFlow)
+
+    const {nodes, edges} = parsedExistingFlow
+
+    setNodes(nodes)
+    setEdges(edges)
+    console.log(parsedExistingFlow)
+  }, [])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
