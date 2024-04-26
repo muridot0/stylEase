@@ -111,8 +111,8 @@ export const meta: MetaFunction = () => {
 //TODO: work on holding the data in local storage so that data persists on refresh
 export default function Playground() {
   const [nodes, setNodes, onNodesChange] =
-    useNodesState<CustomNode>(initialNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
+    useNodesState<CustomNode>([])
+  const [edges, setEdges, onEdgesChange] = useEdgesState([])
 
   const [background, setBackground] = React.useState<
     BackgroundVariant | undefined
@@ -139,7 +139,11 @@ export default function Playground() {
   React.useEffect(() => {
     const existingFlow = localStorage.getItem('stylEase')
 
-    if(!existingFlow) return;
+    if(!existingFlow) {
+      setNodes(initialNodes)
+      setEdges(initialEdges)
+      return
+    };
     const parsedExistingFlow: ReactFlowJsonObject = JSON.parse(existingFlow)
 
     const {nodes, edges} = parsedExistingFlow
