@@ -10,7 +10,8 @@ import {
   BackgroundVariant,
   Connection,
   Edge,
-  ReactFlowProvider
+  ReactFlowProvider,
+  ReactFlowInstance
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -115,6 +116,7 @@ export default function Playground() {
   const [background, setBackground] = React.useState<
     BackgroundVariant | undefined
   >()
+  const [flowInstance, setFlowInstance] = React.useState<ReactFlowInstance>(ReactFlowInstance)
 
   React.useEffect(() => {
     backgroundState.subscribe((value) => {
@@ -124,6 +126,10 @@ export default function Playground() {
 
   React.useEffect(() => {
     globalNodeState.value = nodes
+  }, [nodes])
+
+  React.useEffect(() => {
+    console.log(flowInstance?.toObject())
   }, [nodes])
 
   const onConnect = (params: Connection) => {
@@ -202,6 +208,7 @@ export default function Playground() {
             onConnect={onConnect}
             onEdgesDelete={handleEdgeDelete}
             snapToGrid={true}
+            onInit={setFlowInstance}
           >
             <NodeDrawer onSelect={addNode} />
             <Background
