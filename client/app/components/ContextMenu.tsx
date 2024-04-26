@@ -33,6 +33,7 @@ export default React.forwardRef(function ContextMenu({ toggleMenu, showMenu }: P
   }
 
   const clearNodes = () => {
+    toast.dismiss();
     toastRef.current =  toast(<DeleteMsg onDelete={deleteNodes} onCancel={cancelDelete}/>, {
       position: "top-center",
       autoClose: false,

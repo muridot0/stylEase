@@ -1,6 +1,6 @@
 import type { MetaFunction } from '@remix-run/node'
 import React from 'react'
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import {
   ReactFlow,
   useNodesState,
@@ -12,7 +12,7 @@ import {
   Edge,
   ReactFlowProvider,
   ReactFlowInstance,
-  ReactFlowJsonObject
+  ReactFlowJsonObject,
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -110,8 +110,7 @@ export const meta: MetaFunction = () => {
 
 //TODO: work on holding the data in local storage so that data persists on refresh
 export default function Playground() {
-  const [nodes, setNodes, onNodesChange] =
-    useNodesState<CustomNode>([])
+  const [nodes, setNodes, onNodesChange] = useNodesState<CustomNode>([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
 
   const [background, setBackground] = React.useState<
@@ -123,7 +122,6 @@ export default function Playground() {
     backgroundState.subscribe((value) => {
       setBackground(value)
     })
-
   }, [backgroundState.value])
 
   React.useEffect(() => {
@@ -134,23 +132,22 @@ export default function Playground() {
     if (!flowInstance) return
     const flow = flowInstance.toObject()
     localStorage.setItem('stylEase', JSON.stringify(flow))
-  }, [nodes])
+  }, [nodes, edges])
 
   React.useEffect(() => {
     const existingFlow = localStorage.getItem('stylEase')
 
-    if(!existingFlow) {
+    if (!existingFlow) {
       setNodes(initialNodes)
       setEdges(initialEdges)
       return
-    };
+    }
     const parsedExistingFlow: ReactFlowJsonObject = JSON.parse(existingFlow)
 
-    const {nodes, edges} = parsedExistingFlow
+    const { nodes, edges } = parsedExistingFlow
 
     setNodes(nodes)
     setEdges(edges)
-    console.log(parsedExistingFlow)
   }, [])
 
   const onConnect = (params: Connection) => {
@@ -219,7 +216,7 @@ export default function Playground() {
       <div className='h-screen w-screen'>
         <ReactFlowProvider>
           <Header />
-          <ToastContainer />
+          <ToastContainer limit={1}/>
           <ReactFlow
             nodes={nodes}
             edges={edges}
