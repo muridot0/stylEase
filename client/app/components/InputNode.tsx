@@ -15,6 +15,7 @@ export default React.memo(function InputNode({
   selected,
   ...props
 }: NodeProps<Props>) {
+  //TODO: add data persisitence for images
   return (
     <WrapperNode
       nodeTitle={data.title}
