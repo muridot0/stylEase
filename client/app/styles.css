@@ -37,7 +37,6 @@
   font-size: 12px;
   font-weight: 300;
 
-
   --stroke-color: #808080;
 
   --hover-color: #222428;
@@ -47,6 +46,7 @@
   --node-border-color: #bbbdc1;
   --node-handle-color: #4d5259;
 
+  --toastify-toast-bd-radius: 8px !important;
   --toastify-font-family: 'Zed Mono', sans-serif !important;
   --toastify-color-light: #ededee !important;
   --toastify-text-color-light: #222428 !important;
