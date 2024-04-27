@@ -2,8 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 import convertHEICtoJPEG from '../lib/convertHEIC'
 import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
-import { Node, ReactFlowInstance, ReactFlowJsonObject, useReactFlow } from 'reactflow'
-import { CustomNode } from '~/state/nodesState'
+import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -36,16 +35,18 @@ function Attachment({
   const [loading, setLoading] = React.useState(false)
 
   const reactflow = useReactFlow()
+  console.log('file attached', fileAttached, 'file', file, 'file exceeded', fileSizeExceeded)
 
   React.useEffect(() => {
     reactflow.setNodes((nodes) =>
       nodes.map((node) => {
         if(node.id === nodeId) {
-          console.log(file)
           node.data = {
             ...node.data,
             content: {...file}
           }
+        if(JSON.stringify(file) === '{}') setFileAttached(false);
+          console.log('file attached after',fileAttached)
         }
         return node
       })
@@ -64,6 +65,7 @@ function Attachment({
     nodes.map((node): void => {
       if(node.id === nodeId) {
         if(JSON.stringify(node.data.content) !== '{}'){
+          console.log('i am called')
           setFile(() => ({
             ...node.data.content
           }))
@@ -134,24 +136,11 @@ function Attachment({
   }
 
   const handleFileDelete = () => {
-    // reactflow.setNodes((nodes) =>
-    //   nodes.map((node) => {
-    //     if(node.id === nodeId && file !== null) {
-    //       console.log(file)
-    //       node.data = {
-    //         ...node.data,
-    //         content: {...file}
-    //       }
-    //     }
-    //     return node
-    //   })
-    // )
     setFile(null)
     setFileAttached(false)
-    console.log('the file here', file)
   }
 
-  const renderUploadJSX = () => {
+  const renderUploadedPhoto = () => {
     return (
       <div>
         {loading ? (
@@ -159,7 +148,7 @@ function Attachment({
             <span className='i-lucide-cog animate-spin text-[45px]'></span>
             <p className='text-md'>Processing your picture ...</p>
           </div>
-        ) : !loading && fileAttached ? (
+        ) : !loading && fileAttached && JSON.stringify(file) !== '{}' ? (
           renderFileAttached()
         ) : (
           <>
@@ -195,7 +184,7 @@ function Attachment({
                     powerful!
                   </p>
                   <p className='text-sm font-italic'>
-                    (File size limit {convertBytestoMegabytes(maxFileSize)}mb)
+                    (Try an image under {convertBytestoMegabytes(maxFileSize)}mb)
                   </p>
                 </>
               )}
@@ -269,7 +258,7 @@ function Attachment({
         ? renderPreviewJSX()
         : attachmentType === 'preview' && !fileAttached
           ? renderNoFileAttachedJSX()
-          : renderUploadJSX()}
+          : renderUploadedPhoto()}
     </section>
   )
 }
