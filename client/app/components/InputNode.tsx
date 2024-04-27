@@ -55,7 +55,7 @@ export default React.memo(function InputNode({
           </svg>
         <div className='bg-[--node-bg-color] absolute dark:bg-[-node-bg-color] h-8 right-[0.8rem] w-1 ' />
       </div>
-      <Attachment maxFileSize={3000000} label='Input Node' className='nodrag' />
+      <Attachment maxFileSize={3000000} label='Input Node' className='nodrag' nodeId={props.id}/>
     </WrapperNode>
   )
 })

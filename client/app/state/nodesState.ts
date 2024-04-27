@@ -5,7 +5,7 @@ interface CustomNode {
   id: string
   title: string
   icon: string
-  content?: File
+  content?: {name: string, url: string, size: number}
   description?: string
   type?: string,
   contentNodeConnected?: boolean

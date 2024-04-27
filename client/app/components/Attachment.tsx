@@ -2,6 +2,8 @@ import React from 'react'
 import clsx from 'clsx'
 import convertHEICtoJPEG from '../lib/convertHEIC'
 import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
+import { Node, ReactFlowInstance, ReactFlowJsonObject, useReactFlow } from 'reactflow'
+import { CustomNode } from '~/state/nodesState'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -13,23 +15,69 @@ interface Props {
    * maximum allowed file size in bytes
    */
   maxFileSize?: number
+  nodeId: string
 }
 
 function Attachment({
   label,
   attachmentType,
   maxFileSize = DEFAULT_FILE_SIZE_IN_BYTES,
-  className
+  className,
+  nodeId
 }: Props) {
   // TODO: add attachment storage functionality
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
-  const [file, setFile] = React.useState<File | null>(null)
+  const [file, setFile] = React.useState<{url: string, name: string, size: number} | null>(null)
   const [fileSizeExceeded, setFileSizeExceeded] = React.useState<{
     size: number
     exceeded: boolean
   }>()
   const [loading, setLoading] = React.useState(false)
+
+  const reactflow = useReactFlow()
+
+  React.useEffect(() => {
+    reactflow.setNodes((nodes) =>
+      nodes.map((node) => {
+        if(node.id === nodeId) {
+          console.log(file)
+          node.data = {
+            ...node.data,
+            content: {...file}
+          }
+        }
+        return node
+      })
+    )
+  }, [file])
+
+  React.useEffect(() => {
+    const flowData = localStorage.getItem('stylEase')
+
+    if(!flowData) return
+
+    const parsedFlow: ReactFlowJsonObject = JSON.parse(flowData)
+
+    const {nodes} = parsedFlow
+
+    nodes.map((node): void => {
+      if(node.id === nodeId) {
+        if(JSON.stringify(node.data.content) !== '{}'){
+          setFile(() => ({
+            ...node.data.content
+          }))
+          setFileAttached(true)
+        }
+      }
+    })
+
+
+    return () => {
+      if(file)
+      URL.revokeObjectURL(file.url)
+    }
+  }, [])
 
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget
@@ -50,7 +98,11 @@ function Attachment({
       }
 
       if (file.type !== 'image/heic' && file.type !== 'image/heif') {
-        setFile(file)
+        setFile(() => ({
+          url: URL.createObjectURL(file),
+          name: file.name,
+          size: file.size
+        }))
         setFileAttached(true)
         setFileSizeExceeded({ size: file.size, exceeded: false })
         setTimeout(() => {
@@ -69,17 +121,34 @@ function Attachment({
           setLoading(false)
           return
         }
-        setFile(newFile)
+        setFile(() => ({
+          url: URL.createObjectURL(newFile),
+          name: newFile.name,
+          size: newFile.size
+        }))
         setFileAttached(true)
-        setFileSizeExceeded({ size: file.size, exceeded: false })
+        setFileSizeExceeded({ size: newFile.size, exceeded: false })
         setLoading(false)
       }
     }
   }
 
   const handleFileDelete = () => {
+    // reactflow.setNodes((nodes) =>
+    //   nodes.map((node) => {
+    //     if(node.id === nodeId && file !== null) {
+    //       console.log(file)
+    //       node.data = {
+    //         ...node.data,
+    //         content: {...file}
+    //       }
+    //     }
+    //     return node
+    //   })
+    // )
     setFile(null)
     setFileAttached(false)
+    console.log('the file here', file)
   }
 
   const renderUploadJSX = () => {
@@ -142,7 +211,7 @@ function Attachment({
       <div>
         {file && (
           <>
-            <img src={URL.createObjectURL(file)} alt='' />
+            <img src={file.url} alt='' />
             {/* <span>{convertBytestoMegabytes(file.size)}</span> */}
             <span className='i-lucide-trash-2'></span>
           </>
@@ -157,7 +226,7 @@ function Attachment({
         {file && (
           <>
             <img
-              src={URL.createObjectURL(file)}
+              src={file.url}
               alt={file.name}
               className='max-w-[100%] rounded-[4px]'
             />
