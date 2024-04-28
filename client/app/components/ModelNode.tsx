@@ -19,6 +19,7 @@ export default React.memo(function ModelNode({
   onConnect,
   ...props
 }: NodeProps<Props> & any) {
+  // TODO: restrict model node to one input per handle
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
   const [displayNodeConnected, setDisplayNodeConnected] = React.useState(false)

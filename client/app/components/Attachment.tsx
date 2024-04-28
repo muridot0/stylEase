@@ -10,9 +10,6 @@ interface Props {
   className?: string
   attachmentType?: 'preview'
   label: string
-  /**
-   * maximum allowed file size in bytes
-   */
   maxFileSize?: number
   nodeId: string
 }
@@ -27,7 +24,11 @@ function Attachment({
   // TODO: add attachment storage functionality
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
-  const [file, setFile] = React.useState<{url: string, name: string, size: number} | null>(null)
+  const [file, setFile] = React.useState<{
+    url: string
+    name: string
+    size: number
+  } | null>(null)
   const [fileSizeExceeded, setFileSizeExceeded] = React.useState<{
     size: number
     exceeded: boolean
@@ -35,18 +36,16 @@ function Attachment({
   const [loading, setLoading] = React.useState(false)
 
   const reactflow = useReactFlow()
-  console.log('file attached', fileAttached, 'file', file, 'file exceeded', fileSizeExceeded)
 
   React.useEffect(() => {
     reactflow.setNodes((nodes) =>
       nodes.map((node) => {
-        if(node.id === nodeId) {
+        if (node.id === nodeId) {
           node.data = {
             ...node.data,
-            content: {...file}
+            content: { ...file }
           }
-        if(JSON.stringify(file) === '{}') setFileAttached(false);
-          console.log('file attached after',fileAttached)
+          if (JSON.stringify(file) === '{}') setFileAttached(false)
         }
         return node
       })
@@ -56,16 +55,15 @@ function Attachment({
   React.useEffect(() => {
     const flowData = localStorage.getItem('stylEase')
 
-    if(!flowData) return
+    if (!flowData) return
 
     const parsedFlow: ReactFlowJsonObject = JSON.parse(flowData)
 
-    const {nodes} = parsedFlow
+    const { nodes } = parsedFlow
 
     nodes.map((node): void => {
-      if(node.id === nodeId) {
-        if(JSON.stringify(node.data.content) !== '{}'){
-          console.log('i am called')
+      if (node.id === nodeId) {
+        if (JSON.stringify(node.data.content) !== '{}') {
           setFile(() => ({
             ...node.data.content
           }))
@@ -74,10 +72,8 @@ function Attachment({
       }
     })
 
-
     return () => {
-      if(file)
-      URL.revokeObjectURL(file.url)
+      if (file) URL.revokeObjectURL(file.url)
     }
   }, [])
 
@@ -184,7 +180,8 @@ function Attachment({
                     powerful!
                   </p>
                   <p className='text-sm font-italic'>
-                    (Try an image under {convertBytestoMegabytes(maxFileSize)}mb)
+                    (Try an image under {convertBytestoMegabytes(maxFileSize)}
+                    mb)
                   </p>
                 </>
               )}
@@ -201,7 +198,6 @@ function Attachment({
         {file && (
           <>
             <img src={file.url} alt='' />
-            {/* <span>{convertBytestoMegabytes(file.size)}</span> */}
             <span className='i-lucide-trash-2'></span>
           </>
         )}
