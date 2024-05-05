@@ -16,6 +16,7 @@
     "@remix-run/node": "^2.8.1",
     "@remix-run/react": "^2.8.1",
     "@remix-run/serve": "^2.8.1",
+    "@tensorflow/tfjs": "^4.19.0",
     "@unocss/reset": "^0.59.0",
     "clsx": "^2.1.0",
     "heic2any": "^0.0.4",
