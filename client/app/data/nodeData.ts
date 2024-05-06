@@ -1,11 +1,5 @@
 import randomStr from '~/lib/randomStr'
-import type { CustomNode } from '~/state/nodesState'
-import {
-  STYLE_NODE_TYPE,
-  MODEL_NODE_TYPE,
-  DISPLAY_NODE_TYPE
-} from '~/components'
-import { CONTENT_NODE_TYPE } from '~/components/InputNode'
+import { CONTENT_NODE_TYPE, DISPLAY_NODE_TYPE, MODEL_NODE_TYPE, STYLE_NODE_TYPE, type CustomNode } from '~/state/nodesState'
 
 export const nodeData: CustomNode[] = [
   {

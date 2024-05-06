@@ -59,8 +59,3 @@ export default React.memo(function InputNode({
     </WrapperNode>
   )
 })
-
-const STYLE_NODE_TYPE = 'style-node-type'
-const CONTENT_NODE_TYPE = 'content-node-type'
-
-export { STYLE_NODE_TYPE, CONTENT_NODE_TYPE }

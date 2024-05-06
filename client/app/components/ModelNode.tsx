@@ -116,7 +116,3 @@ export default React.memo(function ModelNode({
     </div>
   )
 })
-
-const MODEL_NODE_TYPE = 'model-node-type'
-
-export { MODEL_NODE_TYPE }

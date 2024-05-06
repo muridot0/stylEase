@@ -3,9 +3,7 @@ import NodeHandle from './NodeHandle'
 import { NodeProps, Position } from 'reactflow'
 import React from 'react'
 import { useReactFlow } from 'reactflow'
-import { DISPLAY_NODE_TYPE } from './DisplayNode'
-import { CONTENT_NODE_TYPE, STYLE_NODE_TYPE } from './InputNode'
-import { MODEL_NODE_TYPE } from './ModelNode'
+import { STYLE_NODE_TYPE, CONTENT_NODE_TYPE, MODEL_NODE_TYPE, DISPLAY_NODE_TYPE } from '~/state/nodesState'
 
 interface Props extends React.PropsWithChildren {
   nodeTitle: string

@@ -19,11 +19,8 @@ export default React.memo(function DisplayNode({ data, selected, ...props }: Nod
       selected={selected}
       nodeId={props.id}
     >
-      <Attachment label='display node' attachmentType='preview' />
+      <Attachment nodeId={props.id} label='display node' attachmentType='preview' />
     </WrapperNode>
   )
 })
 
-const DISPLAY_NODE_TYPE = 'display-node-type'
-
-export { DISPLAY_NODE_TYPE }
