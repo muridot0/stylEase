@@ -2,5 +2,4 @@ node_modules
 /.cache
 /build
 .env
-/model/.venv
-/model/**/*.bin
+/model
