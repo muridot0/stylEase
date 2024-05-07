@@ -1,7 +1,6 @@
-import { signal } from '@preact/signals'
-import clsx from 'clsx'
 import React from 'react'
-import { Handle, Position, useReactFlow, useStore } from 'reactflow'
+import clsx from 'clsx'
+import { Handle, Position, useStore } from 'reactflow'
 import type { Connection, HandleProps } from 'reactflow'
 import globalNodeState from '~/state/nodesState'
 
@@ -17,17 +16,32 @@ function NodeHandle({ className, ...props }: Props) {
   function isValidHandle(connection: Connection) {
     switch (connection.sourceHandle) {
       case 'style-node':
+        return connection.targetHandle === 'style-input'
+      case 'content-node':
+        return connection.targetHandle === 'content-input'
+      case 'model-node':
+        return connection.targetHandle === 'model-input'
+      default:
+        return connection.source !== connection.target
+    }
+  }
+
+  const onConnect = (connection: Connection) => {
+    switch (connection.sourceHandle) {
+      case 'style-node':
         globalNodeState.value.map((node) => {
           if (node.id === connection.target) {
+            console.log('connected here', connection)
             node.data = {
               ...node.data,
               styleNodeConnected: true
             }
           }
         })
-        return connection.targetHandle === 'style-input'
+        break
       case 'content-node':
         globalNodeState.value.map((node) => {
+          console.log('called', connection)
           if (node.id === connection.target) {
             node.data = {
               ...node.data,
@@ -35,7 +49,7 @@ function NodeHandle({ className, ...props }: Props) {
             }
           }
         })
-        return connection.targetHandle === 'content-input'
+        break
       case 'model-node':
         globalNodeState.value.map((node) => {
           if (node.id === connection.source) {
@@ -45,9 +59,7 @@ function NodeHandle({ className, ...props }: Props) {
             }
           }
         })
-        return connection.targetHandle === 'model-input'
-      default:
-        return connection.source !== connection.target
+        break
     }
   }
 
@@ -65,6 +77,7 @@ function NodeHandle({ className, ...props }: Props) {
         className
       )}
       isValidConnection={isValidHandle}
+      onConnect={onConnect}
       isConnectableStart={
         props.type === 'target' ? false : isSourceConnected ? false : true
       }

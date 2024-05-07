@@ -1,5 +1,5 @@
 import React from 'react'
-import { NodeProps, Position } from 'reactflow'
+import { Connection, NodeProps, Position } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
@@ -16,7 +16,6 @@ export default React.memo(function ModelNode({
   data,
   selected,
   isConnectable,
-  onConnect,
   ...props
 }: NodeProps<Props> & any) {
   // TODO: restrict model node to one input per handle
@@ -74,19 +73,18 @@ export default React.memo(function ModelNode({
           <div className='bg-[--node-bg-color] absolute dark:bg-[-node-bg-color] h-8 right-[0.8rem] w-1' />
         </div>
         <div>
+          {/**These only need to receive connection rather than be able to be connected */}
           <NodeHandle
             id='style-input'
             className='!top-[4.6rem]'
             type='target'
             position={Position.Left}
-            onConnect={onConnect}
           />
           <NodeHandle
             id='content-input'
             className='!top-[6.6rem]'
             type='target'
             position={Position.Left}
-            onConnect={onConnect}
           />
         </div>
         <div className=''>
