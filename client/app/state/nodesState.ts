@@ -28,7 +28,7 @@ const initialNodes = [
     position: { x: 490, y: 223 },
     data: {
       title: 'Style Node',
-      icon: 'i-lucide-image-plus',
+      icon: 'i-lucide-paintbrush',
       id: `style-node-${randomStr(10)}`
     }
   },
@@ -38,7 +38,7 @@ const initialNodes = [
     position: { x: 490, y: 532 },
     data: {
       title: 'Content Node',
-      icon: 'i-lucide-paintbrush',
+      icon: 'i-lucide-image-plus',
       id: `style-node-${randomStr(10)}`
     }
   },
