@@ -2,9 +2,9 @@ import { defineConfig, presetUno, presetIcons, transformerDirectives, transforme
 
 export default defineConfig({
   content: {
-    filesystem: [
-      "**/*.{html,js,ts,jsx,tsx}"
-    ]
+    pipeline: {
+      include: [/\.([jt]sx|mdx?|html|ts)($|\?)/]
+    }
   },
   transformers: [
     transformerDirectives(),

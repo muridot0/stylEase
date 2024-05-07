@@ -26,12 +26,12 @@ export default function Header() {
       <div className='flex items-center'>
         <picture className='mr-4'>
           <source
-            srcSet='stylEase-dark.svg'
+            srcSet='stylEase-light.svg'
             media='(prefers-color-scheme: dark)'
           />
-          <img src='/stylEase-light.svg' alt='stylEase' />
+          <img src='/stylEase-dark.svg' alt='stylEase'/>
         </picture>
-        <h2 className='mt-1 text-xl font-bold'>stylEase</h2>
+        <h2 className='text-xl font-bold'>stylEase</h2>
       </div>
       <ContextMenu
         toggleMenu={toggleMenu}
