@@ -4,6 +4,8 @@ import convertHEICtoJPEG from '../lib/convertHEIC'
 import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
 import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
 import fileToBase64 from '~/lib/fileToBase64'
+import base64ToImageData from '~/lib/base64ToImageData'
+import setRef from '~/lib/setRef'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -15,13 +17,13 @@ interface Props {
   nodeId: string
 }
 
-function Attachment({
+export default React.forwardRef(function Attachment({
   label,
   attachmentType,
   maxFileSize = DEFAULT_FILE_SIZE_IN_BYTES,
   className,
   nodeId
-}: Props) {
+}: Props, ref: React.ForwardedRef<HTMLCanvasElement>) {
   // TODO: add attachment storage functionality
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
@@ -36,8 +38,14 @@ function Attachment({
     exceeded: boolean
   }>()
   const [loading, setLoading] = React.useState(false)
+  const canvasRef = React.useRef<HTMLCanvasElement>(null)
 
   const reactflow = useReactFlow()
+
+  React.useEffect(() => {
+    if(!canvasRef.current) return
+    setRef(ref, canvasRef.current)
+  }, [])
 
   React.useEffect(() => {
     reactflow.setNodes((nodes) =>
@@ -95,6 +103,7 @@ function Attachment({
       }
 
       if (file.type !== 'image/heic' && file.type !== 'image/heif') {
+        //TODO: would need to convert the base64 string to ImageData for the canvas
         const url = (await fileToBase64(file))
         setFile(() => ({
           url: url,
@@ -198,12 +207,8 @@ function Attachment({
     //TODO: complete functionality for displaynode here
     return (
       <div>
-        {file && (
-          <>
-            <img src={file.url} alt='' />
-            <span className='i-lucide-trash-2'></span>
-          </>
-        )}
+        <canvas ref={canvasRef} width={256} height={256}></canvas>
+        <span className='i-lucide-trash-2'></span>
       </div>
     )
   }
@@ -215,8 +220,10 @@ function Attachment({
           <>
             <img
               src={file.url}
+              width={256}
+              height={256}
               alt={file.name}
-              className='max-w-[100%] rounded-[4px]'
+              className='rounded-[4px]'
             />
             <div className='mt-2 mb-0'>{file.name}</div>
             <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
@@ -259,8 +266,7 @@ function Attachment({
         : attachmentType === 'preview' && !fileAttached
           ? renderNoFileAttachedJSX()
           : renderUploadedPhoto()}
+          {attachmentType === 'preview' && renderPreviewJSX()}
     </section>
   )
-}
-
-export default Attachment
+})
