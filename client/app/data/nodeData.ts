@@ -24,7 +24,7 @@ export const nodeData: CustomNode[] = [
     description: 'Style transfer model: this model stylEases your images',
     styleNodeConnected: false,
     contentNodeConnected: false,
-    displayNodeConnected: false
+    displayNodeConnected: false,
   },
   {
     id: `display-node-${randomStr(10)}`,

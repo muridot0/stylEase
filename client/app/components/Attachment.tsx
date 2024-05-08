@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import convertHEICtoJPEG from '../lib/convertHEIC'
 import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
 import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
+import fileToBase64 from '~/lib/fileToBase64'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -24,6 +25,7 @@ function Attachment({
   // TODO: add attachment storage functionality
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
+  //TODO: chage this whole object to just be a file and handle accordingly
   const [file, setFile] = React.useState<{
     url: string
     name: string
@@ -63,7 +65,8 @@ function Attachment({
 
     nodes.map((node): void => {
       if (node.id === nodeId) {
-        if (JSON.stringify(node.data.content) !== '{}') {
+        //TODO: check that content.url contains data variable
+        if (JSON.stringify(node.data.content) !== '{}' && JSON.stringify(node.data.content.url) !== '') {
           setFile(() => ({
             ...node.data.content
           }))
@@ -71,10 +74,6 @@ function Attachment({
         }
       }
     })
-
-    return () => {
-      if (file) URL.revokeObjectURL(file.url)
-    }
   }, [])
 
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
@@ -96,11 +95,13 @@ function Attachment({
       }
 
       if (file.type !== 'image/heic' && file.type !== 'image/heif') {
+        const url = (await fileToBase64(file))
         setFile(() => ({
-          url: URL.createObjectURL(file),
+          url: url,
           name: file.name,
           size: file.size
         }))
+
         setFileAttached(true)
         setFileSizeExceeded({ size: file.size, exceeded: false })
         setTimeout(() => {
@@ -119,8 +120,9 @@ function Attachment({
           setLoading(false)
           return
         }
+        const url = await fileToBase64(newFile)
         setFile(() => ({
-          url: URL.createObjectURL(newFile),
+          url: url,
           name: newFile.name,
           size: newFile.size
         }))
@@ -193,6 +195,7 @@ function Attachment({
   }
 
   const renderPreviewJSX = () => {
+    //TODO: complete functionality for displaynode here
     return (
       <div>
         {file && (
@@ -215,6 +218,7 @@ function Attachment({
               alt={file.name}
               className='max-w-[100%] rounded-[4px]'
             />
+            <div className='mt-2 mb-0'>{file.name}</div>
             <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
               <p className='border font-medium rounded-md border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
                 {convertBytestoMegabytes(file.size)}mb

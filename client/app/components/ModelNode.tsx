@@ -4,6 +4,7 @@ import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
 import globalNodeState from '~/state/nodesState'
+import * as mi from '@magenta/image'
 
 interface Props {
   title: string
@@ -22,6 +23,9 @@ export default React.memo(function ModelNode({
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
   const [displayNodeConnected, setDisplayNodeConnected] = React.useState(false)
+  const model = new mi.ArbitraryStyleTransferNetwork();
+
+  // model.stylize()
 
   React.useEffect(() => {
     globalNodeState.subscribe((nodes) => {
