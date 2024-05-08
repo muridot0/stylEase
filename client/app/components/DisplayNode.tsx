@@ -1,8 +1,9 @@
-import type { NodeProps } from 'reactflow'
+import type { NodeProps, ReactFlowJsonObject } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import { Position, useReactFlow } from 'reactflow'
 import Attachment from './Attachment'
 import React from 'react'
+import base64ToImageData from '~/lib/base64ToImageData'
 
 interface Props {
   title: string
@@ -14,15 +15,31 @@ export default React.memo(function DisplayNode({ data, selected, ...props }: Nod
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
   const reactflow = useReactFlow()
 
-  const node = reactflow.getNodes()
+  const flowData = localStorage.getItem('stylEase')
+
+  if (!flowData) return
+
+  const parsedFlow: ReactFlowJsonObject = JSON.parse(flowData)
   React.useEffect(() => {
 
-    //TODO: display image here as canvas
+    const { nodes } = parsedFlow
+
     if(!canvasRef.current) return
     const ctx = canvasRef.current.getContext('2d')
-    console.log(node[0].data)
 
-  },[node])
+
+
+    if(!nodes[0]?.data?.content?.url) return
+    console.log(nodes[0].data.content.url)
+    const data = base64ToImageData(nodes[0].data.content.url)
+    console.log(data)
+    canvasRef.current.width = data.width
+    canvasRef.current.height = data.height
+
+
+    ctx?.putImageData(data.imageData!, 0, 0)
+
+  },[parsedFlow])
 
   return (
     <WrapperNode

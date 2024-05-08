@@ -74,7 +74,7 @@ export default React.forwardRef(function Attachment({
     nodes.map((node): void => {
       if (node.id === nodeId) {
         //TODO: check that content.url contains data variable
-        if (JSON.stringify(node.data.content) !== '{}' && JSON.stringify(node.data.content.url) !== '') {
+        if (JSON.stringify(node.data.content) !== '{}') {
           setFile(() => ({
             ...node.data.content
           }))
@@ -207,7 +207,7 @@ export default React.forwardRef(function Attachment({
     //TODO: complete functionality for displaynode here
     return (
       <div>
-        <canvas ref={canvasRef} width={256} height={256}></canvas>
+        <canvas ref={canvasRef} className='w-full rounded-[4px]'></canvas>
         <span className='i-lucide-trash-2'></span>
       </div>
     )
