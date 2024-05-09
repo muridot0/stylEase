@@ -4,14 +4,11 @@ import convertHEICtoJPEG from '../lib/convertHEIC'
 import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
 import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
 import fileToBase64 from '~/lib/fileToBase64'
-import base64ToImageData from '~/lib/base64ToImageData'
-import setRef from '~/lib/setRef'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
 interface Props {
   className?: string
-  attachmentType?: 'preview'
   label: string
   maxFileSize?: number
   nodeId: string
@@ -19,14 +16,12 @@ interface Props {
 
 export default React.forwardRef(function Attachment({
   label,
-  attachmentType,
   maxFileSize = DEFAULT_FILE_SIZE_IN_BYTES,
   className,
   nodeId
 }: Props, ref: React.ForwardedRef<HTMLCanvasElement>) {
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
-  //TODO: chage this whole object to just be a file and handle accordingly
   const [file, setFile] = React.useState<{
     url: string
     name: string
@@ -37,15 +32,8 @@ export default React.forwardRef(function Attachment({
     exceeded: boolean
   }>()
   const [loading, setLoading] = React.useState(false)
-  const [previewGenerated, setPreviewGenerated] = React.useState(true)
-  const canvasRef = React.useRef<HTMLCanvasElement>(null)
-
   const reactflow = useReactFlow()
 
-  React.useEffect(() => {
-    if(!canvasRef.current) return
-    setRef(ref, canvasRef.current)
-  }, [])
 
   React.useEffect(() => {
     reactflow.setNodes((nodes) =>
@@ -216,7 +204,7 @@ export default React.forwardRef(function Attachment({
               alt={file.name}
               className='rounded-[4px]'
             />
-            <div className='mt-2 mb-0'>{file.name}</div>
+            <div className='mt-2 mb-0 truncate ...'>{file.name}</div>
             <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
               <p className='border font-medium rounded-md border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
                 {convertBytestoMegabytes(file.size)}mb
