@@ -31,19 +31,27 @@ export default React.forwardRef(function Preview(
 
   const reactflow = useReactFlow()
 
-  const flowData = localStorage.getItem('stylEase')
+  // const flowData = localStorage.getItem('stylEase')
 
-  // const nodes = reactflow.getNodes()
+  const nodes = reactflow.getNodes()
 
   React.useEffect(() => {
-    if (!flowData) return
+    if (!nodes) return
 
-    console.log(reactflow.getNodes())
-
-    const parsedFlow: ReactFlowJsonObject = JSON.parse(flowData)
-
-    const { nodes } = parsedFlow
-    if(!nodes[0].data.content.url) return
+    if(!nodes[0].data.content.url) {
+      //TODO: figure out how to force a refresh here
+      const refreshNodes = reactflow.getNodes()
+      reactflow.setNodes([...refreshNodes])
+      // reactflow.setNodes((nodes) => nodes.map((node) => {
+      //     node = {
+      //       ...node,
+      //     }
+      //   return node
+      // }))
+      setPreviewGenerated(false)
+      setFile(null)
+      return
+    }
 
     setPreviewGenerated(true)
     setFile(nodes[0].data.content)
@@ -60,7 +68,7 @@ export default React.forwardRef(function Preview(
 
     ctx?.putImageData(data.imageData!, 0, 0)
 
-  },[flowData])
+  },[reactflow.getNodes()])
 
   const handleDownload = () => {}
 
