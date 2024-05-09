@@ -1,9 +1,9 @@
 import type { NodeProps, ReactFlowJsonObject } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import { Position, useReactFlow } from 'reactflow'
-import Attachment from './Attachment'
 import React from 'react'
 import base64ToImageData from '~/lib/base64ToImageData'
+import Preview from './Preview'
 
 interface Props {
   title: string
@@ -49,7 +49,7 @@ export default React.memo(function DisplayNode({ data, selected, ...props }: Nod
       selected={selected}
       nodeId={props.id}
     >
-      <Attachment nodeId={props.id} label='display node' attachmentType='preview' ref={canvasRef} />
+      <Preview nodeId={props.id} label='display node' ref={canvasRef} />
     </WrapperNode>
   )
 })

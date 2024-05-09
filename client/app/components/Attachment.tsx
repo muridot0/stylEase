@@ -24,7 +24,6 @@ export default React.forwardRef(function Attachment({
   className,
   nodeId
 }: Props, ref: React.ForwardedRef<HTMLCanvasElement>) {
-  // TODO: add attachment storage functionality
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
   //TODO: chage this whole object to just be a file and handle accordingly
@@ -38,6 +37,7 @@ export default React.forwardRef(function Attachment({
     exceeded: boolean
   }>()
   const [loading, setLoading] = React.useState(false)
+  const [previewGenerated, setPreviewGenerated] = React.useState(true)
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
 
   const reactflow = useReactFlow()
@@ -203,15 +203,6 @@ export default React.forwardRef(function Attachment({
     )
   }
 
-  const renderPreviewJSX = () => {
-    //TODO: complete functionality for displaynode here
-    return (
-      <div>
-        <canvas ref={canvasRef} className='w-full rounded-[4px]'></canvas>
-        <span className='i-lucide-trash-2'></span>
-      </div>
-    )
-  }
 
   const renderFileAttached = () => {
     return (
@@ -243,30 +234,16 @@ export default React.forwardRef(function Attachment({
     )
   }
 
-  const renderNoFileAttachedJSX = () => {
-    return (
-      <div className='flex flex-col items-center gap-1 nodrag cursor-default'>
-        <span className='i-lucide-image-off flex text-[45px] text-[--node-icons-color]'></span>
-        <p>No preview available</p>
-      </div>
-    )
-  }
-
   return (
     <section
       className={clsx(
         className,
         'border-[--node-border-color] border text-center p-[1.75rem] rounded-[4px] relative max-w-[200px]',
-        { 'p-0 !border-none': fileAttached && !loading },
+        { 'p-0 !border-none': fileAttached && !loading},
         { shake: fileSizeExceeded?.exceeded }
       )}
     >
-      {attachmentType === 'preview' && fileAttached
-        ? renderPreviewJSX()
-        : attachmentType === 'preview' && !fileAttached
-          ? renderNoFileAttachedJSX()
-          : renderUploadedPhoto()}
-          {attachmentType === 'preview' && renderPreviewJSX()}
+      {renderUploadedPhoto()}
     </section>
   )
 })

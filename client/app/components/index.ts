@@ -4,6 +4,7 @@ import DisplayNode from './DisplayNode'
 import ModelNode from './ModelNode'
 import ContextMenu from './ContextMenu'
 import NodeDrawer from './NodeDrawer'
+import Preview from './Preview'
 
 export {
   Header,
@@ -11,5 +12,6 @@ export {
   DisplayNode,
   NodeDrawer,
   ContextMenu,
-  ModelNode
+  ModelNode,
+  Preview
 }
