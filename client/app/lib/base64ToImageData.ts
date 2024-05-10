@@ -27,7 +27,7 @@ function scaleImageData(imageData: ImageData, scaleFactor: number) {
   const ctx = canvas.getContext('2d');
 
   const img = new Image()
-  img.src = imageDataToDataURL(imageData)
+  img.src = imageDataToBase64(imageData)
 
   // Calculate the new dimensions
   const newWidth = imageData.width * scaleFactor;
@@ -46,7 +46,7 @@ function scaleImageData(imageData: ImageData, scaleFactor: number) {
   return scaledImageData;
 }
 
-function imageDataToDataURL(imageData: ImageData) {
+function imageDataToBase64(imageData: ImageData) {
   var canvas = document.createElement('canvas');
   var ctx = canvas.getContext('2d');
   canvas.width = imageData.width;
@@ -55,4 +55,4 @@ function imageDataToDataURL(imageData: ImageData) {
   return canvas.toDataURL();
 }
 
-export {base64ToImageData, scaleImageData}
+export {base64ToImageData, scaleImageData, imageDataToBase64}

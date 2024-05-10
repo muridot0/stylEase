@@ -13,6 +13,7 @@ import NodeHandle from './NodeHandle'
 import globalNodeState, { CustomNode } from '~/state/nodesState'
 import * as mi from '@magenta/image'
 import {base64ToImageData, scaleImageData} from '~/lib/base64ToImageData'
+import { storeImageDataInIndexedDB } from '~/lib/storeInIndexedDB'
 
 interface Props {
   title: string
@@ -81,29 +82,29 @@ export default React.memo(function ModelNode({
     const contentImageData = base64ToImageData(contentImage.url)
     const styleImageData = base64ToImageData(styleImage.url)
 
-    console.log(contentImageData)
-    console.log(styleImageData)
-
     const stylize = () => {
       if(!contentImageData?.imageData || !styleImageData?.imageData ) return
 
       const scaledContentImageData = scaleImageData(contentImageData.imageData, 0.5)
       const scaledStyleImageData = scaleImageData(styleImageData.imageData, 0.5)
 
-      console.log(scaledStyleImageData)
+      model.stylize(scaledContentImageData!, scaledStyleImageData!).then((imageData): void => {
+        storeImageDataInIndexedDB(imageData, props.id)
+        // console.log(imageData)
+        // let db
+        // const open = window.indexedDB.open("stylEase", 1)
+        // open.onerror = (event) => {
+        //   console.error(`Error loading db: ${event}`)
+        // }
 
-      model.stylize(scaledContentImageData!, scaledStyleImageData!).then((imageData) => {
-        console.log(imageData)
-        let db
-        const open = window.indexedDB.open("stylEase", 1)
-        open.onerror = (event) => {
-          console.error(`Error loading db: ${event}`)
-        }
-
-        open.onsuccess =  (event) => {
-          db = (event as any).target.result
-          console.log(db)
-        }
+        // open.onsuccess =  (event) => {
+        //   db = (event as any).target.result
+        //   console.log(db)
+        // }
+        // open.onupgradeneeded = (event) => {
+        //   db = (event as any).currentTarget.result
+        //   console.log
+        // }
         // reactflow.setNodes((nodes) =>
         //   nodes.map((node) => {
         //     if (node.id === props.id) {
