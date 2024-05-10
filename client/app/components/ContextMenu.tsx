@@ -21,7 +21,8 @@ export default React.forwardRef(function ContextMenu({ toggleMenu, showMenu }: P
 
   const deleteNodes = () => {
     const nodes = reactflow.getNodes()
-    reactflow.deleteElements({nodes})
+    const edges = reactflow.getEdges()
+    reactflow.deleteElements({nodes, edges})
     if(toastRef.current){
       toast.dismiss(toastRef.current)
     }
@@ -52,8 +53,12 @@ export default React.forwardRef(function ContextMenu({ toggleMenu, showMenu }: P
   }
 
   const resetCanvas = () => {
-    reactflow.setNodes(initialNodes)
-    reactflow.setEdges(initialEdges)
+    deleteNodes()
+    setTimeout(() => {
+      reactflow.setNodes(initialNodes)
+      reactflow.setEdges(initialEdges)
+    }, 100)
+
   }
 
   React.useEffect(() => {

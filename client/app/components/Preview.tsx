@@ -4,7 +4,7 @@ import convertHEICtoJPEG from '../lib/convertHEIC'
 import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
 import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
 import fileToBase64 from '~/lib/fileToBase64'
-import base64ToImageData from '~/lib/base64ToImageData'
+import {base64ToImageData} from '~/lib/base64ToImageData'
 import setRef from '~/lib/setRef'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
@@ -38,7 +38,7 @@ export default React.forwardRef(function Preview(
   React.useEffect(() => {
     if (!nodes) return
 
-    if(!nodes[0].data.content.url) {
+    if(!nodes[0].data.content) {
       //TODO: figure out how to force a refresh here
       const refreshNodes = reactflow.getNodes()
       reactflow.setNodes([...refreshNodes])
@@ -53,20 +53,25 @@ export default React.forwardRef(function Preview(
       return
     }
 
-    setPreviewGenerated(true)
-    setFile(nodes[0].data.content)
+    if(nodes[0].data.content.url){
+      setPreviewGenerated(true)
+      setFile(nodes[0].data.content)
 
-    if(!canvasRef.current) return
+      if(!canvasRef.current) return
 
-    const ctx = canvasRef.current.getContext('2d')
-    //INFO: would receive ImageData from the model so only place to do conversion is for the model input
-    const data = base64ToImageData(nodes[0].data.content.url)
-    canvasRef.current.width = data.width
-    canvasRef.current.height = data.height
+      const ctx = canvasRef.current.getContext('2d')
+      //INFO: would receive ImageData from the model so only place to do conversion is for the model input
+      const data = base64ToImageData(nodes[0].data.content.url)
 
-    console.log(file)
+      if(!data) return
 
-    ctx?.putImageData(data.imageData!, 0, 0)
+      canvasRef.current.width = data.width
+      canvasRef.current.height = data.height
+
+      console.log(file)
+
+      ctx?.putImageData(data.imageData!, 0, 0)
+    }
 
   },[reactflow.getNodes()])
 

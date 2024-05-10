@@ -1,10 +1,18 @@
 import React from 'react'
-import { Connection, NodeProps, Position } from 'reactflow'
+import {
+  Connection,
+  NodeProps,
+  Position,
+  useReactFlow,
+  getIncomers,
+  Node
+} from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
-import globalNodeState from '~/state/nodesState'
+import globalNodeState, { CustomNode } from '~/state/nodesState'
 import * as mi from '@magenta/image'
+import {base64ToImageData, scaleImageData} from '~/lib/base64ToImageData'
 
 interface Props {
   title: string
@@ -23,7 +31,18 @@ export default React.memo(function ModelNode({
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
   const [displayNodeConnected, setDisplayNodeConnected] = React.useState(false)
-  const model = new mi.ArbitraryStyleTransferNetwork();
+  const [styleImage, setStyleImage] = React.useState<{
+    name: string
+    size: number
+    url: string
+  }>()
+  const [contentImage, setContentImage] = React.useState<{
+    name: string
+    size: number
+    url: string
+  }>()
+  const model = new mi.ArbitraryStyleTransferNetwork()
+  const reactflow = useReactFlow()
 
   // model.stylize()
 
@@ -34,7 +53,75 @@ export default React.memo(function ModelNode({
       setContentNodeConnected(currentNode?.data.contentNodeConnected!)
       setDisplayNodeConnected(currentNode?.data.displayNodeConnected!)
     })
-  }, [globalNodeState.value, styleNodeConnected, contentNodeConnected])
+  }, [
+    globalNodeState.value,
+    styleNodeConnected,
+    contentNodeConnected,
+    displayNodeConnected
+  ])
+
+  const incommers = getIncomers(
+    reactflow.getNode(props.id)!,
+    reactflow.getNodes(),
+    reactflow.getEdges()
+  )
+  React.useEffect(() => {
+    incommers.map((node: Node<CustomNode>) => {
+      if (node.type === 'style-node-type') {
+        setStyleImage(node.data.content)
+      } else {
+        setContentImage(node.data.content)
+      }
+    })
+  }, [incommers])
+
+  const stylEase = () => {
+    if((!contentImage || !styleImage)) return
+
+    const contentImageData = base64ToImageData(contentImage.url)
+    const styleImageData = base64ToImageData(styleImage.url)
+
+    console.log(contentImageData)
+    console.log(styleImageData)
+
+    const stylize = () => {
+      if(!contentImageData?.imageData || !styleImageData?.imageData ) return
+
+      const scaledContentImageData = scaleImageData(contentImageData.imageData, 0.5)
+      const scaledStyleImageData = scaleImageData(styleImageData.imageData, 0.5)
+
+      console.log(scaledStyleImageData)
+
+      model.stylize(scaledContentImageData!, scaledStyleImageData!).then((imageData) => {
+        console.log(imageData)
+        let db
+        const open = window.indexedDB.open("stylEase", 1)
+        open.onerror = (event) => {
+          console.error(`Error loading db: ${event}`)
+        }
+
+        open.onsuccess =  (event) => {
+          db = (event as any).target.result
+          console.log(db)
+        }
+        // reactflow.setNodes((nodes) =>
+        //   nodes.map((node) => {
+        //     if (node.id === props.id) {
+        //       node.data = {
+        //         ...node.data,
+        //         content: { url: scaleImageData(imageData, 0.5), size: contentImage.size, name: contentImage.name }
+        //       }
+        //     }
+        //     return node
+        //   })
+        // )
+      })
+    }
+
+    model.initialize().then(stylize)
+
+    console.log(reactflow.getNode(props.id))
+  }
 
   return (
     <div>
@@ -111,7 +198,7 @@ export default React.memo(function ModelNode({
         </div>
       </WrapperNode>
       {styleNodeConnected && contentNodeConnected && displayNodeConnected && (
-        <button className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[9.5rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'>
+        <button onClick={stylEase} className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[9.5rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'>
           <span className='i-lucide-play flex' /> stylEase!
         </button>
       )}
