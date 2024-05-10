@@ -14,7 +14,6 @@ import globalNodeState, { CustomNode } from '~/state/nodesState'
 import * as mi from '@magenta/image'
 import {base64ToImageData, scaleImageData} from '~/lib/base64ToImageData'
 import { storeImageDataInIndexedDB } from '~/lib/storeInIndexedDB'
-
 interface Props {
   title: string
   icon: string
@@ -76,27 +75,47 @@ export default React.memo(function ModelNode({
     })
   }, [incommers])
 
-  const stylEase = () => {
+
+  const stylEase = async () => {
     if((!contentImage || !styleImage)) return
 
     const contentImageData = base64ToImageData(contentImage.url)
     const styleImageData = base64ToImageData(styleImage.url)
+    if(!contentImageData?.imageData || !styleImageData?.imageData ) return
 
-    const stylize = () => {
-      if(!contentImageData?.imageData || !styleImageData?.imageData ) return
+    console.log(model)
 
-      const scaledContentImageData = scaleImageData(contentImageData.imageData, 0.5)
-      const scaledStyleImageData = scaleImageData(styleImageData.imageData, 0.5)
+    const scaledContentImageData = scaleImageData(contentImageData.imageData, 0.5)
+    const scaledStyleImageData = scaleImageData(styleImageData.imageData, 0.5)
 
-      model.stylize(scaledContentImageData!, scaledStyleImageData!).then((imageData): void => {
-        storeImageDataInIndexedDB(imageData, props.id)
-      })
-    }
+    const worker = new Worker(new URL('../lib/stylEaseWorker.js', import.meta.url), {type: 'module'})
 
-    model.initialize().then(stylize)
+    console.log(worker)
 
-    console.log(reactflow.getNode(props.id))
+    worker.onmessage = function(event) {
+      const resultImageData = event.data;
+      // Handle the result, for example, display it on the UI
+      // displayResultImage(resultImageData);
+      console.log(resultImageData)
+  };
+
+  // Pass the scaled image data to the worker
+  worker.postMessage({ scaledContentImageData, scaledStyleImageData });
+
+    // const stylize = () => {
+    //   if(!contentImageData?.imageData || !styleImageData?.imageData ) return
+
+    //   const scaledContentImageData = scaleImageData(contentImageData.imageData, 0.5)
+    //   const scaledStyleImageData = scaleImageData(styleImageData.imageData, 0.5)
+
+    //   model.stylize(scaledContentImageData!, scaledStyleImageData!).then((imageData): void => {
+    //     storeImageDataInIndexedDB(imageData, props.id)
+    //   })
+    // }
+
+    // model.initialize().then(stylize)
   }
+
 
   return (
     <div>
