@@ -1,22 +1,16 @@
 import React from 'react'
 import clsx from 'clsx'
-import convertHEICtoJPEG from '../lib/convertHEIC'
 import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
-import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
-import fileToBase64 from '~/lib/fileToBase64'
+import { useReactFlow } from 'reactflow'
 import {base64ToImageData} from '~/lib/base64ToImageData'
-import setRef from '~/lib/setRef'
-
-const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
 interface Props {
   className?: string
-  label: string
   nodeId: string
 }
 
 export default React.forwardRef(function Preview(
-  { label, className, nodeId }: Props,
+  { className, nodeId }: Props,
   ref: React.ForwardedRef<HTMLCanvasElement>
 ) {
   //TODO: chage this whole object to just be a file and handle accordingly
@@ -31,23 +25,15 @@ export default React.forwardRef(function Preview(
 
   const reactflow = useReactFlow()
 
-  // const flowData = localStorage.getItem('stylEase')
-
   const nodes = reactflow.getNodes()
 
   React.useEffect(() => {
+    //TODO: fetch the image data from the indexedDb and parsed through the collection using nodeId
     if (!nodes) return
 
     if(!nodes[0].data.content) {
-      //TODO: figure out how to force a refresh here
       const refreshNodes = reactflow.getNodes()
       reactflow.setNodes([...refreshNodes])
-      // reactflow.setNodes((nodes) => nodes.map((node) => {
-      //     node = {
-      //       ...node,
-      //     }
-      //   return node
-      // }))
       setPreviewGenerated(false)
       setFile(null)
       return
@@ -80,7 +66,7 @@ export default React.forwardRef(function Preview(
   const renderPreviewJSX = () => {
     return (
       <div>
-        <canvas ref={canvasRef} className='w-full rounded-[4px]'></canvas>
+        <canvas aria-label={file?.name} ref={canvasRef} className='w-full rounded-[4px]'></canvas>
         <div className='mt-2 mb-0 truncate ...'>
           {file!.name}
         </div>

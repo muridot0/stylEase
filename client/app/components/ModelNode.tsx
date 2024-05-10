@@ -90,32 +90,6 @@ export default React.memo(function ModelNode({
 
       model.stylize(scaledContentImageData!, scaledStyleImageData!).then((imageData): void => {
         storeImageDataInIndexedDB(imageData, props.id)
-        // console.log(imageData)
-        // let db
-        // const open = window.indexedDB.open("stylEase", 1)
-        // open.onerror = (event) => {
-        //   console.error(`Error loading db: ${event}`)
-        // }
-
-        // open.onsuccess =  (event) => {
-        //   db = (event as any).target.result
-        //   console.log(db)
-        // }
-        // open.onupgradeneeded = (event) => {
-        //   db = (event as any).currentTarget.result
-        //   console.log
-        // }
-        // reactflow.setNodes((nodes) =>
-        //   nodes.map((node) => {
-        //     if (node.id === props.id) {
-        //       node.data = {
-        //         ...node.data,
-        //         content: { url: scaleImageData(imageData, 0.5), size: contentImage.size, name: contentImage.name }
-        //       }
-        //     }
-        //     return node
-        //   })
-        // )
       })
     }
 
