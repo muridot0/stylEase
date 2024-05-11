@@ -2,8 +2,8 @@
 // const model = new mi.ArbitraryStyleTransferNetwork();
 // const model = require('@magenta/image');
 self.onmessage = function (event) {
-  const { scaledContentImageData, scaledStyleImageData } = event.data
-  console.log(event)
+  const { scaledContentImageData, scaledStyleImageData, model } = event.data
+  console.log(event, model)
   // Run the stylize function
   // model.initialize().then(() =>
   //   model
