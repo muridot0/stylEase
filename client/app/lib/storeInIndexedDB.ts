@@ -1,6 +1,6 @@
 import { imageDataToBase64 } from './base64ToImageData'
 
-function storeImageDataInIndexedDB(imageData: ImageData, id: string) {
+function storeImageDataInIndexedDB(imageData: ImageData, name: string, size: number, id: string) {
   const request = indexedDB.open('stylEase', 1)
 
   request.onerror = function (event) {
@@ -54,7 +54,7 @@ function storeImageDataInIndexedDB(imageData: ImageData, id: string) {
     }
 
     function addNewRecord() {
-      const addRequest = objectStore.add(base64String, id)
+      const addRequest = objectStore.add({url: base64String, name, size}, id)
       addRequest.onsuccess = function (event: Event) {
         console.log('Image data stored successfully')
       }

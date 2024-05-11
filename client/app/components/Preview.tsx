@@ -1,8 +1,11 @@
 import React from 'react'
 import clsx from 'clsx'
 import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
-import { useReactFlow } from 'reactflow'
+import { useReactFlow, getIncomers } from 'reactflow'
 import {base64ToImageData} from '~/lib/base64ToImageData'
+import fetchFromIndexedDB from '~/lib/fetchFromIndexedDB'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { db } from '~/lib/db'
 
 interface Props {
   className?: string
@@ -17,56 +20,58 @@ export default React.forwardRef(function Preview(
   const [loading, setLoading] = React.useState(false)
   const [previewGenerated, setPreviewGenerated] = React.useState(false)
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
-  const [file, setFile] = React.useState<{
-    url: string
-    name: string
-    size: number
-  } | null>(null)
-
   const reactflow = useReactFlow()
 
-  const nodes = reactflow.getNodes()
+  const incommers = getIncomers(reactflow.getNode(nodeId)!, reactflow.getNodes(), reactflow.getEdges())
+  // const [file, setFile] = React.useState<{
+  //   url: string
+  //   name: string
+  //   size: number
+  // } | null>(null)
 
-  React.useEffect(() => {
-    //TODO: fetch the image data from the indexedDb and parsed through the collection using nodeId
-    if (!nodes) return
+  const file = useLiveQuery(() => db.imagedata.where('id').equals(incommers[0].id).toArray())
 
-    if(!nodes[0].data.content) {
-      const refreshNodes = reactflow.getNodes()
-      reactflow.setNodes([...refreshNodes])
-      setPreviewGenerated(false)
-      setFile(null)
-      return
-    }
+  console.log(file)
 
-    if(nodes[0].data.content.url){
-      setPreviewGenerated(true)
-      setFile(nodes[0].data.content)
 
-      if(!canvasRef.current) return
+  // React.useEffect(() => {
 
-      const ctx = canvasRef.current.getContext('2d')
-      //INFO: would receive ImageData from the model so only place to do conversion is for the model input
-      const data = base64ToImageData(nodes[0].data.content.url)
+  //   request.onerror = function (event) {
+  //     console.error('IndexedDB error:', (event.target as any).errorCode);
+  //   };
 
-      if(!data) return
+  //   request.onsuccess = function (event) {
+  //     const db = (event.target as any).result as IDBDatabase;
 
-      canvasRef.current.width = data.width
-      canvasRef.current.height = data.height
+  //     const transaction = db.transaction(['stylEased'], 'readwrite');
+  //     const objectStore = transaction.objectStore('stylEased');
 
-      console.log(file)
+  //     // Check if a record with the same ID exists
+  //     const getRequest = objectStore.get(nodeId);
 
-      ctx?.putImageData(data.imageData!, 0, 0)
-    }
+  //     getRequest.onsuccess = function (event) {
+  //       const stylEasedImage = (event.target as any).result;
 
-  },[reactflow.getNodes()])
+  //       if (!stylEasedImage) {
+  //         console.log('here')
+  //         return
+  //       } else {
+  //         setFile(stylEasedImage);
+  //       }
+  //     };
+
+  //   };
+  //   console.log(file)
+  // }, [request])
+
+
 
   const handleDownload = () => {}
 
   const renderPreviewJSX = () => {
     return (
       <div>
-        <canvas aria-label={file?.name} ref={canvasRef} className='w-full rounded-[4px]'></canvas>
+        <canvas aria-label={file?.data.name} ref={canvasRef} className='w-full rounded-[4px]'></canvas>
         <div className='mt-2 mb-0 truncate ...'>
           {file!.name}
         </div>

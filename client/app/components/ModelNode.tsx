@@ -14,6 +14,7 @@ import globalNodeState, { CustomNode } from '~/state/nodesState'
 import * as mi from '@magenta/image'
 import { base64ToImageData, scaleImageData } from '~/lib/base64ToImageData'
 import { storeImageDataInIndexedDB } from '~/lib/storeInIndexedDB'
+import { db } from '~/lib/db'
 interface Props {
   title: string
   icon: string
@@ -90,22 +91,18 @@ export default React.memo(function ModelNode({
     )
     const scaledStyleImageData = scaleImageData(styleImageData.imageData, 0.5)
 
-    // const worker = new Worker(
-    //   new URL('../lib/stylEaseWorker.js', import.meta.url),
-    //   { type: 'module' }
-    // )
+    const worker = new Worker('stylEaseWorker.js')
 
-    // console.log(worker)
+    console.log(worker)
+
+    // Pass the scaled image data to the worker
+    // worker.postMessage([ scaledContentImageData, scaledStyleImageData ])
 
     // worker.onmessage = function (event) {
     //   const resultImageData = event.data
-    //   // Handle the result, for example, display it on the UI
-    //   // displayResultImage(resultImageData);
     //   console.log(resultImageData)
     // }
 
-    // // Pass the scaled image data to the worker
-    // worker.postMessage({ scaledContentImageData, scaledStyleImageData, model })
 
     const stylize = () => {
       if (!contentImageData?.imageData || !styleImageData?.imageData) return
@@ -118,8 +115,10 @@ export default React.memo(function ModelNode({
 
       model
         .stylize(scaledContentImageData!, scaledStyleImageData!)
-        .then((imageData): void => {
-          storeImageDataInIndexedDB(imageData, props.id)
+        .then(async (imageData) => {
+          console.log(db)
+          db.imagedata.add({id: props.id, data: {url: imageData, name: `stylEased-${contentImage.name}`, size: contentImage.size} })
+          // storeImageDataInIndexedDB(imageData, `stylEased-${contentImage.name}`, contentImage.size, props.id)
         })
     }
 
