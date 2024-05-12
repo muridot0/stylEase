@@ -4,8 +4,23 @@ import convertHEICtoJPEG from '../lib/convertHEIC'
 import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
 import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
 import fileToBase64 from '~/lib/fileToBase64'
+import { useFetcher, useActionData } from '@remix-run/react'
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/node'
+import { base64ToImageData } from '~/lib/base64ToImageData'
+
+export async function loader({request}: LoaderFunctionArgs) {
+  // const body = await request.formData()
+  return request
+  // return json({data: body})
+}
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
+
+interface FetcherData {
+  buffer: any
+  name: string
+  size: number
+}
 
 interface Props {
   className?: string
@@ -14,13 +29,15 @@ interface Props {
   nodeId: string
 }
 
-export default React.forwardRef(function Attachment({
-  label,
-  maxFileSize = DEFAULT_FILE_SIZE_IN_BYTES,
-  className,
-  nodeId
-}: Props, ref: React.ForwardedRef<HTMLCanvasElement>) {
+export default React.forwardRef(function Attachment(
+  { label, maxFileSize = DEFAULT_FILE_SIZE_IN_BYTES, className, nodeId }: Props,
+  ref: React.ForwardedRef<HTMLCanvasElement>
+) {
+  // let imgs = useActionData();
+  // console.log(imgs)
+  const fetcher = useFetcher()
   const fileRef = React.useRef(null)
+  const buttonRef = React.useRef<HTMLButtonElement>(null)
   const [fileAttached, setFileAttached] = React.useState(false)
   const [file, setFile] = React.useState<{
     url: string
@@ -32,8 +49,8 @@ export default React.forwardRef(function Attachment({
     exceeded: boolean
   }>()
   const [loading, setLoading] = React.useState(false)
+  const [buffer, setBuffer] = React.useState<any>(null)
   const reactflow = useReactFlow()
-
 
   React.useEffect(() => {
     reactflow.setNodes((nodes) =>
@@ -71,14 +88,33 @@ export default React.forwardRef(function Attachment({
     })
   }, [])
 
+  React.useEffect(() => {
+    // console.log(fetcher.data, fetcher.state)
+    const data = fetcher.data as any
+    console.log(data)
+    // if(!data) return
+    // const bufferString = data?.buffer
+    // console.log(bufferString)
+    // const imageData = new ImageData(new Uint8ClampedArray(bufferString.data.toString('base64')), 256, 256)
+
+    // console.log(imageData)
+    // console.log(JSON.stringify((bufferString?.toString('base64'))))
+    setBuffer(data?.buffer)
+
+
+  }, [fetcher])
+
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget
-    setLoading(true)
-
     if (!files) {
       setLoading(false)
       return
     }
+
+    buttonRef.current?.click()
+
+    setLoading(true)
+
 
     for (const file of files) {
       setFileSizeExceeded({ size: file.size, exceeded: false })
@@ -145,18 +181,21 @@ export default React.forwardRef(function Attachment({
           renderFileAttached()
         ) : (
           <>
-            <label id='uploadLabel' htmlFor='image' className='hidden'>
-              {label}
-            </label>
-            <input
-              id='image'
-              type='file'
-              name='image'
-              ref={fileRef}
-              accept='.jpg,.png,.jpeg,.heif,.heic'
-              className='opacity-0 block w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
-              onChange={handleFileAttached}
-            />
+            <fetcher.Form action='/images' method='post' encType='multipart/form-data'>
+              <label id='uploadLabel' htmlFor='image' className='hidden'>
+                {label}
+              </label>
+              <input
+                id='image'
+                type='file'
+                name='image'
+                ref={fileRef}
+                accept='.jpg,.png,.jpeg,.heif,.heic'
+                className='opacity-0 block w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
+                onChange={handleFileAttached}
+              />
+              <button ref={buttonRef} type='submit' className='hidden'>submit</button>
+            </fetcher.Form>
             <div
               className={clsx('flex flex-col items-center gap-1', {
                 'text-red-600 dark:text-red-600': fileSizeExceeded?.exceeded
@@ -188,7 +227,6 @@ export default React.forwardRef(function Attachment({
       </div>
     )
   }
-
 
   const renderFileAttached = () => {
     return (
@@ -225,10 +263,11 @@ export default React.forwardRef(function Attachment({
       className={clsx(
         className,
         'border-[--node-border-color] border text-center p-[1.75rem] rounded-[4px] relative max-w-[200px]',
-        { 'p-0 !border-none': fileAttached && !loading},
+        { 'p-0 !border-none': fileAttached && !loading },
         { shake: fileSizeExceeded?.exceeded }
       )}
     >
+    <img src={buffer} alt="" />
       {renderUploadedPhoto()}
     </section>
   )

@@ -87,9 +87,9 @@ export default React.memo(function ModelNode({
 
     const scaledContentImageData = scaleImageData(
       contentImageData.imageData,
-      0.5
+      1
     )
-    const scaledStyleImageData = scaleImageData(styleImageData.imageData, 0.5)
+    const scaledStyleImageData = scaleImageData(styleImageData.imageData, 1)
 
     const worker = new Worker('stylEaseWorker.js')
 
@@ -107,14 +107,8 @@ export default React.memo(function ModelNode({
     const stylize = () => {
       if (!contentImageData?.imageData || !styleImageData?.imageData) return
 
-      const scaledContentImageData = scaleImageData(
-        contentImageData.imageData,
-        0.7
-      )
-      const scaledStyleImageData = scaleImageData(styleImageData.imageData, 0.7)
-
       model
-        .stylize(scaledContentImageData!, scaledStyleImageData!)
+        .stylize(contentImageData.imageData, styleImageData.imageData)
         .then(async (imageData) => {
           console.log(db)
           db.imagedata.add({id: props.id, data: {url: imageData, name: `stylEased-${contentImage.name}`, size: contentImage.size} })

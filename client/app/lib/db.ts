@@ -7,11 +7,13 @@ export interface Schema {
 
 export class SubClassDexie extends Dexie {
   imagedata!: Table<Schema>
+  testData!: Table<any>
 
   constructor() {
     super('stylEase');
     this.version(1).stores({
-      imagedata: 'id, data'
+      imagedata: 'id, data',
+      testData: 'id'
     })
   }
 

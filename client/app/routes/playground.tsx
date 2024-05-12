@@ -1,4 +1,4 @@
-import type { MetaFunction } from '@remix-run/node'
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import {
@@ -26,6 +26,7 @@ import nodeTypes from '~/lib/nodetypes'
 import randomStr from '~/lib/randomStr'
 import backgroundState from '~/state/backgroundState'
 import globalNodeState, { CustomNode, initialEdges, initialNodes } from '~/state/nodesState'
+import { useLoaderData } from '@remix-run/react'
 
 export const meta: MetaFunction = () => {
   return [
@@ -34,8 +35,28 @@ export const meta: MetaFunction = () => {
   ]
 }
 
+// export async function loader ({
+// request
+// }: LoaderFunctionArgs) {
+//   // let data =  request
+//   // console.log(await data.formData())
+//   return null
+
+// }
+
+// export async function action({request}: ActionFunctionArgs) {
+//   let formData = await request.formData()
+//   let value = Object.fromEntries(formData);
+
+
+//   return value
+//   // return db.testData.add({id: '135', data: {value} })
+// }
+
 //TODO: work on holding the data in local storage so that data persists on refresh
 export default function Playground() {
+  // let {value} = useLoaderData<typeof loader>()
+  // console.log(value)
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNode>([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
 
