@@ -18,12 +18,10 @@ const uploadFileHandler = unstable_composeUploadHandlers(
 
 // Define the loader function
 export let action: ActionFunction = async ({ request }) => {
-  if (request.method === 'POST') {
     const formData = await unstable_parseMultipartFormData(
       request,
       uploadFileHandler
     )
-    console.log(formData.get('image'))
     const imageBlob = formData.get('image') as File
 
     if (!imageBlob) return
@@ -35,33 +33,21 @@ export let action: ActionFunction = async ({ request }) => {
       })
 
       console.log(resized.inspect())
-      console.log(resized.getBuffer.length / 1_048_000)
+      const bufferSize = (await resized.getBufferAsync('image/jpeg')).length / 1_048_576
       const base64 = await resized.getBase64Async('image/jpeg')
 
-      // const arrayBuffer = await file.arrayBuffer()
-
-      // const buffer = Buffer.from(arrayBuffer)
-      // const imageData = await resizeImage(buffer)
-
-      // console.log(imageData)
-
-      // return imageData
-      return base64
+      return {url: base64, size: bufferSize, width: resized.getWidth(), height: resized.getHeight()}
     }
-
     const processedImageData = await processImage(imageBlob)
 
-    return json({ buffer: processedImageData})
-  }
-
-  return json('returned', { status: 200 })
+    return json({...processedImageData, name: imageBlob.name })
 }
 
 function mangle(filename: string) {
   const rstr = randomStr(4)
   const timestamp = Date.now()
 
-  const parts = filename.split('.')
+  const parts = filename.replace(/ /g, "_").split('.')
   const ext = parts.pop()
   return `${parts.join('.')}-${timestamp}_${rstr}.${ext}`
 }
