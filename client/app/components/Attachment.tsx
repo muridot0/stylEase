@@ -8,7 +8,7 @@ import { useFetcher, useActionData } from '@remix-run/react'
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/node'
 import { base64ToImageData } from '~/lib/base64ToImageData'
 
-export async function loader({request}: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   // const body = await request.formData()
   return request
   // return json({data: body})
@@ -17,9 +17,11 @@ export async function loader({request}: LoaderFunctionArgs) {
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
 interface FetcherData {
-  buffer: any
-  name: string
+  url: string
   size: number
+  width: number
+  height: number
+  name: string
 }
 
 interface Props {
@@ -90,7 +92,7 @@ export default React.forwardRef(function Attachment(
 
   React.useEffect(() => {
     // console.log(fetcher.data, fetcher.state)
-    const data = fetcher.data as any
+    const data = fetcher.data as FetcherData
     console.log(data)
     // if(!data) return
     // const bufferString = data?.buffer
@@ -99,9 +101,7 @@ export default React.forwardRef(function Attachment(
 
     // console.log(imageData)
     // console.log(JSON.stringify((bufferString?.toString('base64'))))
-    setBuffer(data?.buffer)
-
-
+    setBuffer(data?.url)
   }, [fetcher])
 
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
@@ -114,7 +114,6 @@ export default React.forwardRef(function Attachment(
     buttonRef.current?.click()
 
     setLoading(true)
-
 
     for (const file of files) {
       setFileSizeExceeded({ size: file.size, exceeded: false })
@@ -181,7 +180,11 @@ export default React.forwardRef(function Attachment(
           renderFileAttached()
         ) : (
           <>
-            <fetcher.Form action='/images' method='post' encType='multipart/form-data'>
+            <fetcher.Form
+              action='/images'
+              method='post'
+              encType='multipart/form-data'
+            >
               <label id='uploadLabel' htmlFor='image' className='hidden'>
                 {label}
               </label>
@@ -194,7 +197,9 @@ export default React.forwardRef(function Attachment(
                 className='opacity-0 block w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
                 onChange={handleFileAttached}
               />
-              <button ref={buttonRef} type='submit' className='hidden'>submit</button>
+              <button ref={buttonRef} type='submit' className='hidden'>
+                submit
+              </button>
             </fetcher.Form>
             <div
               className={clsx('flex flex-col items-center gap-1', {
@@ -233,6 +238,7 @@ export default React.forwardRef(function Attachment(
       <div>
         {file && (
           <>
+          // TODO: dont set it directly here set it from useEffect with refs and store values in indexeddb
             <img
               src={file.url}
               width={256}
@@ -267,7 +273,7 @@ export default React.forwardRef(function Attachment(
         { shake: fileSizeExceeded?.exceeded }
       )}
     >
-    <img src={buffer} alt="" />
+      <img src={buffer} alt='' />
       {renderUploadedPhoto()}
     </section>
   )
