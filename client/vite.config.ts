@@ -7,5 +7,9 @@ import UnoCSS from '@unocss/vite'
 installGlobals();
 
 export default defineConfig({
-  plugins: [remix({ignoredRouteFiles: ["**/.*"]}), UnoCSS(), tsconfigPaths()],
+  plugins: [
+    remix({ignoredRouteFiles: ["**/.*"]}),
+    UnoCSS(),
+    tsconfigPaths()
+  ]
 });

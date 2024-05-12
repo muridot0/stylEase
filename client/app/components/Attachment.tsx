@@ -61,7 +61,6 @@ export default React.forwardRef(function Attachment({
 
     nodes.map((node): void => {
       if (node.id === nodeId) {
-        //TODO: check that content.url contains data variable
         if (JSON.stringify(node.data.content) !== '{}') {
           setFile(() => ({
             ...node.data.content
@@ -91,8 +90,7 @@ export default React.forwardRef(function Attachment({
       }
 
       if (file.type !== 'image/heic' && file.type !== 'image/heif') {
-        //TODO: would need to convert the base64 string to ImageData for the canvas
-        const url = (await fileToBase64(file))
+        const url = await fileToBase64(file)
         setFile(() => ({
           url: url,
           name: file.name,

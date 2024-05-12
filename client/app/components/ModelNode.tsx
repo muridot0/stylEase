@@ -109,9 +109,9 @@ export default React.memo(function ModelNode({
 
       const scaledContentImageData = scaleImageData(
         contentImageData.imageData,
-        0.5
+        0.7
       )
-      const scaledStyleImageData = scaleImageData(styleImageData.imageData, 0.5)
+      const scaledStyleImageData = scaleImageData(styleImageData.imageData, 0.7)
 
       model
         .stylize(scaledContentImageData!, scaledStyleImageData!)

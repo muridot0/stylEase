@@ -30,8 +30,8 @@ function scaleImageData(imageData: ImageData, scaleFactor: number) {
   img.src = imageDataToBase64(imageData)
 
   // Calculate the new dimensions
-  const newWidth = imageData.width * scaleFactor;
-  const newHeight = imageData.height * scaleFactor;
+  const newWidth = 256;
+  const newHeight = 256;
 
   // Set the canvas dimensions to the new size
   canvas.width = newWidth;
