@@ -238,7 +238,7 @@ export default React.forwardRef(function Attachment(
       <div>
         {file && (
           <>
-          // TODO: dont set it directly here set it from useEffect with refs and store values in indexeddb
+          {/* //TODO dont set it directly here set it from useEffect with refs and store values in indexeddb*/}
             <img
               src={file.url}
               width={256}
