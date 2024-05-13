@@ -32,6 +32,7 @@ export default function Preview(
   console.log(dbResult)
 
   React.useEffect(() => {
+    //TODO: work on fetching specific stylised images for respective models from indexeddb using model id
     if(!dbResult || dbResult.length <= 0) return
     setFile(dbResult[0].data)
     console.log(file)
