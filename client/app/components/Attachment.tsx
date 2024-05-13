@@ -91,16 +91,8 @@ export default React.forwardRef(function Attachment(
   }, [])
 
   React.useEffect(() => {
-    // console.log(fetcher.data, fetcher.state)
     const data = fetcher.data as FetcherData
     console.log(data)
-    // if(!data) return
-    // const bufferString = data?.buffer
-    // console.log(bufferString)
-    // const imageData = new ImageData(new Uint8ClampedArray(bufferString.data.toString('base64')), 256, 256)
-
-    // console.log(imageData)
-    // console.log(JSON.stringify((bufferString?.toString('base64'))))
     setBuffer(data?.url)
   }, [fetcher])
 
@@ -110,57 +102,58 @@ export default React.forwardRef(function Attachment(
       setLoading(false)
       return
     }
+    if (files[0].size > maxFileSize) {
+      setFileSizeExceeded({ size: files[0].size, exceeded: true })
+      setFileAttached(false)
+      setLoading(false)
+      return
+    }
 
-    buttonRef.current?.click()
 
     setLoading(true)
+    fetcher.submit(e.currentTarget.form, {action: '/images', method: 'post', encType: 'multipart/form-data'})
+    // buttonRef.current?.click()
 
-    for (const file of files) {
-      setFileSizeExceeded({ size: file.size, exceeded: false })
-      if (file.size > maxFileSize) {
-        setFileSizeExceeded({ size: file.size, exceeded: true })
-        setFileAttached(false)
-        setLoading(false)
-        return
-      }
+    // for (const file of files) {
+    //   // setFileSizeExceeded({ size: file.size, exceeded: false })
 
-      if (file.type !== 'image/heic' && file.type !== 'image/heif') {
-        const url = await fileToBase64(file)
-        setFile(() => ({
-          url: url,
-          name: file.name,
-          size: file.size
-        }))
+    //   if (file.type !== 'image/heic' && file.type !== 'image/heif') {
+    //     const url = await fileToBase64(file)
+    //     setFile(() => ({
+    //       url: url,
+    //       name: file.name,
+    //       size: file.size
+    //     }))
 
-        setFileAttached(true)
-        setFileSizeExceeded({ size: file.size, exceeded: false })
-        setTimeout(() => {
-          setLoading(false)
-        }, 300)
-      } else {
-        const convert = await convertHEICtoJPEG(files[0])
-        const newFile = new File(
-          [convert as Blob],
-          file.name.slice(0, file.name.indexOf('.')),
-          { type: (convert as Blob).type }
-        )
-        if (newFile.size > maxFileSize) {
-          setFileSizeExceeded({ size: newFile.size, exceeded: true })
-          setFileAttached(false)
-          setLoading(false)
-          return
-        }
-        const url = await fileToBase64(newFile)
-        setFile(() => ({
-          url: url,
-          name: newFile.name,
-          size: newFile.size
-        }))
-        setFileAttached(true)
-        setFileSizeExceeded({ size: newFile.size, exceeded: false })
-        setLoading(false)
-      }
-    }
+    //     setFileAttached(true)
+    //     setFileSizeExceeded({ size: file.size, exceeded: false })
+    //     setTimeout(() => {
+    //       setLoading(false)
+    //     }, 300)
+    //   } else {
+    //     const convert = await convertHEICtoJPEG(files[0])
+    //     const newFile = new File(
+    //       [convert as Blob],
+    //       file.name.slice(0, file.name.indexOf('.')),
+    //       { type: (convert as Blob).type }
+    //     )
+    //     if (newFile.size > maxFileSize) {
+    //       setFileSizeExceeded({ size: newFile.size, exceeded: true })
+    //       setFileAttached(false)
+    //       setLoading(false)
+    //       return
+    //     }
+    //     const url = await fileToBase64(newFile)
+    //     setFile(() => ({
+    //       url: url,
+    //       name: newFile.name,
+    //       size: newFile.size
+    //     }))
+    //     setFileAttached(true)
+    //     setFileSizeExceeded({ size: newFile.size, exceeded: false })
+    //     setLoading(false)
+    //   }
+    // }
   }
 
   const handleFileDelete = () => {
@@ -197,9 +190,6 @@ export default React.forwardRef(function Attachment(
                 className='opacity-0 block w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
                 onChange={handleFileAttached}
               />
-              <button ref={buttonRef} type='submit' className='hidden'>
-                submit
-              </button>
             </fetcher.Form>
             <div
               className={clsx('flex flex-col items-center gap-1', {

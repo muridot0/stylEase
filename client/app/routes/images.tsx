@@ -10,14 +10,59 @@ import Jimp from 'jimp'
 import randomStr from '~/lib/randomStr'
 
 const uploadFileHandler = unstable_composeUploadHandlers(
-  unstable_createFileUploadHandler({
-    file: ({ filename }) => mangle(filename)
-  }),
-  unstable_createMemoryUploadHandler()
+  async ({name, contentType, data, filename}) => {
+    if(name !== 'file') return;
+
+    if (contentType !== 'image/heic' && contentType !== 'image/heif') {
+      //     const url = await fileToBase64(file)
+      //     setFile(() => ({
+      //       url: url,
+      //       name: file.name,
+      //       size: file.size
+      //     }))
+
+      //     setFileAttached(true)
+      //     setFileSizeExceeded({ size: file.size, exceeded: false })
+      //     setTimeout(() => {
+      //       setLoading(false)
+      //     }, 300)
+      //   } else {
+      //     const convert = await convertHEICtoJPEG(files[0])
+      //     const newFile = new File(
+      //       [convert as Blob],
+      //       file.name.slice(0, file.name.indexOf('.')),
+      //       { type: (convert as Blob).type }
+      //     )
+      //     if (newFile.size > maxFileSize) {
+      //       setFileSizeExceeded({ size: newFile.size, exceeded: true })
+      //       setFileAttached(false)
+      //       setLoading(false)
+      //       return
+      //     }
+      //     const url = await fileToBase64(newFile)
+      //     setFile(() => ({
+      //       url: url,
+      //       name: newFile.name,
+      //       size: newFile.size
+      //     }))
+      //     setFileAttached(true)
+      //     setFileSizeExceeded({ size: newFile.size, exceeded: false })
+      //     setLoading(false)
+      //   }
+  }
 )
+// const uploadFileHandler = unstable_composeUploadHandlers(
+//   unstable_createFileUploadHandler({
+//     file: ({ filename }) => mangle(filename)
+//   }),
+//   unstable_createMemoryUploadHandler()
+// )
 
 // Define the loader function
 export let action: ActionFunction = async ({ request }) => {
+
+  const data = request.body
+  console.log(data)
     const formData = await unstable_parseMultipartFormData(
       request,
       uploadFileHandler
