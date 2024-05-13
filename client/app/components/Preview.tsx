@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
+import { niceBytes } from '../lib/niceBytes'
 import { useReactFlow, getIncomers } from 'reactflow'
 import {base64ToImageData} from '~/lib/base64ToImageData'
 import fetchFromIndexedDB from '~/lib/fetchFromIndexedDB'
@@ -69,7 +69,7 @@ export default function Preview(
         </div>
         <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
           <p className='border font-medium rounded-md border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
-            {convertBytestoMegabytes(file!.size)}mb
+            {niceBytes(file!.size)}
           </p>
           <button
             className=' bg-zinc-200 dark:bg-[--node-icons-color] rounded-full p-1 text-sm'

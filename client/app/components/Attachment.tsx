@@ -1,18 +1,8 @@
 import React from 'react'
 import clsx from 'clsx'
-import convertHEICtoJPEG from '../lib/convertHEIC'
-import { convertBytestoMegabytes } from '../lib/bytesToMegabytes'
+import { niceBytes } from '../lib/niceBytes'
 import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
-import fileToBase64 from '~/lib/fileToBase64'
-import { useFetcher, useActionData } from '@remix-run/react'
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from '@remix-run/node'
-import { base64ToImageData } from '~/lib/base64ToImageData'
-
-export async function loader({ request }: LoaderFunctionArgs) {
-  // const body = await request.formData()
-  return request
-  // return json({data: body})
-}
+import { useFetcher } from '@remix-run/react'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -31,15 +21,14 @@ interface Props {
   nodeId: string
 }
 
-export default React.forwardRef(function Attachment(
-  { label, maxFileSize = DEFAULT_FILE_SIZE_IN_BYTES, className, nodeId }: Props,
-  ref: React.ForwardedRef<HTMLCanvasElement>
-) {
-  // let imgs = useActionData();
-  // console.log(imgs)
+export default function Attachment({
+  label,
+  maxFileSize = DEFAULT_FILE_SIZE_IN_BYTES,
+  className,
+  nodeId
+}: Props) {
   const fetcher = useFetcher()
   const fileRef = React.useRef(null)
-  const buttonRef = React.useRef<HTMLButtonElement>(null)
   const [fileAttached, setFileAttached] = React.useState(false)
   const [file, setFile] = React.useState<{
     url: string
@@ -51,7 +40,6 @@ export default React.forwardRef(function Attachment(
     exceeded: boolean
   }>()
   const [loading, setLoading] = React.useState(false)
-  const [buffer, setBuffer] = React.useState<any>(null)
   const reactflow = useReactFlow()
 
   React.useEffect(() => {
@@ -92,11 +80,9 @@ export default React.forwardRef(function Attachment(
 
   React.useEffect(() => {
     const data = fetcher.data as FetcherData
-    console.log(data)
-    if(!data) {
+    if (!data || fetcher.state !== 'idle') {
       return
     }
-
     setFile(() => ({
       url: data.url,
       name: data.name,
@@ -104,6 +90,7 @@ export default React.forwardRef(function Attachment(
     }))
     setLoading(false)
     setFileAttached(true)
+    setFileSizeExceeded({ size: data.size, exceeded: false })
   }, [fetcher])
 
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
@@ -119,51 +106,15 @@ export default React.forwardRef(function Attachment(
       return
     }
 
-
     setLoading(true)
-    fetcher.submit(e.currentTarget.form, {action: '/images', method: 'post', encType: 'multipart/form-data'})
-    // buttonRef.current?.click()
-
-    // for (const file of files) {
-    //   // setFileSizeExceeded({ size: file.size, exceeded: false })
-
-    //   if (file.type !== 'image/heic' && file.type !== 'image/heif') {
-    //     const url = await fileToBase64(file)
-    //     setFile(() => ({
-    //       url: url,
-    //       name: file.name,
-    //       size: file.size
-    //     }))
-
-    //     setFileAttached(true)
-    //     setFileSizeExceeded({ size: file.size, exceeded: false })
-    //     setTimeout(() => {
-    //       setLoading(false)
-    //     }, 300)
-    //   } else {
-    //     const convert = await convertHEICtoJPEG(files[0])
-    //     const newFile = new File(
-    //       [convert as Blob],
-    //       file.name.slice(0, file.name.indexOf('.')),
-    //       { type: (convert as Blob).type }
-    //     )
-    //     if (newFile.size > maxFileSize) {
-    //       setFileSizeExceeded({ size: newFile.size, exceeded: true })
-    //       setFileAttached(false)
-    //       setLoading(false)
-    //       return
-    //     }
-    //     const url = await fileToBase64(newFile)
-    //     setFile(() => ({
-    //       url: url,
-    //       name: newFile.name,
-    //       size: newFile.size
-    //     }))
-    //     setFileAttached(true)
-    //     setFileSizeExceeded({ size: newFile.size, exceeded: false })
-    //     setLoading(false)
-    //   }
-    // }
+    setFile(null)
+    setFileAttached(false)
+    setFileSizeExceeded({ size: files[0].size, exceeded: false })
+    fetcher.submit(e.currentTarget.form, {
+      action: '/images',
+      method: 'post',
+      encType: 'multipart/form-data'
+    })
   }
 
   const handleFileDelete = () => {
@@ -179,7 +130,7 @@ export default React.forwardRef(function Attachment(
             <span className='i-lucide-cog animate-spin text-[45px]'></span>
             <p className='text-md'>Processing your picture ...</p>
           </div>
-        ) : !loading && fileAttached && JSON.stringify(file) !== '{}' ? (
+        ) : fileAttached && JSON.stringify(file) !== '{}' ? (
           renderFileAttached()
         ) : (
           <>
@@ -216,13 +167,11 @@ export default React.forwardRef(function Attachment(
               ) : (
                 <>
                   <p className='font-medium'>
-                    The file size of{' '}
-                    {convertBytestoMegabytes(fileSizeExceeded.size)}mb is too
+                    The file size of {niceBytes(fileSizeExceeded.size)} is too
                     powerful!
                   </p>
                   <p className='text-sm font-italic'>
-                    (Try an image under {convertBytestoMegabytes(maxFileSize)}
-                    mb)
+                    (Try an image under {niceBytes(maxFileSize)})
                   </p>
                 </>
               )}
@@ -238,7 +187,7 @@ export default React.forwardRef(function Attachment(
       <div>
         {file && (
           <>
-          {/* //TODO dont set it directly here set it from useEffect with refs and store values in indexeddb*/}
+            {/* //TODO dont set it directly here set it from useEffect with refs and store values in indexeddb*/}
             <img
               src={file.url}
               width={256}
@@ -249,7 +198,7 @@ export default React.forwardRef(function Attachment(
             <div className='mt-2 mb-0 truncate ...'>{file.name}</div>
             <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
               <p className='border font-medium rounded-md border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
-                {convertBytestoMegabytes(file.size)}mb
+                {niceBytes(file.size)}
               </p>
               <button
                 className=' bg-zinc-200 dark:bg-[--node-icons-color] rounded-full p-1 text-sm'
@@ -273,8 +222,7 @@ export default React.forwardRef(function Attachment(
         { shake: fileSizeExceeded?.exceeded }
       )}
     >
-      <img src={buffer} alt='' />
       {renderUploadedPhoto()}
     </section>
   )
-})
+}
