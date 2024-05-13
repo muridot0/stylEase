@@ -21,6 +21,7 @@
     "clsx": "^2.1.0",
     "dexie": "^4.0.4",
     "dexie-react-hooks": "^1.1.7",
+    "heic-convert": "^2.1.0",
     "heic2any": "^0.0.4",
     "isbot": "^4.1.0",
     "jimp": "^0.22.12",

@@ -2,18 +2,45 @@ import {
   ActionFunction,
   json,
   unstable_composeUploadHandlers,
-  unstable_createFileUploadHandler,
-  unstable_createMemoryUploadHandler,
   unstable_parseMultipartFormData
 } from '@remix-run/node'
 import Jimp from 'jimp'
 import randomStr from '~/lib/randomStr'
+import convert from 'heic-convert'
+
+const convertToBuffer = async (data: AsyncIterable<Uint8Array>) => {
+  const dataArray = [];
+    for await (const x of data)
+    {
+        dataArray.push(x);
+    }
+    return Buffer.concat(dataArray)
+}
 
 const uploadFileHandler = unstable_composeUploadHandlers(
   async ({name, contentType, data, filename}) => {
-    if(name !== 'file') return;
+    console.log('here', name)
+    if(name !== 'image') return;
+    console.log('got past')
 
     if (contentType !== 'image/heic' && contentType !== 'image/heif') {
+      return JSON.stringify({
+        url: await convertToBuffer(data),
+        filename: mangle(filename || `stylEase_${randomStr(2)}`)
+      })
+    }
+
+    const convertedFile = await convert({
+      buffer: await convertToBuffer(data), // the HEIC file buffer
+      format: 'JPEG',
+      quality: 1
+    });
+
+    return JSON.stringify({
+      url: convertedFile,
+      filename: mangle(filename || `stylEase_${randomStr(2)}`)
+    })
+
       //     const url = await fileToBase64(file)
       //     setFile(() => ({
       //       url: url,
@@ -51,41 +78,33 @@ const uploadFileHandler = unstable_composeUploadHandlers(
       //   }
   }
 )
-// const uploadFileHandler = unstable_composeUploadHandlers(
-//   unstable_createFileUploadHandler({
-//     file: ({ filename }) => mangle(filename)
-//   }),
-//   unstable_createMemoryUploadHandler()
-// )
 
 // Define the loader function
 export let action: ActionFunction = async ({ request }) => {
 
   const data = request.body
-  console.log(data)
     const formData = await unstable_parseMultipartFormData(
       request,
       uploadFileHandler
     )
-    const imageBlob = formData.get('image') as File
+
+    const imageBlob = JSON.parse(formData.get('image') as string)
 
     if (!imageBlob) return
 
-    async function processImage(file: Blob) {
-      const buffer = await file.arrayBuffer()
-      const resized = await Jimp.read(Buffer.from(buffer)).then((img) => {
+    async function processImage(file: Buffer) {
+      const resized = await Jimp.read(Buffer.from(file)).then((img) => {
         return img.resize(256, Jimp.AUTO)
       })
 
-      console.log(resized.inspect())
       const bufferSize = (await resized.getBufferAsync('image/jpeg')).length / 1_048_576
       const base64 = await resized.getBase64Async('image/jpeg')
 
       return {url: base64, size: bufferSize, width: resized.getWidth(), height: resized.getHeight()}
     }
-    const processedImageData = await processImage(imageBlob)
+    const processedImageData = await processImage(imageBlob.url)
 
-    return json({...processedImageData, name: imageBlob.name })
+    return json({...processedImageData, name: imageBlob.filename})
 }
 
 function mangle(filename: string) {
@@ -94,5 +113,8 @@ function mangle(filename: string) {
 
   const parts = filename.replace(/ /g, "_").split('.')
   const ext = parts.pop()
-  return `${parts.join('.')}-${timestamp}_${rstr}.${ext}`
+  if(ext?.toLowerCase() !== 'heic' && ext?.toLowerCase() !== 'heif') {
+    return `${parts.join('.')}-${timestamp}_${rstr}.${ext}`
+  }
+  return `${parts.join('.')}-${timestamp}_${rstr}.jpg`
 }

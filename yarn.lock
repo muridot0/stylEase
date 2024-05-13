@@ -6190,6 +6190,22 @@ he@1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
+heic-convert@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/heic-convert/-/heic-convert-2.1.0.tgz#7f764529e37591ae263ef49582d1d0c13491526e"
+  integrity sha512-1qDuRvEHifTVAj3pFIgkqGgJIr0M3X7cxEPjEp0oG4mo8GFjq99DpCo8Eg3kg17Cy0MTjxpFdoBHOatj7ZVKtg==
+  dependencies:
+    heic-decode "^2.0.0"
+    jpeg-js "^0.4.4"
+    pngjs "^6.0.0"
+
+heic-decode@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/heic-decode/-/heic-decode-2.0.0.tgz#77ab96ee1a255f0a9952d0e88d584bca30577114"
+  integrity sha512-NU+zsiDvdL+EebyTjrEqjkO2XYI7FgLhQzsbmO8dnnYce3S0PBSDm/ZyI4KpcGPXYEdb5W72vp/AQFuc4F8ASg==
+  dependencies:
+    libheif-js "^1.17.1"
+
 heic2any@^0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/heic2any/-/heic2any-0.0.4.tgz#eddb8e6fec53c8583a6e18b65069bb5e8d19028a"
@@ -7017,6 +7033,11 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
+
+libheif-js@^1.17.1:
+  version "1.17.1"
+  resolved "https://registry.yarnpkg.com/libheif-js/-/libheif-js-1.17.1.tgz#7772cc5a31098df0354f0fadb49a939030765acd"
+  integrity sha512-g9wBm/CasGZMjmH3B2sD9+AO7Y5+79F0oPS+sdAulSxQeYeCeiTIP+lDqvlPofD+y76wvfVtotKZ8AuvZQnWgg==
 
 libnpmaccess@7.0.2:
   version "7.0.2"

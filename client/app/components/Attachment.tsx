@@ -93,7 +93,17 @@ export default React.forwardRef(function Attachment(
   React.useEffect(() => {
     const data = fetcher.data as FetcherData
     console.log(data)
-    setBuffer(data?.url)
+    if(!data) {
+      return
+    }
+
+    setFile(() => ({
+      url: data.url,
+      name: data.name,
+      size: data.size
+    }))
+    setLoading(false)
+    setFileAttached(true)
   }, [fetcher])
 
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
