@@ -19,13 +19,15 @@ interface Props {
   label: string
   maxFileSize?: number
   nodeId: string
+  uploadMessage: string
 }
 
 export default function Attachment({
   label,
   maxFileSize = DEFAULT_FILE_SIZE_IN_BYTES,
   className,
-  nodeId
+  nodeId,
+  uploadMessage
 }: Props) {
   const fetcher = useFetcher()
   const fileRef = React.useRef(null)
@@ -163,7 +165,7 @@ export default function Attachment({
                 })}
               ></span>
               {!fileSizeExceeded?.exceeded ? (
-                <p>Upload a picture</p>
+                <p className='mt-4 w[10rem]'>{uploadMessage}</p>
               ) : (
                 <>
                   <p className='font-medium'>
@@ -187,7 +189,6 @@ export default function Attachment({
       <div>
         {file && (
           <>
-            {/* //TODO dont set it directly here set it from useEffect with refs and store values in indexeddb*/}
             <img
               src={file.url}
               width={256}

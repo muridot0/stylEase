@@ -7,14 +7,16 @@ export const nodeData: CustomNode[] = [
     title: 'Style Node',
     type: STYLE_NODE_TYPE,
     icon: 'i-lucide-paintbrush',
-    description: 'Upload the image you want to use as reference for stylEasing'
+    description: 'Upload the image you want to use as reference for stylEasing',
+    uploadMsg: 'Upload a reference image'
   },
   {
     id: `content-node-${randomStr(10)}`,
     title: 'Content Node',
     type: CONTENT_NODE_TYPE,
     icon: 'i-lucide-image-plus',
-    description: 'Upload an image to get it stylEased'
+    description: 'Upload an image to get it stylEased',
+    uploadMsg: 'Upload image to stylEase'
   },
   {
     id: `model-node-${randomStr(10)}`,

@@ -17,6 +17,7 @@ interface CustomNode {
   contentNodeConnected?: boolean
   styleNodeConnected?: boolean
   displayNodeConnected?: boolean
+  uploadMsg?: string
   // styleImage?:
 }
 
@@ -30,7 +31,8 @@ const initialNodes = [
     data: {
       title: 'Style Node',
       icon: 'i-lucide-paintbrush',
-      id: `style-node-${randomStr(10)}`
+      id: `style-node-${randomStr(10)}`,
+      uploadMsg: 'Upload a reference image'
     }
   },
   {
@@ -40,7 +42,8 @@ const initialNodes = [
     data: {
       title: 'Content Node',
       icon: 'i-lucide-image-plus',
-      id: `style-node-${randomStr(10)}`
+      id: `style-node-${randomStr(10)}`,
+      uploadMsg: 'Upload image to stylEase'
     }
   },
   {

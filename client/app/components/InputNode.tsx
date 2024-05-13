@@ -8,6 +8,7 @@ interface Props {
   title: string
   icon: string
   content: File
+  uploadMsg: string
 }
 
 export default React.memo(function InputNode({
@@ -15,7 +16,7 @@ export default React.memo(function InputNode({
   selected,
   ...props
 }: NodeProps<Props>) {
-  //TODO: make upload message clearer for the user
+  console.log(data)
   return (
     <WrapperNode
       nodeTitle={data.title}
@@ -55,7 +56,7 @@ export default React.memo(function InputNode({
           </svg>
         <div className='bg-[--node-bg-color] absolute dark:bg-[-node-bg-color] h-8 right-[0.8rem] w-1 ' />
       </div>
-      <Attachment maxFileSize={3000000} label='Input Node' className='nodrag' nodeId={props.id}/>
+      <Attachment maxFileSize={3000000} label='Input Node' className='nodrag' nodeId={props.id} uploadMessage={data.uploadMsg}/>
     </WrapperNode>
   )
 })

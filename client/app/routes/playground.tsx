@@ -1,4 +1,3 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import React from 'react'
 import { ToastContainer } from 'react-toastify'
 import {
@@ -80,7 +79,7 @@ export default function Playground() {
     setNodes((nodes) => [
       ...nodes,
       {
-        data: { id: data.id, title: data.title, icon: data.icon },
+        data: { id: data.id, title: data.title, icon: data.icon, uploadMsg: data.uploadMsg },
         position: { x: 300, y: 200 },
         type: data.type,
         id: randomStr()
