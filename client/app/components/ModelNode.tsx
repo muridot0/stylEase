@@ -107,6 +107,7 @@ export default React.memo(function ModelNode({
     const stylize = () => {
       if (!contentImageData?.imageData || !styleImageData?.imageData) return
 
+      //TODO: model has ability to adjust stylisation strength. Add that functionality to this node
       model
         .stylize(contentImageData.imageData, styleImageData.imageData)
         .then(async (imageData) => {
