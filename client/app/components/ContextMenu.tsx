@@ -23,6 +23,10 @@ export default React.forwardRef(function ContextMenu(
 
   const reactflow = useReactFlow()
 
+  React.useEffect(() => {
+    setHideDelete(toggleMenu)
+  }, [toggleMenu])
+
   const deleteNodes = () => {
     const nodes = reactflow.getNodes()
     const edges = reactflow.getEdges()
@@ -33,6 +37,7 @@ export default React.forwardRef(function ContextMenu(
   }
 
   const cancelDelete = () => {
+    setHideDelete(true)
     if (toastRef.current) {
       toast.dismiss(toastRef.current)
     }
@@ -82,7 +87,7 @@ export default React.forwardRef(function ContextMenu(
       </button>
       <ul
         className={clsx(
-          'absolute mt-2 right-8 border bg-[--node-bg-color] border-[--node-border-color] w-[12.5rem] h-max p-4 rounded-[8px] transition-opacity ease-in-out',
+          'overflow-hidden absolute mt-2 right-8 border bg-[--node-bg-color] border-[--node-border-color] w-[12.5rem] h-max p-4 rounded-[8px] transition-opacity ease-in-out',
           { 'opacity-100': toggleMenu },
           { 'opacity-0': !toggleMenu }
         )}
@@ -96,37 +101,54 @@ export default React.forwardRef(function ContextMenu(
           )}
         </div>
         <hr className='border-t-[--node-border-color]' />
-        <h2 className='font-semibold text-lg mt-2'>Actions</h2>
-        <li className='mt-2'>
-          <button className='flex items-center gap-2' onClick={resetCanvas}>
-            <span className='i-lucide-refresh-ccw flex' /> Reset canvas
-          </button>
-        </li>
-        <li className='my-2'>
-          <button
-            className='flex items-center gap-2'
-            onClick={clearConnections}
+        <div className='overflow-hidden'>
+          <h2 className='font-semibold text-lg mt-2'>Actions</h2>
+          <li className='mt-2'>
+            <button className='flex items-center gap-2' onClick={resetCanvas}>
+              <span className='i-lucide-refresh-ccw flex' /> Reset canvas
+            </button>
+          </li>
+          <li className='my-2'>
+            <button
+              className='flex items-center gap-2'
+              onClick={clearConnections}
+            >
+              <span className='i-lucide-unlink flex' /> Clear connections
+            </button>
+          </li>
+          <hr className='border-t-[--node-border-color]' />
+        </div>
+        <div className='overflow-hidden'>
+          <li
+            className={clsx(
+              'mt-2',
+              { '!opacity-0 !h-0': !hideDelete}
+            )}
           >
-            <span className='i-lucide-unlink flex' /> Clear connections
-          </button>
-        </li>
-        <hr className='border-t-[--node-border-color]' />
-        <li className={clsx('mt-2', { hidden: hideDelete === false })}>
-          <button
-            className='flex items-center justify-center gap-2 text-red-500 w[100%] p-1 rounded-[4px]'
-            onClick={clearNodes}
+            <button
+              className='flex items-center justify-center gap-2 text-red-600 w[100%] p-1 rounded-[4px]'
+              onClick={clearNodes}
+            >
+              <span className='i-lucide-trash2 flex' /> Clear nodes
+            </button>
+          </li>
+          <li
+            className={clsx(
+              'justify-between mt-2 opacity-0 transition-all duration-300 h-0 translate-y-10',
+              { 'flex opacity-100 h-auto !translate-y-0': hideDelete === false },
+            )}
           >
-            <span className='i-lucide-trash2 flex' /> Clear nodes
-          </button>
-        </li>
-          <li className={clsx('justify-between mt-2 hidden', {'flex duration-300 translate-y-0': hideDelete === false})}>
-            <button className='flex items-center rounded-4px bg-red-500 p-1 text-[#EEEFEF]'>
+            <button className='flex items-center rounded-4px bg-red-600 p-1 text-[#EEEFEF]'>
               Yes, Delete
             </button>
-            <button className='flex items-center rounded-4px border border-[--node-border-color] p-1 text-[#222428] dark:text-[#EEEFEF]'>
+            <button
+              className='flex items-center rounded-4px border border-[--node-border-color] p-1 text-[#222428] dark:text-[#EEEFEF]'
+              onClick={cancelDelete}
+            >
               Cancel
             </button>
           </li>
+        </div>
       </ul>
     </div>
   )
