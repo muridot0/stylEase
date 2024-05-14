@@ -73,10 +73,11 @@ export default function Preview(
             {niceBytes(file!.size)}
           </p>
           <button
-            className=' bg-zinc-200 dark:bg-[--node-icons-color] rounded-full p-1 text-sm'
+            className=' bg-white border-1.5 border-[--node-border-color] dark:border-neutral-500 btn-shadow dark:bg-[--node-icons-color] rounded-full p-1.5 text-sm hover:brightness-95'
             onClick={handleDownload}
           >
-            <span className='i-lucide-download flex text-zinc-600 dark:text-zinc-200'></span>
+            <span className='i-lucide-download flex text-zinc-600 dark:text-zinc-200'/>
+            <span className='sr-only'>Download image</span>
           </button>
         </aside>
       </div>
@@ -86,7 +87,7 @@ export default function Preview(
   const renderNoFileAttachedJSX = () => {
     return (
       <div className='flex flex-col items-center gap-1 nodrag cursor-default'>
-        <span className='i-lucide-image-off flex text-[45px] text-[--node-icons-color]'></span>
+        <span className='i-lucide-image-off flex text-[45px] text-[--node-icons-color]' />
         <p>No preview available</p>
       </div>
     )

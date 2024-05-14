@@ -17,15 +17,17 @@ export default React.forwardRef(function ContextMenu(
   //TODO: add functionality to close menu when click outside of menu
   const contextRef = React.useRef<HTMLDivElement>(null)
   const [hideDelete, setHideDelete] = React.useState(true)
+  const [animationFinished, setAnimationFinished] = React.useState(true)
 
   const reactflow = useReactFlow()
 
   React.useEffect(() => {
-    if(hideDelete) return
+    if (hideDelete) return
     setHideDelete(toggleMenu)
   }, [toggleMenu])
 
   const deleteNodes = () => {
+    setTimeout(() => setAnimationFinished(true), 200)
     setHideDelete(true)
     const nodes = reactflow.getNodes()
     const edges = reactflow.getEdges()
@@ -56,10 +58,11 @@ export default React.forwardRef(function ContextMenu(
         onClick={showMenu}
       >
         <span className='i-lucide-menu flex text-2xl' />
+        <span className='sr-only'>Menu</span>
       </button>
       <ul
         className={clsx(
-          'overflow-hidden absolute mt-2 right-8 border bg-[--node-bg-color] border-[--node-border-color] w-[12.5rem] h-max p-4 rounded-[8px] transition-opacity ease-in-out',
+          'overflow-hidden absolute mt-2 right-8 border bg-[--node-bg-color] border-[--node-border-color] w-[12.5rem] h-[18.5rem] p-4 rounded-[8px] transition-opacity ease-in-out',
           { 'opacity-100': toggleMenu },
           { 'opacity-0': !toggleMenu }
         )}
@@ -93,29 +96,42 @@ export default React.forwardRef(function ContextMenu(
         <div className='overflow-hidden'>
           <li
             className={clsx(
-              'mt-2',
-              { '!opacity-0 !h-0': !hideDelete}
+              'h-0 opacity-0',
+              { 'mt-2 !h-auto opacity-100': animationFinished },
+              { 'hidden': !hideDelete }
             )}
           >
             <button
-              className='flex items-center justify-center gap-2 text-red-600 w[100%] p-1 rounded-[4px]'
-              onClick={() => setHideDelete(false)}
+              className='flex items-center justify-center gap-2 text-red-500 w[100%] p-1 rounded-[4px]'
+              onClick={() => {
+                setAnimationFinished(false)
+                setHideDelete(false)
+              }}
             >
               <span className='i-lucide-trash2 flex' /> Clear nodes
             </button>
           </li>
           <li
             className={clsx(
-              'justify-between mt-2 opacity-0 transition-all duration-200 h-0 translate-y-10',
-              { 'flex opacity-100 h-auto !translate-y-0': hideDelete === false },
+              'flex justify-between transition-all duration-200 translate-y-10',
+              { 'h-0': animationFinished },
+              { 'transition-all h-auto duration-200 !translate-y-0 mt-2': hideDelete === false }
             )}
           >
-            <button className='flex items-center rounded-4px bg-red-600 p-1 text-[#EEEFEF]' onClick={deleteNodes}>
+            <button
+              className='flex items-center rounded-4px bg-red-600 p-1 text-[#EEEFEF]'
+              onClick={deleteNodes}
+            >
               Yes, Delete
             </button>
             <button
               className='flex items-center rounded-4px border border-[--node-border-color] p-1 text-[#222428] dark:text-[#EEEFEF]'
-              onClick={() => setHideDelete(true)}
+              onClick={() => {
+                setTimeout(() => {
+                  setAnimationFinished(true)
+                }, 200)
+                setHideDelete(true)
+              }}
             >
               Cancel
             </button>

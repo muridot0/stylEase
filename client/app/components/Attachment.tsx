@@ -198,14 +198,15 @@ export default function Attachment({
             />
             <div className='mt-2 mb-0 truncate ...'>{file.name}</div>
             <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
-              <p className='border font-medium rounded-md border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
+              <p className='border font-medium rounded-md border-zinc-200  bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
                 {niceBytes(file.size)}
               </p>
               <button
-                className=' bg-zinc-200 dark:bg-[--node-icons-color] rounded-full p-1 text-sm'
+                className=' bg-white border-1.5 border-[--node-border-color] dark:border-neutral-500 btn-shadow dark:bg-[--node-icons-color] rounded-full p-1.5 text-sm hover:brightness-95'
                 onClick={handleFileDelete}
               >
-                <span className='i-lucide-trash-2 flex text-zinc-600 dark:text-zinc-200'></span>
+                <span className='i-lucide-trash-2 flex' />
+                <span className='sr-only'>Delete image</span>
               </button>
             </aside>
           </>
