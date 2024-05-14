@@ -46,15 +46,7 @@
   --node-border-color: #bbbdc1;
   --node-handle-color: #4d5259;
 
-  --toastify-toast-bd-radius: 8px !important;
-  --toastify-font-family: 'Zed Mono', sans-serif !important;
-  --toastify-color-light: #ededee !important;
-  --toastify-text-color-light: #222428 !important;
-
   @media (prefers-color-scheme: dark) {
-    --toastify-color-light: #3b4045 !important;
-    --toastify-text-color-light: #EEEFEF !important;
-
     --stroke-color: #b3b3b3;
 
     --hover-color: #EEEFEF;
@@ -121,11 +113,6 @@ h1 {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.95);
-}
-
-.Toastify__close-button--light {
-  color: var(--node-icons-color) !important;
-  opacity: 1 !important;
 }
 
 @keyframes animloader {
