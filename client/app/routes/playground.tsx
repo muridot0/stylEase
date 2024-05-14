@@ -1,5 +1,4 @@
 import React from 'react'
-import { ToastContainer } from 'react-toastify'
 import {
   ReactFlow,
   useNodesState,
@@ -15,7 +14,6 @@ import {
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
-import 'react-toastify/dist/ReactToastify.css'
 
 import {
   NodeDrawer,
@@ -134,7 +132,6 @@ export default function Playground() {
       <div className='h-screen w-screen'>
         <ReactFlowProvider>
           <Header />
-          <ToastContainer limit={1}/>
           <ReactFlow
             nodes={nodes}
             edges={edges}

@@ -22,14 +22,11 @@
     "dexie": "^4.0.4",
     "dexie-react-hooks": "^1.1.7",
     "heic-convert": "^2.1.0",
-    "heic2any": "^0.0.4",
     "isbot": "^4.1.0",
     "jimp": "^0.22.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-toastify": "^10.0.5",
-    "reactflow": "^11.11.0",
-    "sharp": "^0.33.3"
+    "reactflow": "^11.11.0"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.1.180",

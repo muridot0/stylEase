@@ -2,8 +2,6 @@ import clsx from 'clsx'
 import React from 'react'
 import { BackgroundVariant, useReactFlow } from 'reactflow'
 import RadioItemWithProvider from './RadioItem'
-import { Bounce, Id, ToastContainer, toast } from 'react-toastify'
-import DeleteMsg from './DeleteMsg'
 import setRef from '~/lib/setRef'
 import { initialEdges, initialNodes } from '~/state/nodesState'
 
@@ -18,7 +16,6 @@ export default React.forwardRef(function ContextMenu(
 ) {
   //TODO: add functionality to close menu when click outside of menu
   const contextRef = React.useRef<HTMLDivElement>(null)
-  const toastRef = React.useRef<Id | null>(null)
   const [hideDelete, setHideDelete] = React.useState(true)
 
   const reactflow = useReactFlow()
@@ -28,36 +25,10 @@ export default React.forwardRef(function ContextMenu(
   }, [toggleMenu])
 
   const deleteNodes = () => {
+    setHideDelete(true)
     const nodes = reactflow.getNodes()
     const edges = reactflow.getEdges()
     reactflow.deleteElements({ nodes, edges })
-    if (toastRef.current) {
-      toast.dismiss(toastRef.current)
-    }
-  }
-
-  const cancelDelete = () => {
-    setHideDelete(true)
-    if (toastRef.current) {
-      toast.dismiss(toastRef.current)
-    }
-  }
-
-  const clearNodes = () => {
-    setHideDelete(false)
-    toast.dismiss()
-    toastRef.current = toast(
-      <DeleteMsg onDelete={deleteNodes} onCancel={cancelDelete} />,
-      {
-        position: 'top-center',
-        autoClose: false,
-        pauseOnHover: true,
-        draggable: true,
-        transition: Bounce
-      }
-    )
-
-    return toastRef.current
   }
 
   const clearConnections = () => {
@@ -127,7 +98,7 @@ export default React.forwardRef(function ContextMenu(
           >
             <button
               className='flex items-center justify-center gap-2 text-red-600 w[100%] p-1 rounded-[4px]'
-              onClick={clearNodes}
+              onClick={() => setHideDelete(false)}
             >
               <span className='i-lucide-trash2 flex' /> Clear nodes
             </button>
@@ -138,12 +109,12 @@ export default React.forwardRef(function ContextMenu(
               { 'flex opacity-100 h-auto !translate-y-0': hideDelete === false },
             )}
           >
-            <button className='flex items-center rounded-4px bg-red-600 p-1 text-[#EEEFEF]'>
+            <button className='flex items-center rounded-4px bg-red-600 p-1 text-[#EEEFEF]' onClick={deleteNodes}>
               Yes, Delete
             </button>
             <button
               className='flex items-center rounded-4px border border-[--node-border-color] p-1 text-[#222428] dark:text-[#EEEFEF]'
-              onClick={cancelDelete}
+              onClick={() => setHideDelete(true)}
             >
               Cancel
             </button>
