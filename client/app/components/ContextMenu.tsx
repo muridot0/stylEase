@@ -21,6 +21,7 @@ export default React.forwardRef(function ContextMenu(
   const reactflow = useReactFlow()
 
   React.useEffect(() => {
+    if(hideDelete) return
     setHideDelete(toggleMenu)
   }, [toggleMenu])
 
@@ -105,7 +106,7 @@ export default React.forwardRef(function ContextMenu(
           </li>
           <li
             className={clsx(
-              'justify-between mt-2 opacity-0 transition-all duration-300 h-0 translate-y-10',
+              'justify-between mt-2 opacity-0 transition-all duration-200 h-0 translate-y-10',
               { 'flex opacity-100 h-auto !translate-y-0': hideDelete === false },
             )}
           >
