@@ -54,13 +54,10 @@ export let action: ActionFunction = async ({ request }) => {
 
   const imageBlob = JSON.parse(formData.get('image') as string)
   const requestId = request.url.split('images/')[1]
-  console.log(requestId)
 
   if (!imageBlob) return
-  console.log(imageBlob)
 
   async function processImage(file: Buffer) {
-    console.log(file)
     const resized = await Jimp.read(Buffer.from(file)).then((img) => {
       if(requestId.includes('style-node')) {
         return img.resize(256, Jimp.AUTO)

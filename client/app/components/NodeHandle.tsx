@@ -31,7 +31,6 @@ function NodeHandle({ className, ...props }: Props) {
       case 'style-node':
         globalNodeState.value.map((node) => {
           if (node.id === connection.target) {
-            console.log('connected here', connection)
             node.data = {
               ...node.data,
               styleNodeConnected: true
@@ -41,7 +40,6 @@ function NodeHandle({ className, ...props }: Props) {
         break
       case 'content-node':
         globalNodeState.value.map((node) => {
-          console.log('called', connection)
           if (node.id === connection.target) {
             node.data = {
               ...node.data,
