@@ -47,7 +47,7 @@ export default function Attachment({
   React.useEffect(() => {
     reactflow.setNodes((nodes) =>
       nodes.map((node) => {
-        if (node.id === nodeId) {
+        if (node.data.id === nodeId) {
           node.data = {
             ...node.data,
             content: { ...file }
@@ -69,7 +69,7 @@ export default function Attachment({
     const { nodes } = parsedFlow
 
     nodes.map((node): void => {
-      if (node.id === nodeId) {
+      if (node.data.id === nodeId) {
         if (JSON.stringify(node.data.content) !== '{}') {
           setFile(() => ({
             ...node.data.content
@@ -113,7 +113,7 @@ export default function Attachment({
     setFileAttached(false)
     setFileSizeExceeded({ size: files[0].size, exceeded: false })
     fetcher.submit(e.currentTarget.form, {
-      action: '/images',
+      action: `/images/${nodeId}`,
       method: 'post',
       encType: 'multipart/form-data'
     })
@@ -137,7 +137,7 @@ export default function Attachment({
         ) : (
           <>
             <fetcher.Form
-              action='/images'
+              action={`/images/${nodeId}`}
               method='post'
               encType='multipart/form-data'
             >

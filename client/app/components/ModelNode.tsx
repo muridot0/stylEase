@@ -109,7 +109,7 @@ export default React.memo(function ModelNode({
 
       //TODO: model has ability to adjust stylisation strength. Add that functionality to this node
       model
-        .stylize(contentImageData.imageData, styleImageData.imageData)
+        .stylize(contentImageData.imageData, styleImageData.imageData, 1)
         .then(async (imageData) => {
           console.log(db)
           db.imagedata.add({id: props.id, data: {url: imageData, name: `stylEased-${contentImage.name}`, size: contentImage.size} })

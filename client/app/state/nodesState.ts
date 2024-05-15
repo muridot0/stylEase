@@ -42,7 +42,7 @@ const initialNodes = [
     data: {
       title: 'Content Node',
       icon: 'i-lucide-image-plus',
-      id: `style-node-${randomStr(10)}`,
+      id: `content-node-${randomStr(10)}`,
       uploadMsg: 'Upload image to stylEase'
     }
   },

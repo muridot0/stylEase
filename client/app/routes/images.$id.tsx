@@ -37,63 +37,35 @@ const uploadFileHandler = unstable_composeUploadHandlers(
       url: convertedFile,
       filename: mangle(filename || `stylEase_${randomStr(2)}`)
     })
-
-    //     const url = await fileToBase64(file)
-    //     setFile(() => ({
-    //       url: url,
-    //       name: file.name,
-    //       size: file.size
-    //     }))
-
-    //     setFileAttached(true)
-    //     setFileSizeExceeded({ size: file.size, exceeded: false })
-    //     setTimeout(() => {
-    //       setLoading(false)
-    //     }, 300)
-    //   } else {
-    //     const convert = await convertHEICtoJPEG(files[0])
-    //     const newFile = new File(
-    //       [convert as Blob],
-    //       file.name.slice(0, file.name.indexOf('.')),
-    //       { type: (convert as Blob).type }
-    //     )
-    //     if (newFile.size > maxFileSize) {
-    //       setFileSizeExceeded({ size: newFile.size, exceeded: true })
-    //       setFileAttached(false)
-    //       setLoading(false)
-    //       return
-    //     }
-    //     const url = await fileToBase64(newFile)
-    //     setFile(() => ({
-    //       url: url,
-    //       name: newFile.name,
-    //       size: newFile.size
-    //     }))
-    //     setFileAttached(true)
-    //     setFileSizeExceeded({ size: newFile.size, exceeded: false })
-    //     setLoading(false)
-    //   }
   }
 )
 
 // Define the loader function
 export let action: ActionFunction = async ({ request }) => {
+
   if(request.method === 'GET') {
     return null
   }
+
   const formData = await unstable_parseMultipartFormData(
     request,
     uploadFileHandler
   )
 
   const imageBlob = JSON.parse(formData.get('image') as string)
+  const requestId = request.url.split('images/')[1]
+  console.log(requestId)
 
   if (!imageBlob) return
+  console.log(imageBlob)
 
   async function processImage(file: Buffer) {
     console.log(file)
     const resized = await Jimp.read(Buffer.from(file)).then((img) => {
-      return img.resize(256, Jimp.AUTO)
+      if(requestId.includes('style-node')) {
+        return img.resize(256, Jimp.AUTO)
+      }
+      return img.resize(1000, Jimp.AUTO)
     })
 
     const bufferSize =
