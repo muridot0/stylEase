@@ -29,6 +29,7 @@
     "reactflow": "^11.11.0"
   },
   "devDependencies": {
+    "@iconify-json/iconoir": "^1.1.44",
     "@iconify-json/lucide": "^1.1.180",
     "@remix-run/dev": "^2.8.1",
     "@types/eslint": "^8.56.7",

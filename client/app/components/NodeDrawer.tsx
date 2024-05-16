@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import { CustomNode } from '~/state/nodesState'
 
 interface Props {
-  onSelect?: (data: CustomNode) => void | null
+  onSelect: (data: CustomNode) => void | null
 }
 
 export default function NodeDrawer({ onSelect }: Props) {
@@ -17,7 +17,7 @@ export default function NodeDrawer({ onSelect }: Props) {
   }
 
   const addNode = (data: CustomNode) => {
-    onSelect?.(data)
+    onSelect(data)
   }
 
   return (

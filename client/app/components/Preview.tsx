@@ -29,32 +29,24 @@ export default function Preview(
   const incommers = getIncomers(reactflow.getNode(nodeId)!, reactflow.getNodes(), reactflow.getEdges())
   const dbResult = useLiveQuery(() => db.imagedata.where('id').equals(incommers[0].id).toArray())
 
-  console.log(dbResult)
-
   React.useEffect(() => {
     //TODO: work on fetching specific stylised images for respective models from indexeddb using model id
     if(!dbResult || dbResult.length <= 0) return
     setFile(dbResult[0].data)
-    console.log(file)
     setPreviewGenerated(true)
   }, [dbResult])
 
   React.useEffect(() => {
     if(!file) return
     if(!canvasRef.current) return
-    console.log('i got here', canvasRef.current)
     const ctx = canvasRef.current.getContext('2d')
     //INFO: would receive ImageData from the model so only place to do conversion is for the model input
     const data = file.url
-
-    console.log(data)
 
     if(!data) return
 
     canvasRef.current.width = data.width
     canvasRef.current.height = data.height
-
-    console.log(file)
 
     ctx?.putImageData((data as any as ImageData), 0, 0)
   }, [reactflow.getNodes()])

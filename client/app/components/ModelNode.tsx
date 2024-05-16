@@ -15,6 +15,7 @@ import * as mi from '@magenta/image'
 import { base64ToImageData, scaleImageData } from '~/lib/base64ToImageData'
 import { storeImageDataInIndexedDB } from '~/lib/storeInIndexedDB'
 import { db } from '~/lib/db'
+import Slider from './Slider'
 interface Props {
   title: string
   icon: string
@@ -45,6 +46,9 @@ export default React.memo(function ModelNode({
   const model = new mi.ArbitraryStyleTransferNetwork()
   const reactflow = useReactFlow()
 
+  console.log('style', styleImage)
+  console.log('content', contentImage)
+
   // model.stylize()
 
   React.useEffect(() => {
@@ -67,6 +71,7 @@ export default React.memo(function ModelNode({
     reactflow.getEdges()
   )
   React.useEffect(() => {
+    console.log('i call')
     incommers.map((node: Node<CustomNode>) => {
       if (node.type === 'style-node-type') {
         setStyleImage(node.data.content)
@@ -74,7 +79,7 @@ export default React.memo(function ModelNode({
         setContentImage(node.data.content)
       }
     })
-  }, [incommers])
+  }, [])
 
   const stylEase = async () => {
     if (!contentImage || !styleImage) return
@@ -85,11 +90,6 @@ export default React.memo(function ModelNode({
 
     console.log(model)
 
-    const scaledContentImageData = scaleImageData(
-      contentImageData.imageData,
-      1
-    )
-    const scaledStyleImageData = scaleImageData(styleImageData.imageData, 1)
 
     const worker = new Worker('stylEaseWorker.js')
 
@@ -103,16 +103,22 @@ export default React.memo(function ModelNode({
     //   console.log(resultImageData)
     // }
 
-
     const stylize = () => {
       if (!contentImageData?.imageData || !styleImageData?.imageData) return
 
       //TODO: model has ability to adjust stylisation strength. Add that functionality to this node
       model
-        .stylize(contentImageData.imageData, styleImageData.imageData, 1)
+        .stylize(contentImageData.imageData, styleImageData.imageData, 0.8)
         .then(async (imageData) => {
           console.log(db)
-          db.imagedata.add({id: props.id, data: {url: imageData, name: `stylEased-${contentImage.name}`, size: contentImage.size} })
+          db.imagedata.add({
+            id: props.id,
+            data: {
+              url: imageData,
+              name: `stylEased-${contentImage.name}`,
+              size: contentImage.size
+            }
+          })
           // storeImageDataInIndexedDB(imageData, `stylEased-${contentImage.name}`, contentImage.size, props.id)
         })
     }
@@ -193,11 +199,12 @@ export default React.memo(function ModelNode({
               : 'Content node'}
           </p>
         </div>
+        <Slider className='mt-4 nodrag' onChange={(e) => console.log('from model', e)}></Slider>
       </WrapperNode>
       {styleNodeConnected && contentNodeConnected && displayNodeConnected && (
         <button
           onClick={stylEase}
-          className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[9.5rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
+          className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[13.75rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
         >
           <span className='i-lucide-play flex' /> stylEase!
         </button>
