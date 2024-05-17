@@ -61,11 +61,18 @@ export default React.memo(function ModelNode({
     displayNodeConnected
   ])
 
+  React.useEffect(() => {
+    console.log('content', contentImage)
+    console.log('style', styleImage)
+  }, [contentImage, styleImage])
+
+  //TODO: find a way to make node refresh when new image is connected
   const incommers = getIncomers(
     reactflow.getNode(props.id)!,
     reactflow.getNodes(),
     reactflow.getEdges()
   )
+
   React.useEffect(() => {
     incommers.map((node: Node<CustomNode>) => {
       if (node.type === 'style-node-type') {

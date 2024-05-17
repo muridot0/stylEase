@@ -936,6 +936,13 @@
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
+"@iconify-json/iconoir@^1.1.44":
+  version "1.1.44"
+  resolved "https://registry.yarnpkg.com/@iconify-json/iconoir/-/iconoir-1.1.44.tgz#753b36abee9ecedee5fb06e5c89924319de25f6d"
+  integrity sha512-XZZ6+nIgS3BUWTmIvZ1Um/TZcUsOEVDGOTZ50hihoTWYjfLLmPlxS/jxrTTpjJO/98wbyiDz4WOXFGqBrXMLPw==
+  dependencies:
+    "@iconify/types" "*"
+
 "@iconify-json/lucide@^1.1.152", "@iconify-json/lucide@^1.1.180":
   version "1.1.187"
   resolved "https://registry.yarnpkg.com/@iconify-json/lucide/-/lucide-1.1.187.tgz#adb30bd8036b43f61519dc0c123db370a05de476"

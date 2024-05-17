@@ -8,6 +8,9 @@ function base64ToImageData(base64String: string) {
   const img = new Image()
   img.src = base64String
 
+  console.log('width here', img.width)
+  console.log('height here', img.height)
+
   const width = img.width
   const height = img.height
 
