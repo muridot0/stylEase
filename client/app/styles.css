@@ -31,11 +31,13 @@
 }
 
 :root {
-  @apply bg-[#e8e8e8] dark:bg-[#222428] text-[#222428] dark:text-[#EEEFEF];
+  @apply bg-[#e8e8e8] dark:bg-[#222428] text-[--primary];
   color-scheme: light dark;
   font-family: 'Zed Mono', sans-serif;
   font-size: 12px;
   font-weight: 300;
+
+  --primary: #222428;
 
   --shadow-inset: inset 0 3px 3px 0 rgba(255, 255, 255, 1), inset 0 4px 6px 0 rgba(0, 0, 0, 0.25);
 
@@ -49,6 +51,8 @@
   --node-handle-color: #4d5259;
 
   @media (prefers-color-scheme: dark) {
+    --primary: #EEEFEF;
+
     --shadow-inset: inset 0 3px 3px 0 rgba(0, 0, 0, 0.25), inset 0 3px 5px 0 rgba(255, 255, 255, 0.25);
 
     --stroke-color: #b3b3b3;
@@ -76,12 +80,38 @@ input[type="range"] {
 }
 
 input[type="range"]::-webkit-slider-thumb {
-  @apply h-[8px] w-[8px] rounded-full bg-[--node-icons-color] relative -top-[0.35rem];
+  @apply h-[8px] w-[8px] rounded-full bg-[--primary] relative -top-[0.35rem];
   -webkit-appearance: none;
 }
 
+input[type="range"]:disabled::-webkit-slider-thumb {
+  @apply opacity-100;
+}
+
+input[type="range"]::-moz-slider-thumb {
+  @apply h-[8px] w-[8px] rounded-full bg-[--primary] relative -top-[0.35rem];
+  -webkit-appearance: none;
+}
+
+input[type="range"]:disabled::-moz-slider-thumb {
+  @apply opacity-100;
+}
+
+
 input[type="range"]::-webkit-slider-runnable-track {
   @apply bg-[--node-handle-color] h-[1px];
+}
+
+input[type="range"]:disabled::-webkit-slider-runnable-track {
+  @apply opacity-10;
+}
+
+input[type="range"]::-moz-range-track {
+  @apply bg-[--node-handle-color] h-[1px];
+}
+
+input[type="range"]:disabled::-moz-range-track {
+  @apply opacity-10;
 }
 
 .no-bg {

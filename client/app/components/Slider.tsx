@@ -3,10 +3,11 @@ import React from 'react'
 
 interface Props {
   className?: string
+  disabled: boolean
   onChange: (val: string) => void
 }
 
-export default function Slider({ className, onChange }: Props) {
+export default function Slider({ className, onChange, disabled }: Props) {
   const [sliderValue, setSliderValue] = React.useState<string>('0.5')
   const rangeRef = React.useRef<HTMLDivElement>(null)
 
@@ -32,23 +33,28 @@ export default function Slider({ className, onChange }: Props) {
 
   return (
     <div className={clsx(className)}>
-      <div className='flex items-center mb-1 text-sm justify-between'>
+      <div className='flex items-center text-sm justify-between'>
         <div className='flex items-center gap-2 text-[--node-icons-color]'>
           <span className='i-iconoir-gym flex' />
           <p>Style strength</p>
         </div>
-        <div className='overflow-hidden h-[16px]'>
-          <div className='flex'>
-            <div ref={rangeRef} className='transition-all duration-300 ease-in-out'>
-              {numArr.map((num) => (
-                <div key={num} className='tabular-nums'>
-                  {num}
-                </div>
-              ))}
+        {!disabled && (
+          <div className='overflow-hidden h-[16px]'>
+            <div className='flex'>
+              <div
+                ref={rangeRef}
+                className='transition-all duration-300 ease-in-out -mt-[600px]'
+              >
+                {numArr.map((num) => (
+                  <div key={num} className='tabular-nums'>
+                    {num}
+                  </div>
+                ))}
+              </div>
+              <p className='ml-1'>%</p>
             </div>
-            <p className='ml-1'>%</p>
           </div>
-        </div>
+        )}
       </div>
       <input
         type='range'
@@ -56,11 +62,12 @@ export default function Slider({ className, onChange }: Props) {
         max='1'
         step='0.01'
         value={sliderValue}
-        className='w-full range-style'
+        className={clsx('w-full cursor-pointer flex mt-3')}
         onChange={(e) => {
           onChange(e.currentTarget.value)
           setSliderValue(e.currentTarget.value)
         }}
+        disabled={disabled}
       />
     </div>
   )

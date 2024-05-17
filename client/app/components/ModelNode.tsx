@@ -203,12 +203,12 @@ export default React.memo(function ModelNode({
               : 'Content node'}
           </p>
         </div>
-        <Slider className='mt-4 nodrag' onChange={(e) => setStylizationStrength(parseFloat(e))}></Slider>
+        <Slider className='mt-4 nodrag' onChange={(e) => setStylizationStrength(parseFloat(e))} disabled={!contentNodeConnected || !styleNodeConnected || !displayNodeConnected}></Slider>
       </WrapperNode>
       {styleNodeConnected && contentNodeConnected && displayNodeConnected && (
         <button
           onClick={stylEase}
-          className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[13.75rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
+          className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[12.65rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
         >
           <span className='i-lucide-play flex' /> stylEase!
         </button>
