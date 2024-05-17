@@ -8,6 +8,27 @@ interface Props {
 
 export default function Slider({ className, onChange }: Props) {
   const [sliderValue, setSliderValue] = React.useState<string>('0.5')
+  const rangeRef = React.useRef<HTMLDivElement>(null)
+
+  const animateNums = () => {
+    console.log('from numbs', sliderValue)
+    if (!rangeRef.current) return
+    let top = ((parseFloat(sliderValue) - 0.1) / 0.01) * -15
+
+    requestAnimationFrame(() => {
+      rangeRef.current!.style.marginTop = `${top}px`
+    })
+  }
+
+  React.useEffect(() => {
+    animateNums()
+  }, [sliderValue])
+
+  const numArr = []
+
+  for (let i = 0.1; i <= 1.01; i += 0.01) {
+    numArr.push((i * 100).toFixed(0))
+  }
 
   return (
     <div className={clsx(className)}>
@@ -16,7 +37,18 @@ export default function Slider({ className, onChange }: Props) {
           <span className='i-iconoir-gym flex' />
           <p>Style strength</p>
         </div>
-        <p className='tabular-nums'>{(parseFloat(sliderValue) * 100).toFixed(0)}%</p>
+        <div className='overflow-hidden h-[16px]'>
+          <div className='flex'>
+            <div ref={rangeRef} className='transition-all duration-300 ease-in-out'>
+              {numArr.map((num) => (
+                <div key={num} className='tabular-nums'>
+                  {num}
+                </div>
+              ))}
+            </div>
+            <p className='ml-1'>%</p>
+          </div>
+        </div>
       </div>
       <input
         type='range'

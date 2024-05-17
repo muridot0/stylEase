@@ -43,13 +43,9 @@ export default React.memo(function ModelNode({
     size: number
     url: string
   }>()
+  const [stylizationStrength, setStylizationStrength] = React.useState<number>(0.5)
   const model = new mi.ArbitraryStyleTransferNetwork()
   const reactflow = useReactFlow()
-
-  console.log('style', styleImage)
-  console.log('content', contentImage)
-
-  // model.stylize()
 
   React.useEffect(() => {
     globalNodeState.subscribe((nodes) => {
@@ -71,7 +67,6 @@ export default React.memo(function ModelNode({
     reactflow.getEdges()
   )
   React.useEffect(() => {
-    console.log('i call')
     incommers.map((node: Node<CustomNode>) => {
       if (node.type === 'style-node-type') {
         setStyleImage(node.data.content)
@@ -80,6 +75,8 @@ export default React.memo(function ModelNode({
       }
     })
   }, [])
+
+  React.useEffect(() => {console.log(stylizationStrength)}, [stylizationStrength])
 
   const stylEase = async () => {
     if (!contentImage || !styleImage) return
@@ -108,7 +105,7 @@ export default React.memo(function ModelNode({
 
       //TODO: model has ability to adjust stylisation strength. Add that functionality to this node
       model
-        .stylize(contentImageData.imageData, styleImageData.imageData, 0.8)
+        .stylize(contentImageData.imageData, styleImageData.imageData, stylizationStrength)
         .then(async (imageData) => {
           console.log(db)
           db.imagedata.add({
@@ -199,7 +196,7 @@ export default React.memo(function ModelNode({
               : 'Content node'}
           </p>
         </div>
-        <Slider className='mt-4 nodrag' onChange={(e) => console.log('from model', e)}></Slider>
+        <Slider className='mt-4 nodrag' onChange={(e) => setStylizationStrength(parseFloat(e))}></Slider>
       </WrapperNode>
       {styleNodeConnected && contentNodeConnected && displayNodeConnected && (
         <button
