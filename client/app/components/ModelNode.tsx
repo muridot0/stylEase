@@ -43,7 +43,8 @@ export default React.memo(function ModelNode({
     size: number
     url: string
   }>()
-  const [stylizationStrength, setStylizationStrength] = React.useState<number>(0.5)
+  const [stylizationStrength, setStylizationStrength] =
+    React.useState<number>(0.5)
   const model = new mi.ArbitraryStyleTransferNetwork()
   const reactflow = useReactFlow()
 
@@ -83,17 +84,18 @@ export default React.memo(function ModelNode({
     })
   }, [])
 
-  React.useEffect(() => {console.log(stylizationStrength)}, [stylizationStrength])
-
   const stylEase = async () => {
-    if (!contentImage || !styleImage) return
+    console.log('content in function', contentImage)
+    if (!contentImage?.url || !styleImage?.url) {
+      console.log('no content image and or style image')
+      return
+    }
 
     const contentImageData = base64ToImageData(contentImage.url)
     const styleImageData = base64ToImageData(styleImage.url)
     if (!contentImageData?.imageData || !styleImageData?.imageData) return
 
     console.log(model)
-
 
     const worker = new Worker('stylEaseWorker.js')
 
@@ -112,7 +114,11 @@ export default React.memo(function ModelNode({
 
       //TODO: model has ability to adjust stylisation strength. Add that functionality to this node
       model
-        .stylize(contentImageData.imageData, styleImageData.imageData, stylizationStrength)
+        .stylize(
+          contentImageData.imageData,
+          styleImageData.imageData,
+          stylizationStrength
+        )
         .then(async (imageData) => {
           console.log(db)
           db.imagedata.add({
@@ -203,7 +209,15 @@ export default React.memo(function ModelNode({
               : 'Content node'}
           </p>
         </div>
-        <Slider className='mt-4 nodrag' onChange={(e) => setStylizationStrength(parseFloat(e))} disabled={!contentNodeConnected || !styleNodeConnected || !displayNodeConnected}></Slider>
+        <Slider
+          className='mt-4 nodrag'
+          onChange={(e) => setStylizationStrength(parseFloat(e))}
+          disabled={
+            !contentNodeConnected ||
+            !styleNodeConnected ||
+            !displayNodeConnected
+          }
+        ></Slider>
       </WrapperNode>
       {styleNodeConnected && contentNodeConnected && displayNodeConnected && (
         <button

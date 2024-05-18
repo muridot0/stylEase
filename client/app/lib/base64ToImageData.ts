@@ -2,6 +2,8 @@ function base64ToImageData(base64String: string) {
   // Create ImageData
   if (!base64String) return
 
+  // const data = new ImageData()
+
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
 
