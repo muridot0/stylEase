@@ -36,6 +36,8 @@ export default function Attachment({
     url: string
     name: string
     size: number
+    width: number
+    height: number
   } | null>(null)
   const [fileSizeExceeded, setFileSizeExceeded] = React.useState<{
     size: number
@@ -86,9 +88,7 @@ export default function Attachment({
       return
     }
     setFile(() => ({
-      url: data.url,
-      name: data.name,
-      size: data.size
+      ...data
     }))
     setLoading(false)
     setFileAttached(true)

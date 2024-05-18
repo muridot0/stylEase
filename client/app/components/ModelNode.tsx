@@ -37,11 +37,15 @@ export default React.memo(function ModelNode({
     name: string
     size: number
     url: string
+    width: number
+    height: number
   }>()
   const [contentImage, setContentImage] = React.useState<{
     name: string
     size: number
     url: string
+    width: number
+    height: number
   }>()
   const [stylizationStrength, setStylizationStrength] =
     React.useState<number>(0.5)
@@ -67,14 +71,12 @@ export default React.memo(function ModelNode({
     console.log('style', styleImage)
   }, [contentImage, styleImage])
 
-  //TODO: find a way to make node refresh when new image is connected
-  const incommers = getIncomers(
-    reactflow.getNode(props.id)!,
-    reactflow.getNodes(),
-    reactflow.getEdges()
-  )
-
   React.useEffect(() => {
+    const incommers = getIncomers(
+      reactflow.getNode(props.id)!,
+      reactflow.getNodes(),
+      reactflow.getEdges()
+    )
     incommers.map((node: Node<CustomNode>) => {
       if (node.type === 'style-node-type') {
         setStyleImage(node.data.content)
@@ -82,7 +84,7 @@ export default React.memo(function ModelNode({
         setContentImage(node.data.content)
       }
     })
-  }, [])
+  }, [globalNodeState.value])
 
   const stylEase = async () => {
     console.log('content in function', contentImage)
@@ -121,7 +123,8 @@ export default React.memo(function ModelNode({
         )
         .then(async (imageData) => {
           console.log(db)
-          db.imagedata.add({
+          console.log(imageData.width, imageData.height)
+          return db.imagedata.add({
             id: props.id,
             data: {
               url: imageData,

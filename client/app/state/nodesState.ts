@@ -11,7 +11,7 @@ interface CustomNode {
   id: string
   title: string
   icon: string
-  content?: { name: string; url: string; size: number }
+  content?: { name: string; url: string; size: number, width: number, height: number }
   description?: string
   type?: string
   contentNodeConnected?: boolean

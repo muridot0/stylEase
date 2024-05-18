@@ -2,16 +2,11 @@ function base64ToImageData(base64String: string) {
   // Create ImageData
   if (!base64String) return
 
-  // const data = new ImageData()
-
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
 
   const img = new Image()
   img.src = base64String
-
-  console.log('width here', img.width)
-  console.log('height here', img.height)
 
   const width = img.width
   const height = img.height
