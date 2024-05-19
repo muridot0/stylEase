@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import { Handle, Position, useStore } from 'reactflow'
+import { Handle, Position, getConnectedEdges, useNodeId, useStore } from 'reactflow'
 import type { Connection, HandleProps } from 'reactflow'
 import globalNodeState from '~/state/nodesState'
 
@@ -8,15 +8,29 @@ interface Props extends HandleProps {
   className?: string
 }
 
+const selector = (s) => ({
+  nodeInternals: s.nodeInternals,
+  edges: s.edges,
+});
+
 function NodeHandle({ className, ...props }: Props) {
   const isSourceConnected = useStore((s) =>
     s.edges.some((edge) => edge.source === props.id)
   )
 
+  const nodeId = useNodeId();
+
+  const { nodeInternals, edges } = useStore(selector);
+
+  //TODO: adding connection limit functionality
+
   function isValidHandle(connection: Connection) {
     switch (connection.sourceHandle) {
       case 'style-node':
-        return connection.targetHandle === 'style-input'
+        const node = nodeInternals.get(nodeId);
+        const connectedEdges = getConnectedEdges([node], edges);
+
+        return connection.targetHandle === 'style-input' && connectedEdges.length < 1
       case 'content-node':
         return connection.targetHandle === 'content-input'
       case 'model-node':
