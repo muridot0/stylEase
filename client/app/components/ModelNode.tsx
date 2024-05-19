@@ -5,7 +5,8 @@ import {
   Position,
   useReactFlow,
   getIncomers,
-  Node
+  Node,
+  ReactFlowJsonObject
 } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
@@ -21,6 +22,9 @@ interface Props {
   icon: string
   styleNodeConnected: boolean
   contentNodeConnected: boolean
+  displayNodeId: string | null
+  contentNodeId: string | null
+  styleNodeId: string | null
 }
 
 export default React.memo(function ModelNode({
@@ -28,7 +32,7 @@ export default React.memo(function ModelNode({
   selected,
   isConnectable,
   ...props
-}: NodeProps<Props> & any) {
+}: NodeProps<Props>) {
   // TODO: restrict model node to one input per handle
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
@@ -71,20 +75,24 @@ export default React.memo(function ModelNode({
     console.log('style', styleImage)
   }, [contentImage, styleImage])
 
+  const flowData = localStorage.getItem('stylEase')
   React.useEffect(() => {
-    const incommers = getIncomers(
-      reactflow.getNode(props.id)!,
-      reactflow.getNodes(),
-      reactflow.getEdges()
-    )
-    incommers.map((node: Node<CustomNode>) => {
-      if (node.type === 'style-node-type') {
+    console.log({data, ...props})
+
+    if (!flowData) return
+
+    const parsedFlow: ReactFlowJsonObject = JSON.parse(flowData)
+
+    const { nodes } = parsedFlow
+
+    nodes.map((node): void => {
+      if (node.id === data.styleNodeId) {
         setStyleImage(node.data.content)
-      } else {
+      } else if (node.id === data.contentNodeId) {
         setContentImage(node.data.content)
       }
     })
-  }, [globalNodeState.value])
+  }, [])
 
   const stylEase = async () => {
     console.log('content in function', contentImage)

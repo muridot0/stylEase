@@ -11,6 +11,7 @@ import {
   ReactFlowProvider,
   ReactFlowInstance,
   ReactFlowJsonObject,
+  NodeChange,
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -93,7 +94,8 @@ export default function Playground() {
             if (edge.target === node.id) {
               node.data = {
                 ...node.data,
-                styleNodeConnected: false
+                styleNodeConnected: false,
+                styleNodeId: null
               }
             }
             return node
@@ -105,7 +107,8 @@ export default function Playground() {
             if (edge.target === node.id) {
               node.data = {
                 ...node.data,
-                contentNodeConnected: false
+                contentNodeConnected: false,
+                contentNodeId: null
               }
             }
             return node
@@ -117,7 +120,8 @@ export default function Playground() {
             if (edge.source === node.id) {
               node.data = {
                 ...node.data,
-                displayNodeConnected: false
+                displayNodeConnected: false,
+                displayNodeId: null
               }
             }
             return node

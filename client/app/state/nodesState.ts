@@ -18,7 +18,9 @@ interface CustomNode {
   styleNodeConnected?: boolean
   displayNodeConnected?: boolean
   uploadMsg?: string
-  // styleImage?:
+  styleNodeId?: string | null
+  contentNodeId?: string | null
+  displayNodeId?: string | null
 }
 
 const globalNodeState = signal<Node<CustomNode>[]>([])
@@ -56,7 +58,10 @@ const initialNodes = [
       id: `model-node-${randomStr(10)}`,
       styleNodeConnected: true,
       contentNodeConnected: true,
-      displayNodeConnected: true
+      displayNodeConnected: true,
+      styleNodeId: '1',
+      contentNodeId: '2',
+      displayNodeId: '4'
     }
   },
   {

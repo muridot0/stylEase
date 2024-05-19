@@ -33,7 +33,8 @@ function NodeHandle({ className, ...props }: Props) {
           if (node.id === connection.target) {
             node.data = {
               ...node.data,
-              styleNodeConnected: true
+              styleNodeConnected: true,
+              styleNodeId: node.id
             }
           }
         })
@@ -43,7 +44,8 @@ function NodeHandle({ className, ...props }: Props) {
           if (node.id === connection.target) {
             node.data = {
               ...node.data,
-              contentNodeConnected: true
+              contentNodeConnected: true,
+              contentNodeId: node.id
             }
           }
         })
@@ -53,7 +55,8 @@ function NodeHandle({ className, ...props }: Props) {
           if (node.id === connection.source) {
             node.data = {
               ...node.data,
-              displayNodeConnected: true
+              displayNodeConnected: true,
+              displayNodeId: connection.target
             }
           }
         })
