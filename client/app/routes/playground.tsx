@@ -23,7 +23,7 @@ import {
 import nodeTypes from '~/lib/nodetypes'
 import randomStr from '~/lib/randomStr'
 import backgroundState from '~/state/backgroundState'
-import globalNodeState, { CustomNode, initialEdges, initialNodes } from '~/state/nodesState'
+import globalNodeState, { CustomNode, MODEL_NODE_TYPE, initialEdges, initialNodes } from '~/state/nodesState'
 
 //TODO: work on holding the data in local storage so that data persists on refresh
 export default function Playground() {
@@ -66,6 +66,23 @@ export default function Playground() {
     setNodes(nodes)
     setEdges(edges)
   }, [])
+
+  //Sets the image data for model node
+  React.useEffect(() => {
+    globalNodeState.value.map((node): void => {
+      if(node.type === MODEL_NODE_TYPE){
+        const styleNode = nodes.find((val) => node.data.styleNodeId === val.id)
+        node.data.styleImage = {
+          ...styleNode?.data.content!
+        }
+        const contentNode = nodes.find(val => node.data.contentNodeId === val.id)
+        node.data.contentImage = {
+          ...contentNode?.data.content!
+        }
+      }
+    })
+  },[globalNodeState.value])
+
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))

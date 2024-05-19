@@ -12,7 +12,6 @@ export default function Slider({ className, onChange, disabled }: Props) {
   const rangeRef = React.useRef<HTMLDivElement>(null)
 
   const animateNums = () => {
-    console.log('from numbs', sliderValue)
     if (!rangeRef.current) return
     let top = ((parseFloat(sliderValue) - 0.1) / 0.01) * -15
 

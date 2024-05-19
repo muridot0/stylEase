@@ -11,7 +11,13 @@ interface CustomNode {
   id: string
   title: string
   icon: string
-  content?: { name: string; url: string; size: number, width: number, height: number }
+  content?: {
+    name: string
+    url: string
+    size: number
+    width: number
+    height: number
+  }
   description?: string
   type?: string
   contentNodeConnected?: boolean
@@ -19,7 +25,21 @@ interface CustomNode {
   displayNodeConnected?: boolean
   uploadMsg?: string
   styleNodeId?: string | null
+  styleImage?: {
+    name: string
+    size: number
+    url: string
+    width: number
+    height: number
+  }
   contentNodeId?: string | null
+  contentImage?: {
+    name: string
+    size: number
+    url: string
+    width: number
+    height: number
+  }
   displayNodeId?: string | null
 }
 
@@ -100,9 +120,13 @@ const initialEdges = [
   }
 ]
 
-
-
 export default globalNodeState
 export type { CustomNode }
-export { initialEdges, initialNodes, STYLE_NODE_TYPE, CONTENT_NODE_TYPE, DISPLAY_NODE_TYPE, MODEL_NODE_TYPE }
-
+export {
+  initialEdges,
+  initialNodes,
+  STYLE_NODE_TYPE,
+  CONTENT_NODE_TYPE,
+  DISPLAY_NODE_TYPE,
+  MODEL_NODE_TYPE
+}

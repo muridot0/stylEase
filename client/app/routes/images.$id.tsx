@@ -62,7 +62,7 @@ export let action: ActionFunction = async ({ request }) => {
       if(requestId.includes('style-node')) {
         return img.resize(256, Jimp.AUTO)
       }
-      return img.resize(1280, Jimp.AUTO)
+      return img.resize(1000, Jimp.AUTO)
     })
 
     const bufferSize =

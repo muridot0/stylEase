@@ -62,6 +62,8 @@ export default React.memo(function ModelNode({
       setStyleNodeConnected(currentNode?.data.styleNodeConnected!)
       setContentNodeConnected(currentNode?.data.contentNodeConnected!)
       setDisplayNodeConnected(currentNode?.data.displayNodeConnected!)
+      setStyleImage(currentNode?.data.styleImage)
+      setContentImage(currentNode?.data.contentImage)
     })
   }, [
     globalNodeState.value,
@@ -69,30 +71,6 @@ export default React.memo(function ModelNode({
     contentNodeConnected,
     displayNodeConnected
   ])
-
-  React.useEffect(() => {
-    console.log('content', contentImage)
-    console.log('style', styleImage)
-  }, [contentImage, styleImage])
-
-  const flowData = localStorage.getItem('stylEase')
-  React.useEffect(() => {
-    console.log({data, ...props})
-
-    if (!flowData) return
-
-    const parsedFlow: ReactFlowJsonObject = JSON.parse(flowData)
-
-    const { nodes } = parsedFlow
-
-    nodes.map((node): void => {
-      if (node.id === data.styleNodeId) {
-        setStyleImage(node.data.content)
-      } else if (node.id === data.contentNodeId) {
-        setContentImage(node.data.content)
-      }
-    })
-  }, [])
 
   const stylEase = async () => {
     console.log('content in function', contentImage)
