@@ -15,7 +15,7 @@ interface Props extends HandleProps {
   className?: string
 }
 
-const selector = (s) => ({
+const selector = (s: any) => ({
   nodeInternals: s.nodeInternals,
   edges: s.edges
 })
@@ -25,12 +25,6 @@ function NodeHandle({ className, ...props }: Props) {
     s.edges.some((edge) => edge.source === props.id)
   )
   const reactflow = useReactFlow()
-
-  const nodeId = useNodeId()
-
-  const { nodeInternals, edges } = useStore(selector)
-
-  //TODO: adding connection limit functionality
 
   function isValidHandle(connection: Connection) {
     switch (connection.sourceHandle) {
@@ -70,18 +64,6 @@ function NodeHandle({ className, ...props }: Props) {
         return connection.source !== connection.target
     }
   }
-
-  // const isHandleConnectable = React.useMemo(() => {
-  //   const node = nodeInternals.get(nodeId)
-  //   const connectedEdges = getConnectedEdges([node], edges)
-  //   console.log(connectedEdges)
-
-  //   if (connectedEdges.length > 1) {
-  //     return false;
-  //   }
-
-  //   return true
-  // }, [nodeInternals, edges, nodeId])
 
   const onConnect = (connection: Connection) => {
     switch (connection.sourceHandle) {

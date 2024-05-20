@@ -1,4 +1,6 @@
 import Dexie, { Table } from "dexie"
+import { ReactFlowJsonObject } from "reactflow";
+import { CustomNode } from "~/state/nodesState";
 
 export interface Schema {
   id: string;
@@ -7,13 +9,13 @@ export interface Schema {
 
 export class SubClassDexie extends Dexie {
   imagedata!: Table<Schema>
-  testData!: Table<any>
+  flow!: Table<ReactFlowJsonObject<CustomNode>>
 
   constructor() {
     super('stylEase');
     this.version(1).stores({
-      imagedata: 'id, data',
-      testData: 'id'
+      flow: '',
+      imagedata: 'id, data'
     })
   }
 

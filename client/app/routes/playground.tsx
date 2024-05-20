@@ -1,3 +1,4 @@
+import { useLiveQuery } from 'dexie-react-hooks'
 import React from 'react'
 import {
   ReactFlow,
@@ -11,19 +12,22 @@ import {
   ReactFlowProvider,
   ReactFlowInstance,
   ReactFlowJsonObject,
-  NodeChange,
+  NodeChange
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
 
-import {
-  NodeDrawer,
-  Header
-} from '~/components'
+import { NodeDrawer, Header } from '~/components'
+import { db } from '~/lib/db'
 import nodeTypes from '~/lib/nodetypes'
 import randomStr from '~/lib/randomStr'
 import backgroundState from '~/state/backgroundState'
-import globalNodeState, { CustomNode, MODEL_NODE_TYPE, initialEdges, initialNodes } from '~/state/nodesState'
+import globalNodeState, {
+  CustomNode,
+  MODEL_NODE_TYPE,
+  initialEdges,
+  initialNodes
+} from '~/state/nodesState'
 
 //TODO: work on holding the data in local storage so that data persists on refresh
 export default function Playground() {
@@ -49,40 +53,60 @@ export default function Playground() {
     if (!flowInstance) return
     const flow = flowInstance.toObject()
     localStorage.setItem('stylEase', JSON.stringify(flow))
+    db.flow.add(flow, 1)
   }, [nodes, edges])
 
-  React.useEffect(() => {
-    const existingFlow = localStorage.getItem('stylEase')
+  const flow = useLiveQuery(async () => await db.flow.toArray())
+  console.log(flow)
 
-    if (!existingFlow) {
+  React.useEffect(() => {
+    if (!flow) {
       setNodes(initialNodes)
       setEdges(initialEdges)
       return
     }
-    const parsedExistingFlow: ReactFlowJsonObject = JSON.parse(existingFlow)
 
-    const { nodes, edges } = parsedExistingFlow
+    flow.map((val): void => {
+      setNodes(val.nodes)
+      setEdges(val.edges)
+    })
 
-    setNodes(nodes)
-    setEdges(edges)
+    // if (flow) {
+    //   const parse: ReactFlowJsonObject = JSON.parse(flow[0])
+    //   console.log(parse)
+
+    //   const { nodes, edges } = parse
+
+    //   setNodes(nodes)
+    //   setEdges(edges)
+    // }
+    // const existingFlow = localStorage.getItem('stylEase')
+
+    // const parsedExistingFlow: ReactFlowJsonObject = JSON.parse(existingFlow)
+
+    // const { nodes, edges } = parsedExistingFlow
+
+    // setNodes(nodes)
+    // setEdges(edges)
   }, [])
 
   //Sets the image data for model node
   React.useEffect(() => {
     globalNodeState.value.map((node): void => {
-      if(node.type === MODEL_NODE_TYPE){
+      if (node.type === MODEL_NODE_TYPE) {
         const styleNode = nodes.find((val) => node.data.styleNodeId === val.id)
         node.data.styleImage = {
           ...styleNode?.data.content!
         }
-        const contentNode = nodes.find(val => node.data.contentNodeId === val.id)
+        const contentNode = nodes.find(
+          (val) => node.data.contentNodeId === val.id
+        )
         node.data.contentImage = {
           ...contentNode?.data.content!
         }
       }
     })
-  },[globalNodeState.value])
-
+  }, [globalNodeState.value])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
@@ -95,7 +119,12 @@ export default function Playground() {
     setNodes((nodes) => [
       ...nodes,
       {
-        data: { id: data.id, title: data.title, icon: data.icon, uploadMsg: data.uploadMsg },
+        data: {
+          id: data.id,
+          title: data.title,
+          icon: data.icon,
+          uploadMsg: data.uploadMsg
+        },
         position: { x: 300, y: 200 },
         type: data.type,
         id: randomStr()
