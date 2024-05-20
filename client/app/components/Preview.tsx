@@ -29,16 +29,16 @@ export default function Preview({ className, nodeId }: Props) {
     reactflow.getNodes(),
     reactflow.getEdges()
   )
-  const dbResult = useLiveQuery(() =>
-    db.imagedata.where('id').equals(incommers[0].id).toArray()
-  )
+  // const dbResult = useLiveQuery(() =>
+  //   // db.imagedata.where('id').equals(incommers[0].id).toArray()
+  // )
 
-  React.useEffect(() => {
-    //TODO: work on fetching specific stylised images for respective models from indexeddb using model id
-    if (!dbResult || dbResult.length <= 0) return
-    setFile(dbResult[0].data)
-    setPreviewGenerated(true)
-  }, [dbResult])
+  // React.useEffect(() => {
+  //   //TODO: work on fetching specific stylised images for respective models from indexeddb using model id
+  //   if (!dbResult || dbResult.length <= 0) return
+  //   setFile(dbResult[0].data)
+  //   setPreviewGenerated(true)
+  // }, [dbResult])
 
   React.useEffect(() => {
     if (!file) return
