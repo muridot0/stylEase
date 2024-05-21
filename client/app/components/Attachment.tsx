@@ -3,7 +3,6 @@ import clsx from 'clsx'
 import { niceBytes } from '../lib/niceBytes'
 import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
 import { useFetcher } from '@remix-run/react'
-import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '~/lib/db'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
@@ -63,43 +62,25 @@ export default function Attachment({
     )
   }, [file])
 
-  // const flow = useLiveQuery(() => db.flow.toArray())
-  // if(flow) {
-  //   const parse: ReactFlowJsonObject = JSON.parse(flow![0])
+  const restoreImages = async () => {
+    const flow = await db.flow.get(1)
 
-  //   const {nodes} = parse
+    if(!flow) return
 
-  //   nodes.map((node): void => {
-  //     if (node.data.id === nodeId) {
-  //       if (JSON.stringify(node.data.content) !== '{}') {
-  //         setFile(() => ({
-  //           ...node.data.content
-  //         }))
-  //         setFileAttached(true)
-  //       }
-  //     }
-  //   })
-  // }
-
-  React.useEffect(() => {
-    const flowData = localStorage.getItem('stylEase')
-
-    if (!flowData) return
-
-    const parsedFlow: ReactFlowJsonObject = JSON.parse(flowData)
-
-    const { nodes } = parsedFlow
-
-    nodes.map((node): void => {
+    flow.nodes.map((node): void => {
       if (node.data.id === nodeId) {
         if (JSON.stringify(node.data.content) !== '{}') {
           setFile(() => ({
-            ...node.data.content
+            ...node.data.content!
           }))
           setFileAttached(true)
         }
       }
     })
+  }
+
+  React.useEffect(() => {
+    restoreImages()
   }, [])
 
   React.useEffect(() => {

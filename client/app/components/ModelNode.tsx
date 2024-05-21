@@ -110,11 +110,12 @@ export default React.memo(function ModelNode({
           console.log(db)
           console.log(imageData.width, imageData.height)
           return db.imagedata.add({
-            id: props.id,
             data: {
               url: imageData,
               name: `stylEased-${contentImage.name}`,
-              size: contentImage.size
+              size: contentImage.size,
+              width: 200,
+              height: 200
             }
           })
           // storeImageDataInIndexedDB(imageData, `stylEased-${contentImage.name}`, contentImage.size, props.id)
