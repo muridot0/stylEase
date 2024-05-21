@@ -99,10 +99,12 @@ export default function Playground() {
   }
 
   const addNode = (data: CustomNode) => {
+    //TODO: add styleNodeId and contentNodeId to model nodes
+    //Could use the type from data for model node types
+
     setNodes((nodes) => [
       ...nodes,
       {
-        //TODO: add styleNodeId and contentNodeId to model nodes
         data: {
           id: data.id,
           title: data.title,
