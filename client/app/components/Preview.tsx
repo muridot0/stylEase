@@ -4,6 +4,7 @@ import { niceBytes } from '../lib/niceBytes'
 import { useReactFlow, getIncomers } from 'reactflow'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '~/lib/db'
+import globalNodeState from '~/state/nodesState'
 
 interface Props {
   className?: string
@@ -17,32 +18,32 @@ export default function Preview({ className, nodeId }: Props) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
   const reactflow = useReactFlow()
   const [file, setFile] = React.useState<{
-    url: ImageData
+    url: string | ImageData
     name: string
     size: number
+    height: number
+    width: number
   } | null>(null)
 
-  console.log(nodeId)
 
   const incommers = getIncomers(
     reactflow.getNode(nodeId)!,
     reactflow.getNodes(),
     reactflow.getEdges()
   )
-  // console.log(incommers[0].data.id)
 
-  const fetchStylizedImage = React.useCallback(async () => {
-    const dbResult = await db.imagedata.get(incommers[0].data.id)
-    if(!dbResult) return;
-    setFile(dbResult.data)
-    setPreviewGenerated(true)
-  }, [setFile, setPreviewGenerated])
 
 
   React.useEffect(() => {
-    //TODO: work on fetching specific stylised images for respective models from indexeddb using model id
-    fetchStylizedImage()
-  }, [fetchStylizedImage])
+    globalNodeState.subscribe((nodes) => {
+      const currentNode = nodes.find((node) => node.id === nodeId)
+      if(!currentNode?.data.content) return
+      setFile(() => ({
+        ...currentNode.data.content!
+      }))
+      setPreviewGenerated(true)
+    })
+  }, [globalNodeState.value])
 
   React.useEffect(() => {
     if (!file) return
@@ -53,11 +54,11 @@ export default function Preview({ className, nodeId }: Props) {
 
     if (!data) return
 
-    canvasRef.current.width = data.width
-    canvasRef.current.height = data.height
+    canvasRef.current.width = (data as ImageData).width
+    canvasRef.current.height = (data as ImageData).height
 
-    ctx?.putImageData(data, 0, 0)
-  }, [reactflow.getNodes()])
+    ctx?.putImageData(data as ImageData, 0, 0)
+  }, [file])
 
   const handleDownload = () => {}
 

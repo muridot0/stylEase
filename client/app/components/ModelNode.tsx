@@ -1,12 +1,15 @@
 import React from 'react'
 import {
+  Node,
   NodeProps,
   Position,
+  getOutgoers,
+  useReactFlow
 } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
-import globalNodeState from '~/state/nodesState'
+import globalNodeState, { CustomNode } from '~/state/nodesState'
 import * as mi from '@magenta/image'
 import { base64ToImageData } from '~/lib/base64ToImageData'
 import { db } from '~/lib/db'
@@ -28,6 +31,7 @@ export default React.memo(function ModelNode({
   isConnectable,
   ...props
 }: NodeProps<Props>) {
+  const reactflow = useReactFlow()
   // TODO: restrict model node to one input per handle
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
@@ -66,6 +70,8 @@ export default React.memo(function ModelNode({
     displayNodeConnected
   ])
 
+  const outgoers = getOutgoers(reactflow.getNode(props.id)!, reactflow.getNodes(), reactflow.getEdges())
+
   const stylEase = async () => {
     console.log('content in function', contentImage)
     if (!contentImage?.url || !styleImage?.url) {
@@ -103,15 +109,34 @@ export default React.memo(function ModelNode({
         .then(async (imageData) => {
           console.log(db)
           console.log(imageData.width, imageData.height)
-          return db.imagedata.put({
-            data: {
-              url: imageData,
-              name: `stylEased-${contentImage.name}`,
-              size: imageData.data.byteLength,
-              width: imageData.width,
-              height: imageData.height
-            }
-          }, data.id)
+
+          outgoers.map((displayNode) => {
+            console.log(displayNode)
+            return reactflow.setNodes((nodes) => {
+              nodes.map((node: Node<CustomNode>) => {
+                if(displayNode.id === node.id) {
+                  console.log('i go in', displayNode)
+                  node.data.content = {
+                    url: imageData,
+                    name: `stylEased_${contentImage.name}`,
+                    size: imageData.data.byteLength,
+                    width: imageData.width,
+                    height: imageData.height
+                  }
+                }
+              })
+              return nodes
+            })
+          })
+          // return db.imagedata.put({
+          //   data: {
+          //     url: imageData,
+          //     name: `stylEased_${contentImage.name}`,
+          //     size: imageData.data.byteLength,
+          //     width: imageData.width,
+          //     height: imageData.height
+          //   }
+          // }, data.id)
           // storeImageDataInIndexedDB(imageData, `stylEased-${contentImage.name}`, contentImage.size, props.id)
         })
     }

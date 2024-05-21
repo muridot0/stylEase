@@ -44,7 +44,7 @@ export default function Playground() {
 
   React.useEffect(() => {
     globalNodeState.value = nodes
-  }, [nodes])
+  }, [setNodes, nodes])
 
   React.useEffect(() => {
     if (!flowInstance) return
@@ -53,9 +53,9 @@ export default function Playground() {
     db.flow.put(flow, 1)
   }, [nodes, edges])
 
-  db.flow.get(1).then((val) => {
-    console.log(val?.nodes)
-  })
+  // db.flow.get(1).then((val) => {
+  //   console.log(val?.nodes)
+  // })
 
   const restoreNodes = React.useCallback(async () => {
     const flow = await db.flow.get(1)
@@ -91,25 +91,26 @@ export default function Playground() {
     })
   }, [globalNodeState.value])
 
-  const fetchStylizedImage = React.useCallback(async () => {
-    globalNodeState.value.map(async (node) => {
-      if(node.type === DISPLAY_NODE_TYPE){
-        const incommers = getIncomers(
-          node,
-          nodes,
-          edges
-        )
+  // const fetchStylizedImage = React.useCallback(async () => {
+  //   globalNodeState.value.map(async (node) => {
+  //     if(node.type === DISPLAY_NODE_TYPE){
+  //       const incommers = getIncomers(
+  //         node,
+  //         nodes,
+  //         edges
+  //       )
 
-        const dbResult = await db.imagedata.get(incommers[0].data.id)
-        if(!dbResult) return
-        node.data.content = {
-          ...dbResult.data
-        }
-      }
-    })
-  }, [globalNodeState.value])
+  //       const dbResult = await db.imagedata.get(incommers[0].data.id)
+  //       if(!dbResult) return
+  //       console.log('called')
+  //       node.data.content = {
+  //         ...dbResult.data
+  //       }
+  //     }
+  //   })
+  // }, [setNodes, setEdges])
 
-  React.useEffect(() => {fetchStylizedImage()}, [fetchStylizedImage])
+  // React.useEffect(() => {fetchStylizedImage()}, [fetchStylizedImage])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
