@@ -1,20 +1,14 @@
 import React from 'react'
 import {
-  Connection,
   NodeProps,
   Position,
-  useReactFlow,
-  getIncomers,
-  Node,
-  ReactFlowJsonObject
 } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
-import globalNodeState, { CustomNode } from '~/state/nodesState'
+import globalNodeState from '~/state/nodesState'
 import * as mi from '@magenta/image'
-import { base64ToImageData, scaleImageData } from '~/lib/base64ToImageData'
-import { storeImageDataInIndexedDB } from '~/lib/storeInIndexedDB'
+import { base64ToImageData } from '~/lib/base64ToImageData'
 import { db } from '~/lib/db'
 import Slider from './Slider'
 interface Props {

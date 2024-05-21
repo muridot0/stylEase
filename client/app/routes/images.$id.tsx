@@ -61,7 +61,6 @@ export let action: ActionFunction = async ({ request }) => {
       if (requestId.includes('style-node')) {
         return img.resize(256, Jimp.AUTO)
       } else if (img.getWidth() <= 1024) {
-        console.log('im here')
         return img
       } else {
         return img.resize(1024, Jimp.AUTO)

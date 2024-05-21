@@ -2,8 +2,6 @@ import React from 'react'
 import clsx from 'clsx'
 import { niceBytes } from '../lib/niceBytes'
 import { useReactFlow, getIncomers } from 'reactflow'
-import { base64ToImageData } from '~/lib/base64ToImageData'
-import fetchFromIndexedDB from '~/lib/fetchFromIndexedDB'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '~/lib/db'
 

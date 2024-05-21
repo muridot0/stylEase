@@ -1,4 +1,3 @@
-import { useLiveQuery } from 'dexie-react-hooks'
 import React from 'react'
 import {
   ReactFlow,
@@ -11,8 +10,6 @@ import {
   Edge,
   ReactFlowProvider,
   ReactFlowInstance,
-  ReactFlowJsonObject,
-  NodeChange
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
