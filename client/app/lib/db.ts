@@ -3,7 +3,7 @@ import { ReactFlowJsonObject } from "reactflow";
 import { CustomNode } from "~/state/nodesState";
 
 export interface Schema {
-  data: {url: string, name: string, size: number, width: number, height: number}
+  data: {url: ImageData, name: string, size: number, width: number, height: number}
 }
 
 export class SubClassDexie extends Dexie {
@@ -14,7 +14,7 @@ export class SubClassDexie extends Dexie {
     super('stylEase');
     this.version(1).stores({
       flow: '',
-      imagedata: ''
+      imagedata: 'id, data'
     })
   }
 

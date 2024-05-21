@@ -18,6 +18,7 @@ import { storeImageDataInIndexedDB } from '~/lib/storeInIndexedDB'
 import { db } from '~/lib/db'
 import Slider from './Slider'
 interface Props {
+  id: string
   title: string
   icon: string
   styleNodeConnected: boolean
@@ -54,7 +55,6 @@ export default React.memo(function ModelNode({
   const [stylizationStrength, setStylizationStrength] =
     React.useState<number>(0.5)
   const model = new mi.ArbitraryStyleTransferNetwork()
-  const reactflow = useReactFlow()
 
   React.useEffect(() => {
     globalNodeState.subscribe((nodes) => {
@@ -109,15 +109,15 @@ export default React.memo(function ModelNode({
         .then(async (imageData) => {
           console.log(db)
           console.log(imageData.width, imageData.height)
-          return db.imagedata.add({
+          return db.imagedata.put({
             data: {
               url: imageData,
               name: `stylEased-${contentImage.name}`,
-              size: contentImage.size,
-              width: 200,
-              height: 200
+              size: imageData.data.byteLength,
+              width: imageData.width,
+              height: imageData.height
             }
-          })
+          }, data.id)
           // storeImageDataInIndexedDB(imageData, `stylEased-${contentImage.name}`, contentImage.size, props.id)
         })
     }

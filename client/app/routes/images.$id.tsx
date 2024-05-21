@@ -42,8 +42,7 @@ const uploadFileHandler = unstable_composeUploadHandlers(
 
 // Define the loader function
 export let action: ActionFunction = async ({ request }) => {
-
-  if(request.method === 'GET') {
+  if (request.method === 'GET') {
     return null
   }
 
@@ -59,15 +58,20 @@ export let action: ActionFunction = async ({ request }) => {
 
   async function processImage(file: Buffer) {
     const resized = await Jimp.read(Buffer.from(file)).then((img) => {
-      if(requestId.includes('style-node')) {
+      if (requestId.includes('style-node')) {
         return img.resize(256, Jimp.AUTO)
+      } else if (img.getWidth() <= 1024) {
+        console.log('im here')
+        return img
+      } else {
+        return img.resize(1024, Jimp.AUTO)
       }
-      return img.resize(1000, Jimp.AUTO)
     })
 
-    const bufferSize =
-      (await resized.getBufferAsync(Jimp.MIME_JPEG)).length
-    const base64 = await resized.getBase64Async(Jimp.MIME_JPEG)
+    const bufferSize = (
+      await resized.getBufferAsync(Jimp.AUTO as unknown as string)
+    ).length
+    const base64 = await resized.getBase64Async(Jimp.AUTO)
 
     return {
       url: base64,
