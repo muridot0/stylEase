@@ -10,6 +10,7 @@ import {
   Edge,
   ReactFlowProvider,
   ReactFlowInstance,
+  getIncomers,
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -17,16 +18,15 @@ import 'reactflow/dist/style.css'
 import { NodeDrawer, Header } from '~/components'
 import { db } from '~/lib/db'
 import nodeTypes from '~/lib/nodetypes'
-import randomStr from '~/lib/randomStr'
 import backgroundState from '~/state/backgroundState'
 import globalNodeState, {
   CustomNode,
+  DISPLAY_NODE_TYPE,
   MODEL_NODE_TYPE,
   initialEdges,
   initialNodes
 } from '~/state/nodesState'
 
-//TODO: work on holding the data in local storage so that data persists on refresh
 export default function Playground() {
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNode>([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
@@ -53,6 +53,10 @@ export default function Playground() {
     db.flow.put(flow, 1)
   }, [nodes, edges])
 
+  db.flow.get(1).then((val) => {
+    console.log(val?.nodes)
+  })
+
   const restoreNodes = React.useCallback(async () => {
     const flow = await db.flow.get(1)
 
@@ -61,7 +65,6 @@ export default function Playground() {
       setEdges(initialEdges)
       return
     }
-    console.log(flow)
     setNodes(flow.nodes)
     setEdges(flow.edges)
   }, [setNodes, setEdges])
@@ -88,6 +91,26 @@ export default function Playground() {
     })
   }, [globalNodeState.value])
 
+  const fetchStylizedImage = React.useCallback(async () => {
+    globalNodeState.value.map(async (node) => {
+      if(node.type === DISPLAY_NODE_TYPE){
+        const incommers = getIncomers(
+          node,
+          nodes,
+          edges
+        )
+
+        const dbResult = await db.imagedata.get(incommers[0].data.id)
+        if(!dbResult) return
+        node.data.content = {
+          ...dbResult.data
+        }
+      }
+    })
+  }, [globalNodeState.value])
+
+  React.useEffect(() => {fetchStylizedImage()}, [fetchStylizedImage])
+
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
     //force a rerender everytime a node is connected
@@ -110,7 +133,7 @@ export default function Playground() {
         },
         position: { x: 300, y: 200 },
         type: data.type,
-        id: randomStr()
+        id: data.id.split('-')[2]
       }
     ])
   }

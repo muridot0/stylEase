@@ -4,6 +4,7 @@ import { BackgroundVariant, useReactFlow } from 'reactflow'
 import RadioItemWithProvider from './RadioItem'
 import setRef from '~/lib/setRef'
 import { initialEdges, initialNodes } from '~/state/nodesState'
+import { db } from '~/lib/db'
 
 interface Props {
   toggleMenu: boolean
@@ -32,6 +33,9 @@ export default React.forwardRef(function ContextMenu(
     const nodes = reactflow.getNodes()
     const edges = reactflow.getEdges()
     reactflow.deleteElements({ nodes, edges })
+    db.tables.forEach((table) => {
+      table.clear()
+    })
   }
 
   const clearConnections = () => {

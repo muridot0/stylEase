@@ -35,14 +35,14 @@ export default React.memo(function ModelNode({
   const [styleImage, setStyleImage] = React.useState<{
     name: string
     size: number
-    url: string
+    url: string | ImageData
     width: number
     height: number
   }>()
   const [contentImage, setContentImage] = React.useState<{
     name: string
     size: number
-    url: string
+    url: string | ImageData
     width: number
     height: number
   }>()
@@ -73,8 +73,8 @@ export default React.memo(function ModelNode({
       return
     }
 
-    const contentImageData = base64ToImageData(contentImage.url)
-    const styleImageData = base64ToImageData(styleImage.url)
+    const contentImageData = base64ToImageData(contentImage.url as string)
+    const styleImageData = base64ToImageData(styleImage.url as string)
     if (!contentImageData?.imageData || !styleImageData?.imageData) return
 
     console.log(model)

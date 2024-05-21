@@ -34,7 +34,7 @@ export default function Attachment({
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
   const [file, setFile] = React.useState<{
-    url: string
+    url: string | ImageData
     name: string
     size: number
     width: number
@@ -191,7 +191,7 @@ export default function Attachment({
         {file && (
           <>
             <img
-              src={file.url}
+              src={file.url as string}
               width={256}
               height={256}
               alt={file.name}

@@ -13,7 +13,7 @@ interface CustomNode {
   icon: string
   content?: {
     name: string
-    url: string
+    url: string | ImageData
     size: number
     width: number
     height: number
@@ -28,7 +28,7 @@ interface CustomNode {
   styleImage?: {
     name: string
     size: number
-    url: string
+    url: string | ImageData
     width: number
     height: number
   }
@@ -36,7 +36,7 @@ interface CustomNode {
   contentImage?: {
     name: string
     size: number
-    url: string
+    url: string | ImageData
     width: number
     height: number
   }
@@ -53,7 +53,7 @@ const initialNodes = [
     data: {
       title: 'Style Node',
       icon: 'i-lucide-paintbrush',
-      id: `style-node-${randomStr(10)}`,
+      id: `style-node-1`,
       uploadMsg: 'Upload a reference image'
     }
   },
@@ -64,7 +64,7 @@ const initialNodes = [
     data: {
       title: 'Content Node',
       icon: 'i-lucide-image-plus',
-      id: `content-node-${randomStr(10)}`,
+      id: `content-node-2`,
       uploadMsg: 'Upload image to stylEase'
     }
   },
@@ -75,7 +75,7 @@ const initialNodes = [
     data: {
       title: 'Style Transfer Node',
       icon: 'i-lucide-brain-cog',
-      id: `model-node-${randomStr(10)}`,
+      id: `model-node-3`,
       styleNodeConnected: true,
       contentNodeConnected: true,
       displayNodeConnected: true,
@@ -91,7 +91,7 @@ const initialNodes = [
     data: {
       title: 'Display Node',
       icon: 'i-lucide-aperture',
-      id: `display-node-${randomStr(10)}`
+      id: `display-node-4`
     }
   }
 ]

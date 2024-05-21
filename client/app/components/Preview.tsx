@@ -22,23 +22,27 @@ export default function Preview({ className, nodeId }: Props) {
     size: number
   } | null>(null)
 
+  console.log(nodeId)
+
   const incommers = getIncomers(
     reactflow.getNode(nodeId)!,
     reactflow.getNodes(),
     reactflow.getEdges()
   )
-  const dbResult = useLiveQuery(() =>
-    db.imagedata.where('id').equals(incommers[0].data.id).toArray()
-  )
-  console.log(dbResult)
+  // console.log(incommers[0].data.id)
+
+  const fetchStylizedImage = React.useCallback(async () => {
+    const dbResult = await db.imagedata.get(incommers[0].data.id)
+    if(!dbResult) return;
+    setFile(dbResult.data)
+    setPreviewGenerated(true)
+  }, [setFile, setPreviewGenerated])
+
 
   React.useEffect(() => {
     //TODO: work on fetching specific stylised images for respective models from indexeddb using model id
-    if (!dbResult || dbResult.length <= 0) return
-    console.log(dbResult)
-    setFile(dbResult[0].data)
-    setPreviewGenerated(true)
-  }, [dbResult])
+    fetchStylizedImage()
+  }, [fetchStylizedImage])
 
   React.useEffect(() => {
     if (!file) return
@@ -52,7 +56,7 @@ export default function Preview({ className, nodeId }: Props) {
     canvasRef.current.width = data.width
     canvasRef.current.height = data.height
 
-    ctx?.putImageData(data as any as ImageData, 0, 0)
+    ctx?.putImageData(data, 0, 0)
   }, [reactflow.getNodes()])
 
   const handleDownload = () => {}

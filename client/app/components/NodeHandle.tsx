@@ -70,10 +70,11 @@ function NodeHandle({ className, ...props }: Props) {
       case 'style-node':
         globalNodeState.value.map((node) => {
           if (node.id === connection.target) {
+            console.log('i connect to the model node')
             node.data = {
               ...node.data,
               styleNodeConnected: true,
-              styleNodeId: node.id
+              styleNodeId: connection.source
             }
           }
         })
@@ -84,7 +85,7 @@ function NodeHandle({ className, ...props }: Props) {
             node.data = {
               ...node.data,
               contentNodeConnected: true,
-              contentNodeId: node.id
+              contentNodeId: connection.source
             }
           }
         })
