@@ -28,7 +28,7 @@ function WrapperNode({
 
   const node = reactflow.getNode(nodeId)
 
-  const findId = () => {
+  const findType = () => {
     return node?.type === STYLE_NODE_TYPE
       ? 'style-node'
       : node?.type === CONTENT_NODE_TYPE
@@ -46,7 +46,7 @@ function WrapperNode({
         return <NodeHandle id="model-input" type='target' position={Position.Left} />
       case 'right':
         return (
-          <NodeHandle id={findId()} type='source' position={Position.Right} />
+          <NodeHandle id={findType()} type='source' position={Position.Right} />
         )
       default:
         return null

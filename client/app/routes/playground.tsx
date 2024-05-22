@@ -11,6 +11,7 @@ import {
   ReactFlowProvider,
   ReactFlowInstance,
   getIncomers,
+  getConnectedEdges,
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -169,7 +170,7 @@ export default function Playground() {
         })
       } else if (edge.targetHandle === 'model-input') {
         setNodes((nodes) => {
-          return nodes.map((node) => {
+          nodes.map((node) => {
             if (edge.source === node.id) {
               node.data = {
                 ...node.data,
@@ -179,6 +180,7 @@ export default function Playground() {
             }
             return node
           })
+          return nodes
         })
       }
     })
