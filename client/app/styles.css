@@ -50,7 +50,15 @@
   --node-border-color: #bbbdc1;
   --node-handle-color: #4d5259;
 
+  --toastify-toast-bd-radius: 8px !important;
+  --toastify-font-family: 'Zed Mono', sans-serif !important;
+  --toastify-color-light: #ededee !important;
+  --toastify-text-color-light: #222428 !important;
+
   @media (prefers-color-scheme: dark) {
+    --toastify-color-light: #3b4045 !important;
+    --toastify-text-color-light: #EEEFEF !important;
+
     --primary: #EEEFEF;
 
     --shadow-inset: inset 0 3px 3px 0 rgba(0, 0, 0, 0.25), inset 0 3px 5px 0 rgba(255, 255, 255, 0.25);
@@ -102,6 +110,15 @@ input[type="range"]::-webkit-slider-runnable-track {
   @apply bg-[--node-handle-color] h-[1px];
 }
 
+input[type="range"]::before {
+    content: '';
+    position: absolute;
+    background: transparent;
+    padding: 1rem;
+    width: 13.35rem;
+    bottom: 0.5rem;
+}
+
 input[type="range"]:disabled::-webkit-slider-runnable-track {
   @apply opacity-10;
 }
@@ -117,6 +134,17 @@ input[type="range"]:disabled::-moz-range-track {
 .no-bg {
   background: none !important;
   border-right: none !important;
+}
+
+.handle::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: transparent;
+  cursor: crosshair;
 }
 
 @keyframes shake {

@@ -1,19 +1,14 @@
 import React from 'react'
-import {
-  Node,
-  NodeProps,
-  Position,
-  getOutgoers,
-  useReactFlow
-} from 'reactflow'
+import { Node, NodeProps, Position, getOutgoers, useReactFlow } from 'reactflow'
 import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
 import globalNodeState, { CustomNode } from '~/state/nodesState'
 import * as mi from '@magenta/image'
 import { base64ToImageData } from '~/lib/base64ToImageData'
-import { db } from '~/lib/db'
 import Slider from './Slider'
+import MissingAttachment from './MissingAttachment'
+import { Bounce, Id, toast } from 'react-toastify'
 interface Props {
   id: string
   title: string
@@ -32,7 +27,6 @@ export default React.memo(function ModelNode({
   ...props
 }: NodeProps<Props>) {
   const reactflow = useReactFlow()
-  // TODO: restrict model node to one input per handle
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
   const [displayNodeConnected, setDisplayNodeConnected] = React.useState(false)
@@ -52,6 +46,7 @@ export default React.memo(function ModelNode({
   }>()
   const [stylizationStrength, setStylizationStrength] =
     React.useState<number>(0.5)
+  const toastRef = React.useRef<Id | null>(null)
   const model = new mi.ArbitraryStyleTransferNetwork()
 
   React.useEffect(() => {
@@ -70,78 +65,61 @@ export default React.memo(function ModelNode({
     displayNodeConnected
   ])
 
-  const outgoers = getOutgoers(reactflow.getNode(props.id)!, reactflow.getNodes(), reactflow.getEdges())
+  const outgoers = getOutgoers(
+    reactflow.getNode(props.id)!,
+    reactflow.getNodes(),
+    reactflow.getEdges()
+  )
 
   const stylEase = async () => {
-    console.log('content in function', contentImage)
-    if (!contentImage?.url || !styleImage?.url) {
-      console.log('no content image and or style image')
-      return
-    }
+    setTimeout(() => {
+      if (!contentImage?.url || !styleImage?.url) {
+        toastRef.current =  toast(<MissingAttachment contentImage={contentImage?.url !== undefined} styleImage={styleImage?.url !== undefined}/>, {
+          position: "top-center",
+          autoClose: false,
+          pauseOnHover: true,
+          draggable: true,
+          transition: Bounce,
+          });
+        return toastRef.current
+      }
 
-    const contentImageData = base64ToImageData(contentImage.url as string)
-    const styleImageData = base64ToImageData(styleImage.url as string)
-    if (!contentImageData?.imageData || !styleImageData?.imageData) return
-
-    console.log(model)
-
-    const worker = new Worker('stylEaseWorker.js')
-
-    console.log(worker)
-
-    // Pass the scaled image data to the worker
-    // worker.postMessage([ scaledContentImageData, scaledStyleImageData ])
-
-    // worker.onmessage = function (event) {
-    //   const resultImageData = event.data
-    //   console.log(resultImageData)
-    // }
-
-    const stylize = () => {
+      const contentImageData = base64ToImageData(contentImage.url as string)
+      const styleImageData = base64ToImageData(styleImage.url as string)
       if (!contentImageData?.imageData || !styleImageData?.imageData) return
 
-      model
-        .stylize(
-          contentImageData.imageData,
-          styleImageData.imageData,
-          stylizationStrength
-        )
-        .then(async (imageData) => {
-          console.log(db)
-          console.log(imageData.width, imageData.height)
+      const stylize = () => {
+        if (!contentImageData?.imageData || !styleImageData?.imageData) return
 
-          outgoers.map((displayNode) => {
-            console.log(displayNode)
-            return reactflow.setNodes((nodes) => {
-              nodes.map((node: Node<CustomNode>) => {
-                if(displayNode.id === node.id) {
-                  console.log('i go in', displayNode)
-                  node.data.content = {
-                    url: imageData,
-                    name: `stylEased_${contentImage.name}`,
-                    size: imageData.data.byteLength,
-                    width: imageData.width,
-                    height: imageData.height
+        model
+          .stylize(
+            contentImageData.imageData,
+            styleImageData.imageData,
+            stylizationStrength
+          )
+          .then(async (imageData) => {
+            outgoers.map((displayNode) => {
+              return reactflow.setNodes((nodes) => {
+                nodes.map((node: Node<CustomNode>) => {
+                  if (displayNode.id === node.id) {
+                    console.log('i go in', displayNode)
+                    node.data.content = {
+                      url: imageData,
+                      name: `stylEased_${contentImage.name}`,
+                      size: imageData.data.byteLength,
+                      width: imageData.width,
+                      height: imageData.height
+                    }
                   }
-                }
+                })
+                return nodes
               })
-              return nodes
             })
           })
-          // return db.imagedata.put({
-          //   data: {
-          //     url: imageData,
-          //     name: `stylEased_${contentImage.name}`,
-          //     size: imageData.data.byteLength,
-          //     width: imageData.width,
-          //     height: imageData.height
-          //   }
-          // }, data.id)
-          // storeImageDataInIndexedDB(imageData, `stylEased-${contentImage.name}`, contentImage.size, props.id)
-        })
-    }
+      }
 
-    model.initialize().then(stylize)
+      model.initialize().then(stylize)
+    }, 300)
   }
 
   return (
@@ -230,7 +208,10 @@ export default React.memo(function ModelNode({
       {styleNodeConnected && contentNodeConnected && displayNodeConnected && (
         <button
           onClick={stylEase}
-          className='mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[12.65rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
+          className={clsx(
+            'mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[12.65rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]',
+            {'!bg-[--hover-bg-color] !text-[--node-border-color]': !contentImage?.url || !styleImage?.url}
+          )}
         >
           <span className='i-lucide-play flex' /> stylEase!
         </button>

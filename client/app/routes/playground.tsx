@@ -1,4 +1,5 @@
 import React from 'react'
+import { ToastContainer } from 'react-toastify'
 import {
   ReactFlow,
   useNodesState,
@@ -10,11 +11,10 @@ import {
   Edge,
   ReactFlowProvider,
   ReactFlowInstance,
-  getIncomers,
-  getConnectedEdges,
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 import { NodeDrawer, Header } from '~/components'
 import { db } from '~/lib/db'
@@ -92,27 +92,6 @@ export default function Playground() {
     })
   }, [globalNodeState.value])
 
-  // const fetchStylizedImage = React.useCallback(async () => {
-  //   globalNodeState.value.map(async (node) => {
-  //     if(node.type === DISPLAY_NODE_TYPE){
-  //       const incommers = getIncomers(
-  //         node,
-  //         nodes,
-  //         edges
-  //       )
-
-  //       const dbResult = await db.imagedata.get(incommers[0].data.id)
-  //       if(!dbResult) return
-  //       console.log('called')
-  //       node.data.content = {
-  //         ...dbResult.data
-  //       }
-  //     }
-  //   })
-  // }, [setNodes, setEdges])
-
-  // React.useEffect(() => {fetchStylizedImage()}, [fetchStylizedImage])
-
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
     //force a rerender everytime a node is connected
@@ -121,9 +100,6 @@ export default function Playground() {
   }
 
   const addNode = (data: CustomNode) => {
-    //TODO: add styleNodeId and contentNodeId to model nodes
-    //Could use the type from data for model node types
-
     setNodes((nodes) => [
       ...nodes,
       {
@@ -191,6 +167,7 @@ export default function Playground() {
       <div className='h-screen w-screen'>
         <ReactFlowProvider>
           <Header />
+          <ToastContainer limit={1}/>
           <ReactFlow
             nodes={nodes}
             edges={edges}

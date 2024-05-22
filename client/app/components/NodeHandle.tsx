@@ -110,7 +110,7 @@ function NodeHandle({ className, ...props }: Props) {
     <Handle
       {...props}
       className={clsx(
-        '!transform-none !pointer-events-auto',
+        '!transform-none !pointer-events-auto handle',
         {
           '!left-0 !rounded-none !border-t-4 !border-b-4 !border-l-8 !border-t-transparent !border-b-transparent !border-l-[--node-handle-color] !dark:border-l-[#6B7077] no-bg':
             props.position !== Position.Right,
