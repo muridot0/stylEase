@@ -15,7 +15,6 @@ export default React.forwardRef(function ContextMenu(
   { toggleMenu, showMenu }: Props,
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
-  //TODO: add functionality to close menu when click outside of menu
   const contextRef = React.useRef<HTMLDivElement>(null)
   const [hideDelete, setHideDelete] = React.useState(true)
   const [animationFinished, setAnimationFinished] = React.useState(true)
