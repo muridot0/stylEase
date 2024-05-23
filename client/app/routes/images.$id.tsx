@@ -41,7 +41,7 @@ const uploadFileHandler = unstable_composeUploadHandlers(
 )
 
 // Define the loader function
-export let action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request }) => {
   if (request.method === 'GET') {
     return null
   }

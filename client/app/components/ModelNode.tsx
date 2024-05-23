@@ -9,6 +9,8 @@ import { base64ToImageData } from '~/lib/base64ToImageData'
 import Slider from './Slider'
 import MissingAttachment from './MissingAttachment'
 import { Bounce, Id, toast } from 'react-toastify'
+import { useFetcher } from '@remix-run/react'
+import { ImageDataToBlob } from '~/lib/imgToBlob'
 interface Props {
   id: string
   title: string
@@ -26,6 +28,7 @@ export default React.memo(function ModelNode({
   isConnectable,
   ...props
 }: NodeProps<Props>) {
+  const fetcher = useFetcher()
   const reactflow = useReactFlow()
   const [styleNodeConnected, setStyleNodeConnected] = React.useState(false)
   const [contentNodeConnected, setContentNodeConnected] = React.useState(false)
