@@ -19,55 +19,58 @@ const uploadFileHandler = unstable_composeUploadHandlers(
     }
     const uint8Array = new Uint8Array(await convertToBuffer(data))
 
-    return JSON.stringify({
-      tensor: tf.node.decodeImage(uint8Array).toFloat().div(tf.scalar(255)).expandDims()
-      // filename: filename || `stylEase_${randomStr(2)}`,
-      // contentType
-    })
+    const tensor = tf.node.decodeImage(uint8Array)
+    console.log(tensor.dataSync(), tensor.shape)
+
+      return JSON.stringify({data: tensor.arraySync(), shape: tensor.shape})
   }
 )
 
 const styleNet = await tf.loadGraphModel(
   'file://app/data/transfer-model-data/saved_model_style_js/model.json');
 
+const transformNet = await tf.loadGraphModel('file://app/data/transfer-model-data/saved_model_transformer_js/model.json')
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await unstable_parseMultipartFormData(request, uploadFileHandler)
   const entries = Object.fromEntries(formData)
   // console.log(entries)
 
-  const styleImg = JSON.parse(formData.get('style-image') as string) as tf.Tensor
-  const contentImg = JSON.parse(formData.get('content-image') as string) as tf.Tensor
+  const styleImg = JSON.parse(formData.get('style-image') as string)
+  const contentImg = JSON.parse(formData.get('content-image') as string)
   const styleRatio = parseFloat(JSON.parse(formData.get('style-ratio') as string))
 
-  console.log(styleImg, styleRatio)
+  // const styleImg = tf.tensor(JSON.parse(entries['style-image']))
+  // const contentImg = tf.tensor(JSON.parse(entries['content-image']))
+  // const styleRatio = parseFloat(entries['style-ratio'])
+
+  console.log( styleImg['data'], styleRatio)
 
   async function startStyling() {
-    let bottleneck = tf.tidy(() => {
-      return styleNet.predict(styleImg) as tf.Tensor;
-    })
+    console.log('im here', tf.tensor3d(styleImg['data']) instanceof tf.Tensor)
+    let bottleneck = styleNet.predict(tf.tensor3d(styleImg['data']).toFloat().div(tf.scalar(255)).expandDims()) as tf.Tensor;
+    console.log(bottleneck)
+
     if (styleRatio !== 1.0) {
       const identityBottleneck = tf.tidy(() => {
-        return styleNet.predict(contentImg) as tf.Tensor;
+        return styleNet.predict(tf.tensor3d(contentImg['data']).toFloat().div(tf.scalar(255)).expandDims()) as tf.Tensor;
       })
       const styleBottleneck = bottleneck;
-      bottleneck = await tf.tidy(() => {
+      bottleneck = tf.tidy(() => {
         const styleBottleneckScaled = styleBottleneck.mul(tf.scalar(styleRatio));
         const identityBottleneckScaled = identityBottleneck.mul(tf.scalar(1.0-styleRatio));
-        return styleBottleneckScaled.addStrict(identityBottleneckScaled)
+        return styleBottleneckScaled.add(identityBottleneckScaled)
       })
       styleBottleneck.dispose();
       identityBottleneck.dispose();
     }
-    // this.styleButton.textContent = 'Stylizing image...';
-    // await tf.nextFrame();
-    // const stylized = await tf.tidy(() => {
-    //   return this.transformNet.predict([tf.browser.fromPixels(this.contentImg).toFloat().div(tf.scalar(255)).expandDims(), bottleneck]).squeeze();
-    // })
-    // await tf.browser.toPixels(stylized, this.stylized);
-    // bottleneck.dispose();  // Might wanna keep this around
-    // stylized.dispose();
+    const stylized =  tf.tidy(() => {
+      return (transformNet.predict([tf.tensor3d(contentImg['data']).toFloat().div(tf.scalar(255)).expandDims(), bottleneck]) as tf.Tensor).squeeze();
+    })
+    const res = (await tf.browser.toPixels(stylized as tf.Tensor3D));
+
+    return res
   }
 
-  return null
+  return await startStyling()
 }

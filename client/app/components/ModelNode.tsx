@@ -68,6 +68,14 @@ export default React.memo(function ModelNode({
     displayNodeConnected
   ])
 
+  React.useEffect(() => {
+    const data = fetcher.data as Uint8ClampedArray
+    if (!data || fetcher.state !== 'idle') {
+      return
+    }
+    console.log(data)
+  }, [fetcher])
+
   const outgoers = getOutgoers(
     reactflow.getNode(props.id)!,
     reactflow.getNodes(),
