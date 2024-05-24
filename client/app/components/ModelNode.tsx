@@ -103,8 +103,8 @@ export default React.memo(function ModelNode({
 
     formData.append('style-image', styleBlob)
     formData.append('content-image', contentBlob)
-
-    console.log(formData.get('content-image'))
+    formData.append('style-ratio', stylizationStrength.toString())
+    formData.append('display-name', contentImage.name)
 
     fetcher.submit(formData, {action: `/styletransfer/${data.id}`, method: 'post', encType: "multipart/form-data"})
 
