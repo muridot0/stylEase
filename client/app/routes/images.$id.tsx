@@ -72,16 +72,19 @@ export const action: ActionFunction = async ({ request }) => {
     ).length
     const base64 = await resized.getBase64Async(Jimp.AUTO)
 
+    resized.getMIME()
+
     return {
       url: base64,
       size: bufferSize,
       width: resized.getWidth(),
-      height: resized.getHeight()
+      height: resized.getHeight(),
+      mime: resized.getMIME()
     }
   }
   const processedImageData = await processImage(imageBlob.url)
 
-  return json({ ...processedImageData, name: imageBlob.filename })
+  return json({ ...processedImageData, name: imageBlob.filename, mime: processedImageData.mime})
 }
 
 function mangle(filename: string) {

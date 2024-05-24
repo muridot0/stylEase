@@ -10,7 +10,7 @@ import Slider from './Slider'
 import MissingAttachment from './MissingAttachment'
 import { Bounce, Id, toast } from 'react-toastify'
 import { useFetcher } from '@remix-run/react'
-import { ImageDataToBlob } from '~/lib/imgToBlob'
+import { b64toBlob, imageDataToBlob } from '~/lib/imgToBlob'
 interface Props {
   id: string
   title: string
@@ -95,41 +95,50 @@ export default React.memo(function ModelNode({
       return toastRef.current
     }
 
-    const contentImageData = base64ToImageData(contentImage.url as string)
-    const styleImageData = base64ToImageData(styleImage.url as string)
-    if (!contentImageData?.imageData || !styleImageData?.imageData) return
+    const formData = new FormData()
 
-    const stylize = () => {
-      if (!contentImageData?.imageData || !styleImageData?.imageData) return
+    const styleBlob = b64toBlob(styleImage.url as string)
 
-      model
-        .stylize(
-          contentImageData.imageData,
-          styleImageData.imageData,
-          stylizationStrength
-        )
-        .then(async (imageData) => {
-          outgoers.map((displayNode) => {
-            return reactflow.setNodes((nodes) => {
-              nodes.map((node: Node<CustomNode>) => {
-                if (displayNode.id === node.id) {
-                  console.log('i go in', displayNode)
-                  node.data.content = {
-                    url: imageData,
-                    name: `stylEased_${contentImage.name}`,
-                    size: imageData.data.byteLength,
-                    width: imageData.width,
-                    height: imageData.height
-                  }
-                }
-              })
-              return nodes
-            })
-          })
-        })
-    }
+    const contentBlob = b64toBlob(contentImage.url as string)
 
-    model.initialize().then(stylize)
+    formData.append('style-image', styleBlob)
+    formData.append('content-image', contentBlob)
+
+    console.log(formData.get('content-image'))
+
+    fetcher.submit(formData, {action: `/styletransfer/${data.id}`, method: 'post', encType: "multipart/form-data"})
+
+    // const stylize = () => {
+    //   if (!contentImageData?.imageData || !styleImageData?.imageData) return
+
+    //   model
+    //     .stylize(
+    //       contentImageData.imageData,
+    //       styleImageData.imageData,
+    //       stylizationStrength
+    //     )
+    //     .then(async (imageData) => {
+    //       outgoers.map((displayNode) => {
+    //         return reactflow.setNodes((nodes) => {
+    //           nodes.map((node: Node<CustomNode>) => {
+    //             if (displayNode.id === node.id) {
+    //               console.log('i go in', displayNode)
+    //               node.data.content = {
+    //                 url: imageData,
+    //                 name: `stylEased_${contentImage.name}`,
+    //                 size: imageData.data.byteLength,
+    //                 width: imageData.width,
+    //                 height: imageData.height
+    //               }
+    //             }
+    //           })
+    //           return nodes
+    //         })
+    //       })
+    //     })
+    // }
+
+    // model.initialize().then(stylize)
   }
 
   return (
