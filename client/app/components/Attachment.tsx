@@ -4,6 +4,7 @@ import { niceBytes } from '../lib/niceBytes'
 import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
 import { useFetcher } from '@remix-run/react'
 import { db } from '~/lib/db'
+import globalNodeState from '~/state/nodesState'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -60,7 +61,7 @@ export default function Attachment({
         return node
       })
     )
-  }, [file])
+  }, [globalNodeState.value, file])
 
   const restoreImages = async () => {
     const flow = await db.flow.get(1)
@@ -138,9 +139,6 @@ export default function Attachment({
         ) : (
           <>
             <fetcher.Form
-              action={`/images/${nodeId}`}
-              method='post'
-              encType='multipart/form-data'
             >
               <label id='uploadLabel' htmlFor='image' className='hidden'>
                 {label}
@@ -150,8 +148,9 @@ export default function Attachment({
                 type='file'
                 name='image'
                 ref={fileRef}
+                title=' '
                 accept='.jpg,.png,.jpeg,.heif,.heic'
-                className='opacity-0 block w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
+                className='opacity-0 w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
                 onChange={handleFileAttached}
               />
             </fetcher.Form>

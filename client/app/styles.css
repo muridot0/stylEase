@@ -50,6 +50,8 @@
 
   --blur: 25px;
 
+  --disabled: #e5e5e5;
+
   --drawer-color: rgba(237,237,238, 0.15);
   --node-border-color: #bbbdc1;
   --node-handle-color: #4d5259;
@@ -68,6 +70,8 @@
     --shadow-inset: inset 0 3px 3px 0 rgba(0, 0, 0, 0.25), inset 0 3px 5px 0 rgba(255, 255, 255, 0.25);
 
     --stroke-color: #b3b3b3;
+
+    --disabled: #222428;
 
     --hover-color: #EEEFEF;
     --hover-bg-color: #222428;
@@ -135,6 +139,23 @@ input[type="range"]::-moz-range-track {
 input[type="range"]:disabled::-moz-range-track {
   @apply opacity-10;
 }
+
+.react-flow__attribution {
+  @apply dark:!bg-neutral-700 rounded rounded-b-none;
+}
+
+.react-flow__controls {
+  @apply !shadow-none;
+}
+.react-flow__controls-button {
+  @apply !rounded-[4px] !mt-2 !bg-[--drawer-color] dark:!border-none !backdrop-blur-[--blur] !text-[--primary] hover:!bg-[--hover-bg-color];
+  border: 1px solid var(--node-border-color) !important;
+}
+
+.react-flow__controls-button svg path {
+  fill: currentColor;
+}
+
 
 .no-bg {
   background: none !important;

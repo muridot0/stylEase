@@ -4,13 +4,11 @@ import WrapperNode from './WrapperNode'
 import clsx from 'clsx'
 import NodeHandle from './NodeHandle'
 import globalNodeState, { CustomNode } from '~/state/nodesState'
-import * as mi from '@magenta/image'
-import { base64ToImageData } from '~/lib/base64ToImageData'
 import Slider from './Slider'
 import MissingAttachment from './MissingAttachment'
 import { Bounce, Id, toast } from 'react-toastify'
 import { useFetcher } from '@remix-run/react'
-import { b64toBlob, imageDataToBlob } from '~/lib/imgToBlob'
+import { b64toBlob } from '~/lib/imgToBlob'
 interface Props {
   id: string
   title: string
@@ -58,7 +56,6 @@ export default React.memo(function ModelNode({
   const [stylizationStrength, setStylizationStrength] =
     React.useState<number>(0.5)
   const toastRef = React.useRef<Id | null>(null)
-  const model = new mi.ArbitraryStyleTransferNetwork()
 
   React.useEffect(() => {
     globalNodeState.subscribe((nodes) => {
@@ -73,7 +70,19 @@ export default React.memo(function ModelNode({
     globalNodeState.value,
     styleNodeConnected,
     contentNodeConnected,
-    displayNodeConnected
+    displayNodeConnected,
+  ])
+
+  React.useEffect(() => {
+    globalNodeState.subscribe((nodes) => {
+      const currentNode = nodes.find((node) => node.id === props.id)
+      setStyleImage(currentNode?.data.styleImage)
+      setContentImage(currentNode?.data.contentImage)
+    })
+  }, [
+    globalNodeState.value,
+    setStyleImage,
+    setContentImage
   ])
 
   React.useEffect(() => {
@@ -149,58 +158,12 @@ export default React.memo(function ModelNode({
     formData.append('content-image', contentBlob)
     formData.append('style-ratio', stylizationStrength.toString())
     formData.append('display-name', contentImage.name)
-    formData.append(
-      'content-sizes',
-      JSON.stringify({ width: contentImage.width, height: contentImage.height })
-    )
 
     fetcher.submit(formData, {
       action: `/styletransfer/${data.id}`,
       method: 'post',
       encType: 'multipart/form-data'
     })
-
-    // const contentImageData = base64ToImageData(contentImage.url as string)
-    // const styleImageData = base64ToImageData(styleImage.url as string)
-    // if (!contentImageData?.imageData || !styleImageData?.imageData) return
-
-    // const stylize = () => {
-    //   if (!contentImageData?.imageData || !styleImageData?.imageData) return
-
-    //   const outgoers = getOutgoers(
-    //     reactflow.getNode(props.id)!,
-    //     reactflow.getNodes(),
-    //     reactflow.getEdges()
-    //   )
-
-    //   model
-    //     .stylize(
-    //       contentImageData.imageData,
-    //       styleImageData.imageData,
-    //       stylizationStrength
-    //     )
-    //     .then(async (imageData) => {
-    //       outgoers.map((displayNode) => {
-    //         return reactflow.setNodes((nodes) => {
-    //           nodes.map((node: Node<CustomNode>) => {
-    //             if (displayNode.id === node.id) {
-    //               console.log('i go in', displayNode)
-    //               node.data.content = {
-    //                 url: imageData,
-    //                 name: `stylEased_${contentImage.name}`,
-    //                 size: imageData.data.byteLength,
-    //                 width: imageData.width,
-    //                 height: imageData.height
-    //               }
-    //             }
-    //           })
-    //           return nodes
-    //         })
-    //       })
-    //     })
-    // }
-
-    // model.initialize().then(stylize)
   }
 
   return (
@@ -292,7 +255,7 @@ export default React.memo(function ModelNode({
           className={clsx(
             'mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[12.65rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]',
             {
-              '!bg-[--hover-bg-color] !text-[--node-border-color]':
+              '!bg-[--disabled] !text-[--node-border-color]':
                 !contentImage?.url || !styleImage?.url
             }
           )}

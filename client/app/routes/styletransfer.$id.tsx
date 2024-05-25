@@ -7,7 +7,6 @@ import * as tf from '@tensorflow/tfjs-node'
 import Jimp from 'jimp'
 import randomStr from '~/lib/randomStr'
 
-//TODO: add reiinako's style transfer logic
 const convertToBuffer = async (data: AsyncIterable<Uint8Array>) => {
   const dataArray = []
   for await (const x of data) {
@@ -29,7 +28,6 @@ const uploadFileHandler = unstable_composeUploadHandlers(
     const uint8Array = new Uint8Array(await convertToBuffer(data))
 
     const tensor = tf.node.decodeImage(uint8Array)
-    console.log(tensor.dataSync(), tensor.shape)
 
     return JSON.stringify({ data: tensor.arraySync(), shape: tensor.shape })
   }
@@ -55,8 +53,6 @@ export const action: ActionFunction = async ({ request }) => {
     JSON.parse(formData.get('style-ratio') as string)
   )
   const displayName = formData.get('display-name') as string
-
-  console.log(typeof styleImg['data'], styleRatio)
 
   async function startStyling() {
     function predictStyleParameters(style: []): tf.Tensor4D {
@@ -94,8 +90,6 @@ export const action: ActionFunction = async ({ request }) => {
     const res = await tf.browser.toPixels(stylized)
     styleRepresentation.dispose()
     stylized.dispose()
-
-    console.log(res)
 
     return {
       url: Array.from(res),

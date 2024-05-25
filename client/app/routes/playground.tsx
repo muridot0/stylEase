@@ -11,6 +11,7 @@ import {
   Edge,
   ReactFlowProvider,
   ReactFlowInstance,
+  Controls,
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -90,7 +91,7 @@ export default function Playground() {
         }
       }
     })
-  }, [globalNodeState.value])
+  }, [nodes, setNodes, edges, setEdges])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
@@ -166,6 +167,7 @@ export default function Playground() {
     <>
       <div className='h-screen w-screen'>
         <ReactFlowProvider>
+          <Controls showInteractive={false} />
           <Header />
           <ToastContainer limit={1} />
           <ReactFlow
