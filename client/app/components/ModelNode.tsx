@@ -22,15 +22,13 @@ interface Props {
   styleNodeId: string | null
 }
 
-
 interface FetcherData {
-  url: Uint8ClampedArray
+  url: number[]
   size: number
   width: number
   height: number
   name: string
 }
-
 
 export default React.memo(function ModelNode({
   data,
@@ -84,17 +82,40 @@ export default React.memo(function ModelNode({
       return
     }
 
-    const imgData = new ImageData(data.url, data.width, data.height)
+    console.log(typeof data.url, data.url)
 
+    console.log(data.url instanceof Uint8ClampedArray)
+
+    const uint8ClampedArr = new Uint8ClampedArray(data.url)
+    console.log(uint8ClampedArr instanceof Uint8ClampedArray) // true
+
+    const imgData = new ImageData(uint8ClampedArr, data.width, data.height)
     console.log(imgData)
 
-  }, [fetcher])
+    const outgoers = getOutgoers(
+      reactflow.getNode(props.id)!,
+      reactflow.getNodes(),
+      reactflow.getEdges()
+    )
 
-  const outgoers = getOutgoers(
-    reactflow.getNode(props.id)!,
-    reactflow.getNodes(),
-    reactflow.getEdges()
-  )
+    outgoers.map((displayNode) => {
+      return reactflow.setNodes((nodes) => {
+        nodes.map((node: Node<CustomNode>) => {
+          if (displayNode.id === node.id) {
+            console.log('i go in', displayNode)
+            node.data.content = {
+              url: imgData,
+              name: `stylEased_${data.name}`,
+              size: imgData.data.byteLength,
+              width: imgData.width,
+              height: imgData.height
+            }
+          }
+        })
+        return nodes
+      })
+    })
+  }, [fetcher])
 
   const stylEase = async () => {
     if (!contentImage?.url || !styleImage?.url) {
@@ -128,9 +149,16 @@ export default React.memo(function ModelNode({
     formData.append('content-image', contentBlob)
     formData.append('style-ratio', stylizationStrength.toString())
     formData.append('display-name', contentImage.name)
-    formData.append('content-sizes', JSON.stringify({width: contentImage.width, height: contentImage.height}))
+    formData.append(
+      'content-sizes',
+      JSON.stringify({ width: contentImage.width, height: contentImage.height })
+    )
 
-    fetcher.submit(formData, {action: `/styletransfer/${data.id}`, method: 'post', encType: "multipart/form-data"})
+    fetcher.submit(formData, {
+      action: `/styletransfer/${data.id}`,
+      method: 'post',
+      encType: 'multipart/form-data'
+    })
 
     // const stylize = () => {
     //   if (!contentImageData?.imageData || !styleImageData?.imageData) return

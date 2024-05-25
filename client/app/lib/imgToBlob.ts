@@ -1,7 +1,6 @@
 function imageDataToBlob(imageData: ImageData): Promise<Blob> {
   return new Promise((resolve, reject) => {
       // Create a canvas element
-      console.log(imageData.width, imageData.height)
       const canvas = document.createElement('canvas');
       canvas.width = imageData.width;
       canvas.height = imageData.height;
@@ -30,8 +29,6 @@ function imageDataToBlob(imageData: ImageData): Promise<Blob> {
 const b64toBlob = (b64Data: string, sliceSize=512) => {
   const b64String = b64Data.split(',')[1]
   const contentType = b64Data.match(/^data:([^;]+);base64,/)
-  console.log(contentType?.[1])
-  console.log(b64String)
   const byteCharacters = atob(b64String);
   const byteArrays = [];
 

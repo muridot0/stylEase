@@ -72,11 +72,12 @@ export const action: ActionFunction = async ({ request }) => {
     })
     const res = await tf.browser.toPixels(stylized as tf.Tensor3D);
 
+    console.log(stylized.shape[0], stylized.shape[1], res.buffer)
     return {
-      url: res,
+      url: Array.from(res),
       size: Buffer.from(res).byteLength,
-      width: contentSizes['width'],
-      height: contentSizes['height'],
+      width: stylized.shape[0],
+      height: stylized.shape[1],
       mime: Jimp.MIME_JPEG,
       name: displayName
     }
