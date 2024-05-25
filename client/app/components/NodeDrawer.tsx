@@ -24,11 +24,11 @@ export default function NodeDrawer({ onSelect }: Props) {
     <Panel
       position='top-left'
       className={clsx(
-        'flex flex-col gap-2 items-center !top-[6rem] rounded-[8px] bg-[--node-bg-color] border border-[--node-border-color] p-4',
+        'flex flex-col gap-2 backdrop-blur-[--blur] items-center !top-[6rem] rounded-[8px] bg-[--drawer-color] border border-[--node-border-color] p-4',
         { 'w-75': !collapsed }
       )}
     >
-      <h1 className='font-bold'>Node Drawer</h1>
+      <h1 className='font-bold text-xl'>Node Drawer</h1>
       <ul
         className={clsx(
           'w-full',
@@ -59,16 +59,16 @@ export default function NodeDrawer({ onSelect }: Props) {
                 onClick={() => addNode(data)}
               >
                 <div className='flex items-center justify-between text-xl'>
-                  <p>{data.title}</p>
+                  <p className='font-bold'>{data.title}</p>
                   <span className={clsx(`${data.icon} flex`)}></span>
                 </div>
 
-                <p className='text-[--node-icons-color]'>{data.description}</p>
+                <p>{data.description}</p>
               </li>
             ))}
       </ul>
       <button
-        className='bg-[--node-bg-color] border rounded-full border-[--node-border-color] absolute -right-10 top-0 p-1'
+        className='w-full flex items-center justify-center mt-2 p-1'
         onClick={collapseSidebar}
       >
         <span

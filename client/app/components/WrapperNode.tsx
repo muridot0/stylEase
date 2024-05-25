@@ -86,7 +86,7 @@ function WrapperNode({
       <div
         className={clsx(
           className,
-          'relative w-full min-w-[200px] bg-[--node-bg-color] border border-[--node-border-color] py-6 px-10 rounded-[8px] text-center',
+          'relative w-full min-w-[200px] backdrop-blur-[--blur] bg-[--node-bg-color] border border-[--node-border-color] py-6 px-10 rounded-[8px] text-center',
           { 'border-[--stroke-color]': selected }
         )}
       >

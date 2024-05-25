@@ -167,7 +167,7 @@ export default function Playground() {
       <div className='h-screen w-screen'>
         <ReactFlowProvider>
           <Header />
-          <ToastContainer limit={1}/>
+          <ToastContainer limit={1} />
           <ReactFlow
             nodes={nodes}
             edges={edges}

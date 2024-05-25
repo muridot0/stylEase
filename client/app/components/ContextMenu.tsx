@@ -24,6 +24,7 @@ export default React.forwardRef(function ContextMenu(
   React.useEffect(() => {
     if (hideDelete) return
     setHideDelete(toggleMenu)
+    setAnimationFinished(true)
   }, [toggleMenu])
 
   const deleteNodes = () => {
@@ -57,7 +58,7 @@ export default React.forwardRef(function ContextMenu(
   return (
     <div ref={contextRef}>
       <button
-        className='border bg-[--node-bg-color] border-[--node-border-color] hover:bg-[--hover-bg-color] hover:text-[--hover-color] p-2 rounded-[50%]'
+        className='border bg-[--drawer-color] backdrop-blur-[--blur] border-[--node-border-color] hover:bg-[--hover-bg-color] hover:text-[--hover-color] p-2 rounded-[50%]'
         onClick={showMenu}
       >
         <span className='i-lucide-menu flex text-2xl' />
@@ -65,7 +66,7 @@ export default React.forwardRef(function ContextMenu(
       </button>
       <ul
         className={clsx(
-          'overflow-hidden absolute mt-2 right-8 border bg-[--node-bg-color] border-[--node-border-color] w-[12.5rem] h-[18.5rem] p-4 rounded-[8px] transition-opacity ease-in-out',
+          'overflow-hidden absolute mt-2 backdrop-blur-[--blur] right-8 border bg-[--drawer-color] border-[--node-border-color] w-[12.5rem] h-[18.5rem] p-4 rounded-[8px] transition-opacity ease-in-out',
           { 'opacity-100': toggleMenu },
           { 'opacity-0': !toggleMenu }
         )}

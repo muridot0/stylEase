@@ -22,6 +22,16 @@ interface Props {
   styleNodeId: string | null
 }
 
+
+interface FetcherData {
+  url: Uint8ClampedArray
+  size: number
+  width: number
+  height: number
+  name: string
+}
+
+
 export default React.memo(function ModelNode({
   data,
   selected,
@@ -69,11 +79,15 @@ export default React.memo(function ModelNode({
   ])
 
   React.useEffect(() => {
-    const data = fetcher.data as Uint8ClampedArray
+    const data = fetcher.data as FetcherData
     if (!data || fetcher.state !== 'idle') {
       return
     }
-    console.log(data)
+
+    const imgData = new ImageData(data.url, data.width, data.height)
+
+    console.log(imgData)
+
   }, [fetcher])
 
   const outgoers = getOutgoers(
@@ -97,7 +111,8 @@ export default React.memo(function ModelNode({
           autoClose: false,
           pauseOnHover: true,
           draggable: true,
-          transition: Bounce
+          transition: Bounce,
+          className: 'backdrop-blur-[--blur]'
         }
       )
       return toastRef.current
@@ -113,6 +128,7 @@ export default React.memo(function ModelNode({
     formData.append('content-image', contentBlob)
     formData.append('style-ratio', stylizationStrength.toString())
     formData.append('display-name', contentImage.name)
+    formData.append('content-sizes', JSON.stringify({width: contentImage.width, height: contentImage.height}))
 
     fetcher.submit(formData, {action: `/styletransfer/${data.id}`, method: 'post', encType: "multipart/form-data"})
 

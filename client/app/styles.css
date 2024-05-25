@@ -44,19 +44,23 @@
   --stroke-color: #808080;
 
   --hover-color: #222428;
-  --hover-bg-color: #e5e5e5;
+  --hover-bg-color: #d6d7da;
   --node-icons-color: #7a7c7e;
   --node-bg-color: #ededee;
+
+  --blur: 25px;
+
+  --drawer-color: rgba(237,237,238, 0.15);
   --node-border-color: #bbbdc1;
   --node-handle-color: #4d5259;
 
   --toastify-toast-bd-radius: 8px !important;
   --toastify-font-family: 'Zed Mono', sans-serif !important;
-  --toastify-color-light: #ededee !important;
+  --toastify-color-light: var(--drawer-color) !important;
   --toastify-text-color-light: #222428 !important;
 
   @media (prefers-color-scheme: dark) {
-    --toastify-color-light: #3b4045 !important;
+    --toastify-color-light: var(--drawer-color) !important;
     --toastify-text-color-light: #EEEFEF !important;
 
     --primary: #EEEFEF;
@@ -68,6 +72,7 @@
     --hover-color: #EEEFEF;
     --hover-bg-color: #222428;
 
+    --drawer-color: rgba(59,64,69, 0.5);
     --node-bg-color: #3b4045;
     --node-border-color: #4d5259;
     --node-handle-color: #bbbdc1;

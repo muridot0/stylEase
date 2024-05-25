@@ -1,5 +1,6 @@
 import { ActionFunction, unstable_composeUploadHandlers, unstable_parseMultipartFormData } from '@remix-run/node'
 import * as tf from '@tensorflow/tfjs-node'
+import Jimp from 'jimp'
 import randomStr from '~/lib/randomStr'
 
 //TODO: add reiinako's style transfer logic
@@ -13,7 +14,7 @@ const convertToBuffer = async (data: AsyncIterable<Uint8Array>) => {
 
 const uploadFileHandler = unstable_composeUploadHandlers(
   async ({ name, contentType, data, filename }) => {
-    if (name === 'style-ratio' || name === 'display-name') {
+    if (name === 'style-ratio' || name === 'display-name' || name === 'content-sizes') {
       const buffer = await convertToBuffer(data);
       return buffer.toString('utf-8'); // Assuming style-ratio is a string
     }
@@ -39,6 +40,8 @@ export const action: ActionFunction = async ({ request }) => {
   const styleImg = JSON.parse(formData.get('style-image') as string)
   const contentImg = JSON.parse(formData.get('content-image') as string)
   const styleRatio = parseFloat(JSON.parse(formData.get('style-ratio') as string))
+  const displayName = formData.get('display-name') as string
+  const contentSizes = JSON.parse(formData.get('content-sizes') as string)
 
   // const styleImg = tf.tensor(JSON.parse(entries['style-image']))
   // const contentImg = tf.tensor(JSON.parse(entries['content-image']))
@@ -67,9 +70,17 @@ export const action: ActionFunction = async ({ request }) => {
     const stylized =  tf.tidy(() => {
       return (transformNet.predict([tf.tensor3d(contentImg['data']).toFloat().div(tf.scalar(255)).expandDims(), bottleneck]) as tf.Tensor).squeeze();
     })
-    const res = (await tf.browser.toPixels(stylized as tf.Tensor3D));
+    const res = await tf.browser.toPixels(stylized as tf.Tensor3D);
 
-    return res
+    return {
+      url: res,
+      size: Buffer.from(res).byteLength,
+      width: contentSizes['width'],
+      height: contentSizes['height'],
+      mime: Jimp.MIME_JPEG,
+      name: displayName
+    }
+
   }
 
   return await startStyling()

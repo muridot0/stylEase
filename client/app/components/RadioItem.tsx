@@ -28,7 +28,7 @@ function RadioItem({ value }: Props) {
         onChange={handleSelectedItem}
         checked={value.toLowerCase() === checked.value}
       />
-      <label htmlFor={value}>{value}</label>
+      <label className="cursor-pointer" htmlFor={value}>{value}</label>
     </li>
   )
 }
