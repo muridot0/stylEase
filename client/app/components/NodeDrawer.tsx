@@ -68,7 +68,7 @@ export default function NodeDrawer({ onSelect }: Props) {
             ))}
       </ul>
       <button
-        className='w-full flex items-center justify-center mt-2 p-1'
+        className='w-full flex items-center justify-center mt-1 p-1'
         onClick={collapseSidebar}
       >
         <span

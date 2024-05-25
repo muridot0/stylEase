@@ -82,7 +82,7 @@ export default React.memo(function ModelNode({
       return
     }
 
-    console.log(typeof data.url, data.url)
+    console.log(typeof data.url, data)
 
     console.log(data.url instanceof Uint8ClampedArray)
 
@@ -92,29 +92,29 @@ export default React.memo(function ModelNode({
     const imgData = new ImageData(uint8ClampedArr, data.width, data.height)
     console.log(imgData)
 
-    // const outgoers = getOutgoers(
-    //   reactflow.getNode(props.id)!,
-    //   reactflow.getNodes(),
-    //   reactflow.getEdges()
-    // )
+    const outgoers = getOutgoers(
+      reactflow.getNode(props.id)!,
+      reactflow.getNodes(),
+      reactflow.getEdges()
+    )
 
-    // outgoers.map((displayNode) => {
-    //   return reactflow.setNodes((nodes) => {
-    //     nodes.map((node: Node<CustomNode>) => {
-    //       if (displayNode.id === node.id) {
-    //         console.log('i go in', displayNode)
-    //         node.data.content = {
-    //           url: imgData,
-    //           name: `stylEased_${data.name}`,
-    //           size: imgData.data.byteLength,
-    //           width: imgData.width,
-    //           height: imgData.height
-    //         }
-    //       }
-    //     })
-    //     return nodes
-    //   })
-    // })
+    outgoers.map((displayNode) => {
+      return reactflow.setNodes((nodes) => {
+        nodes.map((node: Node<CustomNode>) => {
+          if (displayNode.id === node.id) {
+            console.log('i go in', displayNode)
+            node.data.content = {
+              url: imgData,
+              name: `stylEased_${data.name}`,
+              size: imgData.data.byteLength,
+              width: imgData.width,
+              height: imgData.height
+            }
+          }
+        })
+        return nodes
+      })
+    })
   }, [fetcher])
 
   const stylEase = async () => {
@@ -160,47 +160,47 @@ export default React.memo(function ModelNode({
       encType: 'multipart/form-data'
     })
 
-    const contentImageData = base64ToImageData(contentImage.url as string)
-    const styleImageData = base64ToImageData(styleImage.url as string)
-    if (!contentImageData?.imageData || !styleImageData?.imageData) return
+    // const contentImageData = base64ToImageData(contentImage.url as string)
+    // const styleImageData = base64ToImageData(styleImage.url as string)
+    // if (!contentImageData?.imageData || !styleImageData?.imageData) return
 
-    const stylize = () => {
-      if (!contentImageData?.imageData || !styleImageData?.imageData) return
+    // const stylize = () => {
+    //   if (!contentImageData?.imageData || !styleImageData?.imageData) return
 
-      const outgoers = getOutgoers(
-        reactflow.getNode(props.id)!,
-        reactflow.getNodes(),
-        reactflow.getEdges()
-      )
+    //   const outgoers = getOutgoers(
+    //     reactflow.getNode(props.id)!,
+    //     reactflow.getNodes(),
+    //     reactflow.getEdges()
+    //   )
 
-      model
-        .stylize(
-          contentImageData.imageData,
-          styleImageData.imageData,
-          stylizationStrength
-        )
-        .then(async (imageData) => {
-          outgoers.map((displayNode) => {
-            return reactflow.setNodes((nodes) => {
-              nodes.map((node: Node<CustomNode>) => {
-                if (displayNode.id === node.id) {
-                  console.log('i go in', displayNode)
-                  node.data.content = {
-                    url: imageData,
-                    name: `stylEased_${contentImage.name}`,
-                    size: imageData.data.byteLength,
-                    width: imageData.width,
-                    height: imageData.height
-                  }
-                }
-              })
-              return nodes
-            })
-          })
-        })
-    }
+    //   model
+    //     .stylize(
+    //       contentImageData.imageData,
+    //       styleImageData.imageData,
+    //       stylizationStrength
+    //     )
+    //     .then(async (imageData) => {
+    //       outgoers.map((displayNode) => {
+    //         return reactflow.setNodes((nodes) => {
+    //           nodes.map((node: Node<CustomNode>) => {
+    //             if (displayNode.id === node.id) {
+    //               console.log('i go in', displayNode)
+    //               node.data.content = {
+    //                 url: imageData,
+    //                 name: `stylEased_${contentImage.name}`,
+    //                 size: imageData.data.byteLength,
+    //                 width: imageData.width,
+    //                 height: imageData.height
+    //               }
+    //             }
+    //           })
+    //           return nodes
+    //         })
+    //       })
+    //     })
+    // }
 
-    model.initialize().then(stylize)
+    // model.initialize().then(stylize)
   }
 
   return (
