@@ -4,7 +4,6 @@ interface Props {
 }
 
 export default function MissingAttachment({ contentImage, styleImage }: Props) {
-  console.log(styleImage, contentImage)
   return (
     <div>
       {!styleImage && !contentImage ? (

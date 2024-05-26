@@ -42,7 +42,6 @@ function NodeHandle({ className, ...props }: Props) {
       case 'content-node':
         if(connection.target) {
           const edges = getConnectedEdges([reactflow.getNode(connection.target)!], reactflow.getEdges());
-          console.log(edges)
           for (let i = 0; i < edges.length; i++) {
             if (edges[i].sourceHandle === connection.sourceHandle || edges[i].targetHandle === connection.targetHandle) {
               return false;
@@ -52,7 +51,6 @@ function NodeHandle({ className, ...props }: Props) {
 
         return connection.targetHandle === 'content-input'
       case 'model-node':
-        console.log(connection)
         if(connection.target) {
           const edges = getConnectedEdges([reactflow.getNode(connection.source!)!], reactflow.getEdges());
           for (let i = 0; i < edges.length; i++) {
@@ -72,7 +70,6 @@ function NodeHandle({ className, ...props }: Props) {
       case 'style-node':
         globalNodeState.value.map((node) => {
           if (node.id === connection.target) {
-            console.log('i connect to the model node')
             node.data = {
               ...node.data,
               styleNodeConnected: true,

@@ -1,11 +1,8 @@
 import React from 'react'
 import clsx from 'clsx'
 import { niceBytes } from '../lib/niceBytes'
-import { useReactFlow, getIncomers } from 'reactflow'
-import { useLiveQuery } from 'dexie-react-hooks'
-import { db } from '~/lib/db'
+import { useReactFlow } from 'reactflow'
 import globalNodeState from '~/state/nodesState'
-import { stylEasingSignal } from './ModelNode'
 
 interface Props {
   className?: string
@@ -13,11 +10,9 @@ interface Props {
 }
 
 export default function Preview({ className, nodeId }: Props) {
-  //TODO: add code to toggle loading state while processing image
   const [loading, setLoading] = React.useState(false)
   const [previewGenerated, setPreviewGenerated] = React.useState(false)
   const canvasRef = React.useRef<HTMLCanvasElement>(null)
-  const reactflow = useReactFlow()
   const [file, setFile] = React.useState<{
     url: string | ImageData
     name: string
@@ -31,28 +26,36 @@ export default function Preview({ className, nodeId }: Props) {
       const currentNode = nodes.find((node) => node.id === nodeId)
       if(!currentNode?.data.content) {
         setPreviewGenerated(false)
+        setFile(null)
+        setLoading(false)
         return
       }
-      console.log('current', currentNode)
       setFile(() => ({
         ...currentNode.data.content!
       }))
+      setLoading(currentNode.data.stylEasing!)
       setPreviewGenerated(true)
     })
   }, [globalNodeState.value])
 
   React.useEffect(() => {
-    stylEasingSignal.subscribe(val => {
-      setLoading(val)
+    globalNodeState.subscribe((val) => {
+      val.map((node) => {
+        if(node.id === nodeId) {
+          setLoading(node.data.stylEasing!)
+        }
+      })
     })
-  }, [stylEasingSignal.value])
+  }, [globalNodeState.value])
 
   React.useEffect(() => {
-    if (!file) return
+    if (!file) {
+      setPreviewGenerated(false)
+      return
+    }
     if (!canvasRef.current) return
     const ctx = canvasRef.current.getContext('2d')
-    //INFO: would receive ImageData from the model so only place to do conversion is for the model input
-    const data = file.url
+    const data = file?.url
 
     if (!data) return
 
@@ -115,7 +118,7 @@ export default function Preview({ className, nodeId }: Props) {
         { 'p-0 !border-none': previewGenerated }
       )}
     >
-      {previewGenerated ? renderPreviewJSX() : renderNoFileAttachedJSX()}
+      {previewGenerated && file ? renderPreviewJSX() : renderNoFileAttachedJSX()}
     </section>
   )
 }

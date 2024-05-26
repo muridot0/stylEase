@@ -39,7 +39,8 @@ interface CustomNode {
     url: string | ImageData
     width: number
     height: number
-  }
+  },
+  stylEasing?: boolean
   displayNodeId?: string | null
 }
 
@@ -91,7 +92,8 @@ const initialNodes = [
     data: {
       title: 'Display Node',
       icon: 'i-lucide-aperture',
-      id: `display-node-4`
+      id: `display-node-4`,
+      stylEasing: false
     }
   }
 ]

@@ -33,9 +33,7 @@ export default React.forwardRef(function ContextMenu(
     const nodes = reactflow.getNodes()
     const edges = reactflow.getEdges()
     reactflow.deleteElements({ nodes, edges })
-    db.tables.forEach((table) => {
-      table.clear()
-    })
+    db.flow.clear()
   }
 
   const clearConnections = () => {

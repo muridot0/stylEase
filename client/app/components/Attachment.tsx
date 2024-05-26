@@ -47,8 +47,6 @@ export default function Attachment({
   const [loading, setLoading] = React.useState(false)
   const reactflow = useReactFlow()
 
-  console.log('attached: ', fileAttached, nodeId)
-
   React.useEffect(() => {
     reactflow.setNodes((nodes) =>
       nodes.map((node) => {

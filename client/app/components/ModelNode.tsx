@@ -10,7 +10,6 @@ import { Bounce, Id, toast } from 'react-toastify'
 import { useFetcher } from '@remix-run/react'
 import { b64toBlob } from '~/lib/imgToBlob'
 import { db } from '~/lib/db'
-import { signal } from '@preact/signals'
 interface Props {
   id: string
   title: string
@@ -29,8 +28,6 @@ interface FetcherData {
   height: number
   name: string
 }
-
-const stylEasingSignal = signal(false)
 
 export default React.memo(function ModelNode({
   data,
@@ -86,7 +83,6 @@ export default React.memo(function ModelNode({
 
     flow.nodes.map((node): void => {
       if (node.data.id === data.id) {
-        console.log(node)
         setStyleImage(node.data.styleImage)
         setContentImage(node.data.contentImage)
       }
@@ -110,46 +106,51 @@ export default React.memo(function ModelNode({
   ])
 
   React.useEffect(() => {
-    const data = fetcher.data as FetcherData
-    if (!data || fetcher.state !== 'idle') {
-      return
-    }
-
-    console.log(typeof data.url, data)
-
-    console.log(data.url instanceof Uint8ClampedArray)
-
-    const uint8ClampedArr = new Uint8ClampedArray(data.url)
-    console.log(uint8ClampedArr instanceof Uint8ClampedArray) // true
-
-    const imgData = new ImageData(uint8ClampedArr, data.width, data.height)
-    console.log(imgData)
-
     const outgoers = getOutgoers(
       reactflow.getNode(props.id)!,
       reactflow.getNodes(),
       reactflow.getEdges()
     )
+    let data = fetcher.data as FetcherData | undefined
+    if (!data || fetcher.state !== 'idle') {
+      outgoers.map((displayNode) => {
+        return reactflow.setNodes((nodes) => {
+          nodes.map((node: Node<CustomNode>) => {
+            if (displayNode.id === node.id) {
+              if(node.data.content) return
+              node.data.content = undefined
+            }
+          })
+          return nodes
+        })
+      })
+      return
+    }
+
+    const name = data.name
+    const uint8ClampedArr = new Uint8ClampedArray(data.url)
+
+    const imgData = new ImageData(uint8ClampedArr, data.width, data.height)
 
     outgoers.map((displayNode) => {
       return reactflow.setNodes((nodes) => {
         nodes.map((node: Node<CustomNode>) => {
           if (displayNode.id === node.id) {
-            console.log('i go in', displayNode)
             node.data.content = {
               url: imgData,
-              name: `stylEased_${data.name}`,
+              name: `stylEased_${name}`,
               size: imgData.data.byteLength,
               width: imgData.width,
               height: imgData.height
             }
+            node.data.stylEasing = false
           }
         })
         return nodes
       })
     })
     setStylEasing(false)
-    stylEasingSignal.value = false
+    data = undefined
   }, [fetcher])
 
   const stylEase = async () => {
@@ -175,7 +176,6 @@ export default React.memo(function ModelNode({
     }
 
     setStylEasing(true)
-    stylEasingSignal.value = true
 
     const formData = new FormData()
 
@@ -188,12 +188,6 @@ export default React.memo(function ModelNode({
     formData.append('style-ratio', stylizationStrength.toString())
     formData.append('display-name', contentImage.name)
 
-    fetcher.submit(formData, {
-      action: `/styletransfer/${data.id}`,
-      method: 'post',
-      encType: 'multipart/form-data'
-    })
-
     const outgoers = getOutgoers(
       reactflow.getNode(props.id)!,
       reactflow.getNodes(),
@@ -204,13 +198,20 @@ export default React.memo(function ModelNode({
       return reactflow.setNodes((nodes) => {
         nodes.map((node: Node<CustomNode>) => {
           if (displayNode.id === node.id) {
-            console.log('i go in', displayNode)
             node.data.content = undefined
+            node.data.stylEasing = true
+            console.log(node)
           }
         })
         return nodes
       })
     })
+    fetcher.submit(formData, {
+      action: `/styletransfer/${data.id}`,
+      method: 'post',
+      encType: 'multipart/form-data'
+    })
+
   }
 
   return (
@@ -314,5 +315,3 @@ export default React.memo(function ModelNode({
     </div>
   )
 })
-
-export {stylEasingSignal}
