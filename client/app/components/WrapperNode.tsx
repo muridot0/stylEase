@@ -24,6 +24,7 @@ function WrapperNode({
   nodeId
 }: Props) {
   const [hovering, setHovering] = React.useState(false)
+  const hoverRef = React.useRef<HTMLDivElement>(null)
   const reactflow = useReactFlow()
 
   const node = reactflow.getNode(nodeId)
@@ -61,6 +62,30 @@ function WrapperNode({
     setHovering(false)
   }
 
+  const checkHover = () => {
+    if (!hoverRef.current) return
+
+    const rect = hoverRef.current.getBoundingClientRect()
+    const isInElement = (
+      window.innerWidth > rect.left &&
+      window.innerHeight > rect.top &&
+      rect.right > 0 &&
+      rect.bottom > 0
+    )
+
+    if (!isInElement) {
+      setHovering(false)
+    } else {
+      requestAnimationFrame(checkHover)
+    }
+  }
+
+  React.useEffect(() => {
+    if (hovering) {
+      requestAnimationFrame(checkHover)
+    }
+  }, [hovering])
+
   const deleteNode = () => {
     reactflow.deleteElements({ nodes: [{ id: nodeId }] })
   }
@@ -82,6 +107,7 @@ function WrapperNode({
       className='flex flex-col items-end relative'
       onMouseEnter={handleHover}
       onMouseLeave={handleStopHovering}
+      ref={hoverRef}
     >
       <div
         className={clsx(

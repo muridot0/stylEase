@@ -1,10 +1,9 @@
 import React from 'react'
 import clsx from 'clsx'
 import { niceBytes } from '../lib/niceBytes'
-import { ReactFlowJsonObject, useReactFlow } from 'reactflow'
+import { ReactFlowJsonObject, getOutgoers, useReactFlow } from 'reactflow'
 import { useFetcher } from '@remix-run/react'
 import { db } from '~/lib/db'
-import globalNodeState from '~/state/nodesState'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -48,6 +47,8 @@ export default function Attachment({
   const [loading, setLoading] = React.useState(false)
   const reactflow = useReactFlow()
 
+  console.log('attached: ', fileAttached, nodeId)
+
   React.useEffect(() => {
     reactflow.setNodes((nodes) =>
       nodes.map((node) => {
@@ -56,17 +57,17 @@ export default function Attachment({
             ...node.data,
             content: { ...file }
           }
-          if (JSON.stringify(file) === '{}') setFileAttached(false)
+          if (JSON.stringify(node.data.content) === '{}') setFileAttached(false)
         }
         return node
       })
     )
-  }, [globalNodeState.value, file])
+  }, [file, fetcher])
 
   const restoreImages = async () => {
     const flow = await db.flow.get(1)
 
-    if(!flow) return
+    if (!flow) return
 
     flow.nodes.map((node): void => {
       if (node.data.id === nodeId) {
@@ -92,6 +93,7 @@ export default function Attachment({
     setFile(() => ({
       ...data
     }))
+
     setLoading(false)
     setFileAttached(true)
     setFileSizeExceeded({ size: data.size, exceeded: false })
@@ -111,9 +113,7 @@ export default function Attachment({
     }
 
     setLoading(true)
-    setFile(null)
     setFileAttached(false)
-    setFileSizeExceeded({ size: files[0].size, exceeded: false })
     fetcher.submit(e.currentTarget.form, {
       action: `/images/${nodeId}`,
       method: 'post',
@@ -129,17 +129,9 @@ export default function Attachment({
   const renderUploadedPhoto = () => {
     return (
       <div>
-        {loading ? (
-          <div className='h-20 flex justify-center items-center flex-col'>
-            <span className='i-lucide-cog animate-spin text-[45px]'></span>
-            <p className='text-md'>Processing your picture ...</p>
-          </div>
-        ) : fileAttached && JSON.stringify(file) !== '{}' ? (
-          renderFileAttached()
-        ) : (
+        {!loading && !fileAttached ? (
           <>
-            <fetcher.Form
-            >
+            <fetcher.Form>
               <label id='uploadLabel' htmlFor='image' className='hidden'>
                 {label}
               </label>
@@ -148,9 +140,11 @@ export default function Attachment({
                 type='file'
                 name='image'
                 ref={fileRef}
-                title=' '
                 accept='.jpg,.png,.jpeg,.heif,.heic'
-                className='opacity-0 w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer'
+                className={clsx(
+                  'opacity-0 w-full absolute top-0 right-0 left-0 bottom-0 z-1 cursor-pointer',
+                  { hidden: fileAttached }
+                )}
                 onChange={handleFileAttached}
               />
             </fetcher.Form>
@@ -179,6 +173,13 @@ export default function Attachment({
               )}
             </div>
           </>
+        ) : loading && !fileAttached ? (
+          <div className='h-20 flex justify-center items-center flex-col'>
+            <span className='i-lucide-cog animate-spin text-[45px]'></span>
+            <p className='text-md'>Processing your picture ...</p>
+          </div>
+        ) : (
+          fileAttached && !loading && renderFileAttached()
         )}
       </div>
     )

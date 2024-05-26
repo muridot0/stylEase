@@ -5,6 +5,7 @@ import { useReactFlow, getIncomers } from 'reactflow'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '~/lib/db'
 import globalNodeState from '~/state/nodesState'
+import { stylEasingSignal } from './ModelNode'
 
 interface Props {
   className?: string
@@ -25,25 +26,26 @@ export default function Preview({ className, nodeId }: Props) {
     width: number
   } | null>(null)
 
-
-  const incommers = getIncomers(
-    reactflow.getNode(nodeId)!,
-    reactflow.getNodes(),
-    reactflow.getEdges()
-  )
-
-
-
   React.useEffect(() => {
     globalNodeState.subscribe((nodes) => {
       const currentNode = nodes.find((node) => node.id === nodeId)
-      if(!currentNode?.data.content) return
+      if(!currentNode?.data.content) {
+        setPreviewGenerated(false)
+        return
+      }
+      console.log('current', currentNode)
       setFile(() => ({
         ...currentNode.data.content!
       }))
       setPreviewGenerated(true)
     })
   }, [globalNodeState.value])
+
+  React.useEffect(() => {
+    stylEasingSignal.subscribe(val => {
+      setLoading(val)
+    })
+  }, [stylEasingSignal.value])
 
   React.useEffect(() => {
     if (!file) return
@@ -88,13 +90,12 @@ export default function Preview({ className, nodeId }: Props) {
   }
 
   const renderNoFileAttachedJSX = () => {
-    // TODO: adding spinner to preview when stylization image is loading
     return (
       <>
         {loading && !previewGenerated ? (
           <div className='h-20 flex justify-center items-center flex-col'>
             <span className='i-lucide-cog animate-spin text-[45px]'></span>
-            <p className='text-md'>Generating your stylEased picture ...</p>
+            <p className='text-md'>Generating your <i className='font-bold'>stylEased</i> picture ...</p>
           </div>
         ) : (
           <div className='flex flex-col items-center gap-1 nodrag cursor-default'>

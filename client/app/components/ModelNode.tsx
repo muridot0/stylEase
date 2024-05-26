@@ -9,6 +9,8 @@ import MissingAttachment from './MissingAttachment'
 import { Bounce, Id, toast } from 'react-toastify'
 import { useFetcher } from '@remix-run/react'
 import { b64toBlob } from '~/lib/imgToBlob'
+import { db } from '~/lib/db'
+import { signal } from '@preact/signals'
 interface Props {
   id: string
   title: string
@@ -27,6 +29,8 @@ interface FetcherData {
   height: number
   name: string
 }
+
+const stylEasingSignal = signal(false)
 
 export default React.memo(function ModelNode({
   data,
@@ -55,6 +59,8 @@ export default React.memo(function ModelNode({
   }>()
   const [stylizationStrength, setStylizationStrength] =
     React.useState<number>(0.5)
+
+  const [stylEasing, setStylEasing] = React.useState(false)
   const toastRef = React.useRef<Id | null>(null)
 
   React.useEffect(() => {
@@ -72,6 +78,24 @@ export default React.memo(function ModelNode({
     contentNodeConnected,
     displayNodeConnected,
   ])
+
+  const restoreImages = async () => {
+    const flow = await db.flow.get(1)
+
+    if(!flow) return
+
+    flow.nodes.map((node): void => {
+      if (node.data.id === data.id) {
+        console.log(node)
+        setStyleImage(node.data.styleImage)
+        setContentImage(node.data.contentImage)
+      }
+    })
+  }
+
+  React.useEffect(() => {
+    restoreImages()
+  }, [])
 
   React.useEffect(() => {
     globalNodeState.subscribe((nodes) => {
@@ -124,6 +148,8 @@ export default React.memo(function ModelNode({
         return nodes
       })
     })
+    setStylEasing(false)
+    stylEasingSignal.value = false
   }, [fetcher])
 
   const stylEase = async () => {
@@ -148,6 +174,9 @@ export default React.memo(function ModelNode({
       return toastRef.current
     }
 
+    setStylEasing(true)
+    stylEasingSignal.value = true
+
     const formData = new FormData()
 
     const styleBlob = b64toBlob(styleImage.url as string)
@@ -163,6 +192,24 @@ export default React.memo(function ModelNode({
       action: `/styletransfer/${data.id}`,
       method: 'post',
       encType: 'multipart/form-data'
+    })
+
+    const outgoers = getOutgoers(
+      reactflow.getNode(props.id)!,
+      reactflow.getNodes(),
+      reactflow.getEdges()
+    )
+
+    outgoers.map((displayNode) => {
+      return reactflow.setNodes((nodes) => {
+        nodes.map((node: Node<CustomNode>) => {
+          if (displayNode.id === node.id) {
+            console.log('i go in', displayNode)
+            node.data.content = undefined
+          }
+        })
+        return nodes
+      })
     })
   }
 
@@ -256,9 +303,10 @@ export default React.memo(function ModelNode({
             'mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[12.65rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]',
             {
               '!bg-[--disabled] !text-[--node-border-color]':
-                !contentImage?.url || !styleImage?.url
+                !contentImage?.url || !styleImage?.url || stylEasing
             }
           )}
+          disabled={stylEasing}
         >
           <span className='i-lucide-play flex' /> stylEase!
         </button>
@@ -266,3 +314,5 @@ export default React.memo(function ModelNode({
     </div>
   )
 })
+
+export {stylEasingSignal}

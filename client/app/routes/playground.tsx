@@ -46,7 +46,9 @@ export default function Playground() {
 
   React.useEffect(() => {
     globalNodeState.value = nodes
-  }, [setNodes, nodes])
+    // console.log(globalNodeState.value)
+    // console.log(nodes)
+  }, [nodes])
 
   React.useEffect(() => {
     if (!flowInstance) return
@@ -91,7 +93,7 @@ export default function Playground() {
         }
       }
     })
-  }, [nodes, setNodes, edges, setEdges])
+  }, [globalNodeState.value])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
