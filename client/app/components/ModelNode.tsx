@@ -10,6 +10,7 @@ import { Bounce, Id, toast } from 'react-toastify'
 import { useFetcher } from '@remix-run/react'
 import { b64toBlob } from '~/lib/imgToBlob'
 import { db } from '~/lib/db'
+import { resetFetcher } from '~/lib/resetFetcher'
 interface Props {
   id: string
   title: string
@@ -111,7 +112,7 @@ export default React.memo(function ModelNode({
       reactflow.getNodes(),
       reactflow.getEdges()
     )
-    let data = fetcher.data as FetcherData | undefined
+    let data = fetcher.data as FetcherData
     if (!data || fetcher.state !== 'idle') {
       outgoers.map((displayNode) => {
         return reactflow.setNodes((nodes) => {
@@ -150,7 +151,7 @@ export default React.memo(function ModelNode({
       })
     })
     setStylEasing(false)
-    data = undefined
+    resetFetcher(fetcher)
   }, [fetcher])
 
   const stylEase = async () => {
