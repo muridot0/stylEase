@@ -196,7 +196,7 @@ export default function Attachment({
               title={file.name}
               className='rounded-[4px]'
             />
-            <div className='mt-2 mb-0 truncate ...'>{file.name}</div>
+            <div className='mt-2 mb-0 truncate ...' title={file.name}>{file.name}</div>
             <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
               <p className='border font-medium rounded-md border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
                 {niceBytes(file.size)}

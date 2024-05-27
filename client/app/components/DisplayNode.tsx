@@ -18,7 +18,7 @@ export default React.memo(function DisplayNode({ data, selected, ...props }: Nod
       selected={selected}
       nodeId={props.id}
     >
-      <Preview nodeId={props.id} className='nodrag cursor-pointer'/>
+      <Preview nodeId={props.id} className='nodrag cursor-default'/>
     </WrapperNode>
   )
 })
