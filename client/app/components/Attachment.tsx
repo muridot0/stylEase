@@ -203,6 +203,7 @@ export default function Attachment({
               <button
                 className=' bg-white border-1.5 border-[--node-border-color] dark:border-neutral-500 btn-shadow dark:bg-[--node-icons-color] rounded-full p-1.5 text-sm hover:brightness-95'
                 onClick={handleFileDelete}
+                title='Delete image'
               >
                 <span className='i-lucide-trash-2 flex' />
                 <span className='sr-only'>Delete image</span>

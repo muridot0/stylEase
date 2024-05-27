@@ -19,7 +19,7 @@ export default function Header() {
     return () => {
       document.removeEventListener('click', handleClickOutside, true)
     }
-  }, [toggleMenu])
+  }, [])
 
   return (
     <div className='absolute z-1 flex justify-between items-center w-full px-8 py-2'>

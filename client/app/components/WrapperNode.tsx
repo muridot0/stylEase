@@ -135,6 +135,7 @@ function WrapperNode({
           <button
             className='flex border items-center bg-[--node-bg-color] border-[--node-border-color] p-1 rounded-1 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
             onClick={deleteEdges}
+            title='Delete connections'
           >
             <span className='i-lucide-unlink flex' />
             <span className='sr-only'>Delete node connections</span>
@@ -142,6 +143,7 @@ function WrapperNode({
           <button
             className='flex border items-center bg-[--node-bg-color] border-[--node-border-color] p-1 rounded-1 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
             onClick={deleteNode}
+            title='Delete node'
           >
             <span className='i-lucide-trash-2 flex' />
             <span className='sr-only'>Delete node</span>

@@ -45,10 +45,11 @@ export default function NodeDrawer({ onSelect }: Props) {
                 key={data.id}
                 onClick={() => addNode(data)}
               >
-                <button className='flex p-3 border border-[--node-border-color] rounded-[4px] hover:bg-[--hover-bg-color] hover:text-[--hover-color]'>
+                <button className='flex p-3 border border-[--node-border-color] rounded-[4px] hover:bg-[--hover-bg-color] hover:text-[--hover-color]' title={data.title}>
                   <span
                     className={clsx(`${data.icon} text-3xl flex`)}
                   ></span>
+                  <span className='sr-only'>{data.title}</span>
                 </button>
               </li>
             ))
@@ -70,6 +71,7 @@ export default function NodeDrawer({ onSelect }: Props) {
       <button
         className='w-full flex items-center justify-center mt-1 p-1'
         onClick={collapseSidebar}
+        title='Toggle sidebar'
       >
         <span
           className={clsx(
@@ -78,6 +80,7 @@ export default function NodeDrawer({ onSelect }: Props) {
             { 'i-lucide-chevron-up': !collapsed }
           )}
         />
+        <span className='sr-only'>Toggle sidebar</span>
       </button>
     </Panel>
   )

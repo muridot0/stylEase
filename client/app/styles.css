@@ -53,6 +53,8 @@
   --disabled: #e5e5e5;
 
   --drawer-color: rgba(237,237,238, 0.15);
+  --modal-color: rgba(237,237,238, 0.5);
+
   --node-border-color: #bbbdc1;
   --node-handle-color: #4d5259;
 
@@ -77,6 +79,8 @@
     --hover-bg-color: rgba(34, 36, 40, 1);
 
     --drawer-color: rgba(59,64,69, 0.2);
+    --modal-color: rgba(59,64,69, 0.2);
+
     --node-bg-color: #3b4045;
     --node-border-color: #4d5259;
     --node-handle-color: #bbbdc1;

@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { niceBytes } from '../lib/niceBytes'
 import { useReactFlow } from 'reactflow'
 import globalNodeState from '~/state/nodesState'
+import { imageDataToBase64 } from '~/lib/imageDataToBase64'
 
 interface Props {
   className?: string
@@ -12,7 +13,7 @@ interface Props {
 export default function Preview({ className, nodeId }: Props) {
   const [loading, setLoading] = React.useState(false)
   const [previewGenerated, setPreviewGenerated] = React.useState(false)
-  const canvasRef = React.useRef<HTMLCanvasElement>(null)
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [file, setFile] = React.useState<{
     url: string | ImageData
     name: string
@@ -20,11 +21,44 @@ export default function Preview({ className, nodeId }: Props) {
     height: number
     width: number
   } | null>(null)
+  const canvasRef = React.useRef<HTMLCanvasElement>(null)
+  const previewRef = React.useRef<HTMLImageElement>(null)
+  const dialogRef = React.useRef<HTMLDialogElement>(null)
+
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      console.log('i fire', dialogRef.current)
+      if (
+        dialogRef.current &&
+        e.target === dialogRef.current
+      ) {
+        dialogRef.current.close()
+        setIsModalOpen(false)
+      }
+    }
+    document.addEventListener('click', handleClickOutside, true)
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    if(!previewRef.current) return
+
+    const data = file?.url
+
+    if(!data) return
+
+    const src = imageDataToBase64(data as ImageData)
+
+    previewRef.current.src = src
+  }, [isModalOpen, file])
 
   React.useEffect(() => {
     globalNodeState.subscribe((nodes) => {
       const currentNode = nodes.find((node) => node.id === nodeId)
-      if(!currentNode?.data.content) {
+      if (!currentNode?.data.content) {
         setPreviewGenerated(false)
         setFile(null)
         setLoading(false)
@@ -41,7 +75,7 @@ export default function Preview({ className, nodeId }: Props) {
   React.useEffect(() => {
     globalNodeState.subscribe((val) => {
       val.map((node) => {
-        if(node.id === nodeId) {
+        if (node.id === nodeId) {
           setLoading(node.data.stylEasing!)
         }
       })
@@ -67,6 +101,12 @@ export default function Preview({ className, nodeId }: Props) {
 
   const handleDownload = () => {}
 
+  const handlePreview = () => {
+    if (!dialogRef.current) return
+    dialogRef.current.showModal()
+    setIsModalOpen(true)
+  }
+
   const renderPreviewJSX = () => {
     return (
       <div>
@@ -80,13 +120,24 @@ export default function Preview({ className, nodeId }: Props) {
           <p className='border font-medium rounded-md border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
             {niceBytes(file!.size)}
           </p>
-          <button
-            className=' bg-white border-1.5 border-[--node-border-color] dark:border-neutral-500 btn-shadow dark:bg-[--node-icons-color] rounded-full p-1.5 text-sm hover:brightness-95'
-            onClick={handleDownload}
-          >
-            <span className='i-lucide-download flex text-zinc-600 dark:text-zinc-200' />
-            <span className='sr-only'>Download image</span>
-          </button>
+          <div className='flex gap-2'>
+            <button
+              className='bg-white border-1.5 border-[--node-border-color] dark:border-neutral-500 btn-shadow dark:bg-[--node-icons-color] rounded-full p-1.5 text-sm hover:brightness-95'
+              onClick={handlePreview}
+              title='Preview image'
+            >
+              <span className='i-lucide-fullscreen flex text-zinc-600 dark:text-zinc-200' />
+              <span className='sr-only'>Preview image</span>
+            </button>
+            <button
+              className=' bg-white border-1.5 border-[--node-border-color] dark:border-neutral-500 btn-shadow dark:bg-[--node-icons-color] rounded-full p-1.5 text-sm hover:brightness-95'
+              onClick={handleDownload}
+              title='Download image'
+            >
+              <span className='i-lucide-download flex text-zinc-600 dark:text-zinc-200' />
+              <span className='sr-only'>Download image</span>
+            </button>
+          </div>
         </aside>
       </div>
     )
@@ -98,7 +149,9 @@ export default function Preview({ className, nodeId }: Props) {
         {loading && !previewGenerated ? (
           <div className='h-20 flex justify-center items-center flex-col'>
             <span className='i-lucide-cog animate-spin text-[45px]'></span>
-            <p className='text-md'>Generating your <i className='font-bold'>stylEased</i> picture ...</p>
+            <p className='text-md'>
+              Generating your <i className='font-bold'>stylEased</i> picture ...
+            </p>
           </div>
         ) : (
           <div className='flex flex-col items-center gap-1 nodrag cursor-default'>
@@ -110,6 +163,33 @@ export default function Preview({ className, nodeId }: Props) {
     )
   }
 
+  const showDialog = () => {
+    return (
+      <dialog
+        ref={dialogRef}
+        className='px-10 pt-6 pb-10 rounded-[8px] bg-[--modal-color] backdrop-blur-[--blur]'
+      >
+        <div className='justify-end flex'>
+          <button
+            className='flex'
+            onClick={() => {
+              dialogRef.current?.close()
+            }}
+          >
+            <span className='i-lucide-circle-x text-3xl text-[--node-icons-color]'></span>
+          </button>
+        </div>
+        <div className='flex justify-center items-center gap-2 mb-4 '>
+          <span className='i-lucide-aperture text-2xl text-[--node-icons-color]'></span>
+          <h1 className='text-2xl'>Preview Image</h1>
+        </div>
+        <div className=''>
+          <img className='rounded-[4px]' width={400} ref={previewRef}></img>
+        </div>
+      </dialog>
+    )
+  }
+
   return (
     <section
       className={clsx(
@@ -118,7 +198,10 @@ export default function Preview({ className, nodeId }: Props) {
         { 'p-0 !border-none': previewGenerated }
       )}
     >
-      {previewGenerated && file ? renderPreviewJSX() : renderNoFileAttachedJSX()}
+      {previewGenerated && file
+        ? renderPreviewJSX()
+        : renderNoFileAttachedJSX()}
+      {showDialog()}
     </section>
   )
 }
