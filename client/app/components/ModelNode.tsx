@@ -201,7 +201,6 @@ export default React.memo(function ModelNode({
           if (displayNode.id === node.id) {
             node.data.content = undefined
             node.data.stylEasing = true
-            console.log(node)
           }
         })
         return nodes

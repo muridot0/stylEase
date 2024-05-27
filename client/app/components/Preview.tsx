@@ -50,6 +50,15 @@ export default function Preview({ className, nodeId }: Props) {
 
     if(!data) return
 
+    console.log(data)
+
+    if((data as ImageData).width < 600) {
+      previewRef.current.width = 400
+    } else {
+      previewRef.current.width = 600
+    }
+
+
     const src = imageDataToBase64(data as ImageData)
 
     previewRef.current.src = src
@@ -184,7 +193,7 @@ export default function Preview({ className, nodeId }: Props) {
           <h1 className='text-2xl'>Preview Image</h1>
         </div>
         <div className=''>
-          <img className='rounded-[4px]' width={400} ref={previewRef}></img>
+          <img className='rounded-[4px]' ref={previewRef}></img>
         </div>
       </dialog>
     )

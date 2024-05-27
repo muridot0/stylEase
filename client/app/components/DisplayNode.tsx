@@ -18,7 +18,6 @@ export default React.memo(function DisplayNode({ data, selected, ...props }: Nod
       selected={selected}
       nodeId={props.id}
     >
-      {/* //TODO: open a modal to display item when preview image is clicked */}
       <Preview nodeId={props.id} className='nodrag cursor-pointer'/>
     </WrapperNode>
   )

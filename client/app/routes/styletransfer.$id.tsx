@@ -23,7 +23,7 @@ const uploadFileHandler = unstable_composeUploadHandlers(
       name === 'content-sizes'
     ) {
       const buffer = await convertToBuffer(data)
-      return buffer.toString('utf-8') // Assuming style-ratio is a string
+      return buffer.toString('utf-8')
     }
     const uint8Array = new Uint8Array(await convertToBuffer(data))
 

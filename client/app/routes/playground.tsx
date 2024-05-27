@@ -46,8 +46,6 @@ export default function Playground() {
 
   React.useEffect(() => {
     globalNodeState.value = nodes
-    // console.log(globalNodeState.value)
-    // console.log(nodes)
   }, [nodes])
 
   React.useEffect(() => {
@@ -57,9 +55,6 @@ export default function Playground() {
     db.flow.put(flow, 1)
   }, [nodes, edges])
 
-  // db.flow.get(1).then((val) => {
-  //   console.log(val?.nodes)
-  // })
 
   const restoreNodes = React.useCallback(async () => {
     const flow = await db.flow.get(1)
