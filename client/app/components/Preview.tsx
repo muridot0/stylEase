@@ -49,10 +49,11 @@ export default function Preview({ className, nodeId }: Props) {
 
     if(!data) return
 
-    if((data as ImageData).width < 600) {
-      previewRef.current.width = 400
-    } else {
+    if((data as ImageData).width > 1000) {
       previewRef.current.width = 600
+    } else {
+      const aspRatio = (data as ImageData).width / (data as ImageData).height
+      previewRef.current.width = (data as ImageData).width * aspRatio
     }
 
 
@@ -101,6 +102,8 @@ export default function Preview({ className, nodeId }: Props) {
 
     canvasRef.current.width = (data as ImageData).width
     canvasRef.current.height = (data as ImageData).height
+
+    canvasRef.current.title = file.name
 
     ctx?.putImageData(data as ImageData, 0, 0)
   }, [file])
