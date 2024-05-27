@@ -44,7 +44,7 @@
   --stroke-color: #808080;
 
   --hover-color: #222428;
-  --hover-bg-color: #d6d7da;
+  --hover-bg-color: rgba(214, 215, 218, 0.5);
   --node-icons-color: #7a7c7e;
   --node-bg-color: #ededee;
 
@@ -74,7 +74,7 @@
     --disabled: #222428;
 
     --hover-color: #EEEFEF;
-    --hover-bg-color: #222428;
+    --hover-bg-color: rgba(34, 36, 40, 1);
 
     --drawer-color: rgba(59,64,69, 0.2);
     --node-bg-color: #3b4045;
