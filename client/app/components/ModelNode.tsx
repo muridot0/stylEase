@@ -8,7 +8,7 @@ import Slider from './Slider'
 import MissingAttachment from './MissingAttachment'
 import { Bounce, Id, toast } from 'react-toastify'
 import { useFetcher } from '@remix-run/react'
-import { b64toBlob } from '~/lib/imgToBlob'
+import { b64toBlob } from '~/lib/b64toBlob'
 import { db } from '~/lib/db'
 import { resetFetcher } from '~/lib/resetFetcher'
 interface Props {
