@@ -27,7 +27,6 @@ export default function Preview({ className, nodeId }: Props) {
 
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      console.log('i fire', dialogRef.current)
       if (
         dialogRef.current &&
         e.target === dialogRef.current
@@ -49,8 +48,6 @@ export default function Preview({ className, nodeId }: Props) {
     const data = file?.url
 
     if(!data) return
-
-    console.log(data)
 
     if((data as ImageData).width < 600) {
       previewRef.current.width = 400
