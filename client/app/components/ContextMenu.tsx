@@ -65,22 +65,26 @@ export default React.forwardRef(function ContextMenu(
       </button>
       <ul
         className={clsx(
-          'overflow-hidden absolute mt-2 backdrop-blur-[--blur] right-8 border bg-[--drawer-color] border-[--node-border-color] w-[12.5rem] h-[18.5rem] p-4 rounded-[8px] transition-opacity ease-in-out',
-          { 'opacity-100': toggleMenu },
-          { 'opacity-0': !toggleMenu }
+          'overflow-hidden absolute mt-2 backdrop-blur-[--blur] right-8 border bg-[--drawer-color] border-[--node-border-color] w-[12.5rem] h-[17.5rem] p-4 rounded-[8px] transition-opacity ease-in-out',
+          { 'hidden': !toggleMenu }
         )}
       >
         <div className='mb-2'>
-          <h2 className='font-semibold text-lg mb-2'>Background Variant</h2>
+          <div className="flex items-center mb-2 gap-2">
+            <h2 className='font-semibold text-sm text-[--node-border-color]'>Background</h2>
+            <hr className='border-t-[--node-border-color] w-full' />
+          </div>
           {(Object.keys(BackgroundVariant) as Array<BackgroundVariant>).map(
             (key) => (
               <RadioItemWithProvider value={key} key={key} />
             )
           )}
         </div>
-        <hr className='border-t-[--node-border-color]' />
         <div className='overflow-hidden'>
-          <h2 className='font-semibold text-lg mt-2'>Actions</h2>
+        <div className="flex items-center mb-2 gap-2">
+            <h2 className='font-semibold text-sm text-[--node-border-color]'>Actions</h2>
+            <hr className='border-t-[--node-border-color] w-full' />
+          </div>
           <li className='mt-2'>
             <button className='flex items-center gap-2' onClick={resetCanvas}>
               <span className='i-lucide-refresh-ccw flex' /> Reset canvas
@@ -100,7 +104,7 @@ export default React.forwardRef(function ContextMenu(
           <li
             className={clsx(
               'h-0 opacity-0',
-              { 'mt-2 !h-auto opacity-100': animationFinished },
+              { 'mt-3 !h-auto opacity-100': animationFinished },
               { 'hidden': !hideDelete }
             )}
           >
@@ -118,7 +122,7 @@ export default React.forwardRef(function ContextMenu(
             className={clsx(
               'flex justify-between transition-all duration-200 translate-y-10',
               { 'h-0': animationFinished },
-              { 'transition-all h-auto duration-200 !translate-y-0 mt-2': hideDelete === false }
+              { 'transition-all h-auto duration-200 !translate-y-0 mt-3': hideDelete === false }
             )}
           >
             <button

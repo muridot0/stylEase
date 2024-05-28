@@ -44,16 +44,13 @@ export default function Preview({ className, nodeId }: Props) {
 
     if (isModalOpen) {
       console.log('im calling')
-      const data = file?.url
+      const data = file?.url as ImageData
 
       if (!data) return
 
-      if ((data as ImageData).width > 1000) {
-        previewRef.current.width = 600
-      } else {
-        const aspRatio = (data as ImageData).width / (data as ImageData).height
-        previewRef.current.width = (data as ImageData).width * aspRatio
-      }
+      const total = data.width + data.height
+
+      previewRef.current.width = (data.width / total) * 1000
 
       const src = imageDataToBase64(data as ImageData)
 

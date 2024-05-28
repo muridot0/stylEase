@@ -11,7 +11,7 @@ import {
   Edge,
   ReactFlowProvider,
   ReactFlowInstance,
-  Controls,
+  Controls
 } from 'reactflow'
 
 import 'reactflow/dist/style.css'
@@ -45,7 +45,7 @@ export default function Playground() {
   }, [backgroundState.value])
 
   React.useEffect(() => {
-    if(globalNodeState.value = nodes) {
+    if ((globalNodeState.value = nodes)) {
       return
     }
 
@@ -58,7 +58,6 @@ export default function Playground() {
 
     db.flow.put(flow, 1)
   }, [nodes, edges])
-
 
   const restoreNodes = React.useCallback(async () => {
     const flow = await db.flow.get(1)
@@ -84,17 +83,35 @@ export default function Playground() {
         const contentNode = nodes.find(
           (val) => node.data.contentNodeId === val.id
         )
-        if((node.data.styleImage = styleNode?.data.content) && (node.data.contentImage = contentNode?.data.content)) return
+        if (
+          node.data.styleImage &&
+          node.data.contentImage &&
+          styleNode?.data.content &&
+          contentNode?.data.content
+        ) {
+          if (
+            Object.entries(node.data.styleImage).toString() !==
+            Object.entries(styleNode.data.content).toString()
+          ) {
+            console.log('different style')
+            node.data.styleImage = {
+              ...styleNode?.data.content!
+            }
+          }
+          if (
+            Object.entries(node.data.contentImage).toString() !==
+            Object.entries(contentNode.data.content).toString()
+          ) {
+            console.log('different content')
+            node.data.contentImage = {
+              ...contentNode?.data.content!
+            }
+          }
+        }
 
-        node.data.styleImage = {
-          ...styleNode?.data.content!
-        }
-        node.data.contentImage = {
-          ...contentNode?.data.content!
-        }
       }
     })
-  }, [nodes])
+  }, [globalNodeState.value])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
