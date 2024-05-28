@@ -27,10 +27,7 @@ export default function Preview({ className, nodeId }: Props) {
 
   React.useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dialogRef.current &&
-        e.target === dialogRef.current
-      ) {
+      if (dialogRef.current && e.target === dialogRef.current) {
         dialogRef.current.close()
         setIsModalOpen(false)
       }
@@ -43,23 +40,25 @@ export default function Preview({ className, nodeId }: Props) {
   }, [])
 
   React.useEffect(() => {
-    if(!previewRef.current) return
+    if (!previewRef.current) return
 
-    const data = file?.url
+    if (isModalOpen) {
+      console.log('im calling')
+      const data = file?.url
 
-    if(!data) return
+      if (!data) return
 
-    if((data as ImageData).width > 1000) {
-      previewRef.current.width = 600
-    } else {
-      const aspRatio = (data as ImageData).width / (data as ImageData).height
-      previewRef.current.width = (data as ImageData).width * aspRatio
+      if ((data as ImageData).width > 1000) {
+        previewRef.current.width = 600
+      } else {
+        const aspRatio = (data as ImageData).width / (data as ImageData).height
+        previewRef.current.width = (data as ImageData).width * aspRatio
+      }
+
+      const src = imageDataToBase64(data as ImageData)
+
+      previewRef.current.src = src
     }
-
-
-    const src = imageDataToBase64(data as ImageData)
-
-    previewRef.current.src = src
   }, [isModalOpen, file])
 
   React.useEffect(() => {
@@ -106,7 +105,7 @@ export default function Preview({ className, nodeId }: Props) {
     canvasRef.current.title = file.name
 
     ctx?.putImageData(data as ImageData, 0, 0)
-  }, [file])
+  }, [previewGenerated])
 
   const handleDownload = () => {}
 
@@ -124,7 +123,9 @@ export default function Preview({ className, nodeId }: Props) {
           ref={canvasRef}
           className='w-full rounded-[4px]'
         ></canvas>
-        <div className='mt-2 mb-0 truncate ...' title={file?.name}>{file?.name}</div>
+        <div className='mt-2 mb-0 truncate ...' title={file?.name}>
+          {file?.name}
+        </div>
         <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
           <p className='border font-medium rounded-md border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
             {niceBytes(file!.size)}
@@ -183,6 +184,7 @@ export default function Preview({ className, nodeId }: Props) {
             className='flex'
             onClick={() => {
               dialogRef.current?.close()
+              setIsModalOpen(false)
             }}
           >
             <span className='i-lucide-circle-x text-3xl text-[--node-icons-color]'></span>

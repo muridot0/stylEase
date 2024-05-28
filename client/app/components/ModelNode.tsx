@@ -71,7 +71,6 @@ export default React.memo(function ModelNode({
       setContentImage(currentNode?.data.contentImage)
     })
   }, [
-    globalNodeState.value,
     styleNodeConnected,
     contentNodeConnected,
     displayNodeConnected,
@@ -101,7 +100,6 @@ export default React.memo(function ModelNode({
       setContentImage(currentNode?.data.contentImage)
     })
   }, [
-    globalNodeState.value,
     setStyleImage,
     setContentImage
   ])

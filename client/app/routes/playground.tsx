@@ -45,6 +45,10 @@ export default function Playground() {
   }, [backgroundState.value])
 
   React.useEffect(() => {
+    if(globalNodeState.value = nodes) {
+      return
+    }
+
     globalNodeState.value = nodes
   }, [nodes])
 
@@ -77,18 +81,20 @@ export default function Playground() {
     globalNodeState.value.map((node): void => {
       if (node.type === MODEL_NODE_TYPE) {
         const styleNode = nodes.find((val) => node.data.styleNodeId === val.id)
-        node.data.styleImage = {
-          ...styleNode?.data.content!
-        }
         const contentNode = nodes.find(
           (val) => node.data.contentNodeId === val.id
         )
+        if((node.data.styleImage = styleNode?.data.content) && (node.data.contentImage = contentNode?.data.content)) return
+
+        node.data.styleImage = {
+          ...styleNode?.data.content!
+        }
         node.data.contentImage = {
           ...contentNode?.data.content!
         }
       }
     })
-  }, [globalNodeState.value])
+  }, [nodes])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
