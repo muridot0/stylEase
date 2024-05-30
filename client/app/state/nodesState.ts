@@ -17,7 +17,7 @@ interface CustomNode {
     size: number
     width: number
     height: number
-  }
+  } | undefined
   description?: string
   type?: string
   contentNodeConnected?: boolean

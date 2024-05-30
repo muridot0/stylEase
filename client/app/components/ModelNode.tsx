@@ -47,14 +47,14 @@ export default React.memo(function ModelNode({
     url: string | ImageData
     width: number
     height: number
-  }>()
+  } | undefined>(undefined)
   const [contentImage, setContentImage] = React.useState<{
     name: string
     size: number
     url: string | ImageData
     width: number
     height: number
-  }>()
+  } | undefined>(undefined)
   const [stylizationStrength, setStylizationStrength] =
     React.useState<number>(0.5)
 
@@ -67,14 +67,24 @@ export default React.memo(function ModelNode({
       setStyleNodeConnected(currentNode?.data.styleNodeConnected!)
       setContentNodeConnected(currentNode?.data.contentNodeConnected!)
       setDisplayNodeConnected(currentNode?.data.displayNodeConnected!)
-      setStyleImage(currentNode?.data.styleImage)
-      setContentImage(currentNode?.data.contentImage)
     })
   }, [
     globalNodeState.value,
     styleNodeConnected,
     contentNodeConnected,
     displayNodeConnected,
+  ])
+  React.useEffect(() => {
+    globalNodeState.subscribe((nodes) => {
+      const currentNode = nodes.find((node) => node.id === props.id)
+      setStyleImage(currentNode?.data.styleImage)
+      setContentImage(currentNode?.data.contentImage)
+
+    })
+  }, [
+    globalNodeState.value,
+    styleImage,
+    contentImage
   ])
 
   const restoreImages = async () => {

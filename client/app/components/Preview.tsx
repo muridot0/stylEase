@@ -43,7 +43,6 @@ export default function Preview({ className, nodeId }: Props) {
     if (!previewRef.current) return
 
     if (isModalOpen) {
-      console.log('im calling')
       const data = file?.url as ImageData
 
       if (!data) return

@@ -14,6 +14,8 @@ import {
   Controls
 } from 'reactflow'
 
+import isEqual from 'lodash.isequal'
+
 import 'reactflow/dist/style.css'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -45,12 +47,8 @@ export default function Playground() {
   }, [backgroundState.value])
 
   React.useEffect(() => {
-    if ((globalNodeState.value = nodes)) {
-      return
-    }
-
     globalNodeState.value = nodes
-  }, [nodes])
+  }, [nodes, setNodes])
 
   React.useEffect(() => {
     if (!flowInstance) return
@@ -83,35 +81,36 @@ export default function Playground() {
         const contentNode = nodes.find(
           (val) => node.data.contentNodeId === val.id
         )
-        if (
-          node.data.styleImage &&
-          node.data.contentImage &&
-          styleNode?.data.content &&
-          contentNode?.data.content
-        ) {
-          if (
-            Object.entries(node.data.styleImage).toString() !==
-            Object.entries(styleNode.data.content).toString()
-          ) {
-            console.log('different style')
-            node.data.styleImage = {
-              ...styleNode?.data.content!
-            }
-          }
-          if (
-            Object.entries(node.data.contentImage).toString() !==
-            Object.entries(contentNode.data.content).toString()
-          ) {
-            console.log('different content')
-            node.data.contentImage = {
-              ...contentNode?.data.content!
-            }
-          }
+        if (!isEqual(node.data.styleImage, styleNode?.data.content)) {
+          setNodes((nodes) => {
+            nodes.map((flowNode) => {
+              if (flowNode.id === node.id) {
+                flowNode.data.styleImage = {
+                  ...styleNode?.data.content!
+                }
+              }
+            })
+            return nodes
+          })
+          console.log(node.data.styleImage, styleNode?.data.content)
         }
 
+        if (!isEqual(node.data.contentImage, contentNode?.data.content)) {
+          setNodes((nodes) => {
+            nodes.map((flowNode) => {
+              if (flowNode.id === node.id) {
+                flowNode.data.contentImage = {
+                  ...contentNode?.data.content!
+                }
+              }
+            })
+            return nodes
+          })
+          console.log(node.data.contentImage, contentNode?.data.content)
+        }
       }
     })
-  }, [globalNodeState.value])
+  }, [nodes])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
@@ -198,7 +197,6 @@ export default function Playground() {
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onEdgesDelete={handleEdgeDelete}
-            snapToGrid={true}
             onInit={setFlowInstance}
           >
             <NodeDrawer onSelect={addNode} />

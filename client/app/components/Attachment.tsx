@@ -4,6 +4,8 @@ import { niceBytes } from '../lib/niceBytes'
 import { ReactFlowJsonObject, getOutgoers, useReactFlow } from 'reactflow'
 import { useFetcher } from '@remix-run/react'
 import { db } from '~/lib/db'
+import { resetFetcher } from '~/lib/resetFetcher'
+import isEqual from 'lodash.isequal'
 
 const DEFAULT_FILE_SIZE_IN_BYTES = 500000
 
@@ -20,6 +22,7 @@ interface Props {
   label: string
   maxFileSize?: number
   nodeId: string
+  dataId: string
   uploadMessage: string
 }
 
@@ -28,6 +31,7 @@ export default function Attachment({
   maxFileSize = DEFAULT_FILE_SIZE_IN_BYTES,
   className,
   nodeId,
+  dataId,
   uploadMessage
 }: Props) {
   const fetcher = useFetcher()
@@ -39,7 +43,7 @@ export default function Attachment({
     size: number
     width: number
     height: number
-  } | null>(null)
+  } | undefined>(undefined)
   const [fileSizeExceeded, setFileSizeExceeded] = React.useState<{
     size: number
     exceeded: boolean
@@ -48,17 +52,18 @@ export default function Attachment({
   const reactflow = useReactFlow()
 
   React.useEffect(() => {
-    reactflow.setNodes((nodes) =>
-      nodes.map((node) => {
-        if (node.data.id === nodeId) {
+    reactflow.setNodes((nodes) => {
+      return nodes.map((node) => {
+        if (node.data.id === dataId) {
           node.data = {
             ...node.data,
-            content: { ...file }
+            content: file ? {...file} : undefined
           }
-          if (JSON.stringify(node.data.content) === '{}') setFileAttached(false)
+          file ? setFileAttached(true) : setFileAttached(false)
         }
         return node
       })
+    }
     )
   }, [file, fetcher])
 
@@ -68,8 +73,8 @@ export default function Attachment({
     if (!flow) return
 
     flow.nodes.map((node): void => {
-      if (node.data.id === nodeId) {
-        if (JSON.stringify(node.data.content) !== '{}') {
+      if (node.data.id === dataId) {
+        if (node.data.content) {
           setFile(() => ({
             ...node.data.content!
           }))
@@ -113,21 +118,21 @@ export default function Attachment({
     setLoading(true)
     setFileAttached(false)
     fetcher.submit(e.currentTarget.form, {
-      action: `/images/${nodeId}`,
+      action: `/images/${dataId}`,
       method: 'post',
       encType: 'multipart/form-data'
     })
   }
 
   const handleFileDelete = () => {
-    setFile(null)
+    setFile(undefined)
     setFileAttached(false)
   }
 
   const renderUploadedPhoto = () => {
     return (
       <div>
-        {!loading && !fileAttached ? (
+        {!loading && !fileAttached && !file ? (
           <>
             <fetcher.Form>
               <label id='uploadLabel' htmlFor='image' className='hidden'>
@@ -177,7 +182,7 @@ export default function Attachment({
             <p className='text-md'>Processing your picture ...</p>
           </div>
         ) : (
-          fileAttached && !loading && renderFileAttached()
+          fileAttached && !loading && file && renderFileAttached()
         )}
       </div>
     )
