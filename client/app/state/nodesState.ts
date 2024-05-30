@@ -77,6 +77,7 @@ const initialNodes = [
       title: 'Style Transfer Node',
       icon: 'i-lucide-brain-cog',
       id: `model-node-3`,
+      stylEasing: false,
       styleNodeConnected: true,
       contentNodeConnected: true,
       displayNodeConnected: true,

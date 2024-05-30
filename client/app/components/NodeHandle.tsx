@@ -9,7 +9,6 @@ import {
   useStore
 } from 'reactflow'
 import type { Connection, HandleProps } from 'reactflow'
-import globalNodeState from '~/state/nodesState'
 
 interface Props extends HandleProps {
   className?: string
@@ -68,36 +67,45 @@ function NodeHandle({ className, ...props }: Props) {
   const onConnect = (connection: Connection) => {
     switch (connection.sourceHandle) {
       case 'style-node':
-        globalNodeState.value.map((node) => {
-          if (node.id === connection.target) {
-            node.data = {
-              ...node.data,
-              styleNodeConnected: true,
-              styleNodeId: connection.source
+        reactflow.setNodes((nodes)  => {
+          nodes.forEach((node) => {
+            if (node.id === connection.target) {
+              node.data = {
+                ...node.data,
+                styleNodeConnected: true,
+                styleNodeId: connection.source
+              }
             }
-          }
+          })
+          return nodes
         })
         break
       case 'content-node':
-        globalNodeState.value.map((node) => {
-          if (node.id === connection.target) {
-            node.data = {
-              ...node.data,
-              contentNodeConnected: true,
-              contentNodeId: connection.source
+        reactflow.setNodes((nodes) => {
+          nodes.map((node) => {
+            if (node.id === connection.target) {
+              node.data = {
+                ...node.data,
+                contentNodeConnected: true,
+                contentNodeId: connection.source
+              }
             }
-          }
+          })
+          return nodes
         })
         break
       case 'model-node':
-        globalNodeState.value.map((node) => {
-          if (node.id === connection.source) {
-            node.data = {
-              ...node.data,
-              displayNodeConnected: true,
-              displayNodeId: connection.target
+        reactflow.setNodes((nodes) => {
+          nodes.map((node) => {
+            if (node.id === connection.source) {
+              node.data = {
+                ...node.data,
+                displayNodeConnected: true,
+                displayNodeId: connection.target
+              }
             }
-          }
+          })
+          return nodes
         })
         break
     }

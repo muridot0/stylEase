@@ -1,9 +1,11 @@
 import React from 'react'
 import clsx from 'clsx'
 import { niceBytes } from '../lib/niceBytes'
-import { useReactFlow } from 'reactflow'
+import { getIncomers, useReactFlow } from 'reactflow'
 import globalNodeState from '~/state/nodesState'
 import { imageDataToBase64 } from '~/lib/imageDataToBase64'
+import isEqual from 'lodash.isequal'
+import { db } from '~/lib/db'
 
 interface Props {
   className?: string
@@ -11,6 +13,8 @@ interface Props {
 }
 
 export default function Preview({ className, nodeId }: Props) {
+  const reactflow = useReactFlow()
+
   const [loading, setLoading] = React.useState(false)
   const [previewGenerated, setPreviewGenerated] = React.useState(false)
   const [isModalOpen, setIsModalOpen] = React.useState(false)
@@ -57,32 +61,55 @@ export default function Preview({ className, nodeId }: Props) {
     }
   }, [isModalOpen, file])
 
+  const incommers = getIncomers(reactflow.getNode(nodeId)!, reactflow.getNodes(), reactflow.getEdges())
+
   React.useEffect(() => {
-    globalNodeState.subscribe((nodes) => {
-      const currentNode = nodes.find((node) => node.id === nodeId)
-      if (!currentNode?.data.content) {
-        setPreviewGenerated(false)
-        setFile(null)
-        setLoading(false)
-        return
-      }
+    const currentNode = reactflow.getNodes().find(node => node.id === nodeId)
+
+    if (!currentNode?.data.content) {
+      setPreviewGenerated(false)
+      setFile(null)
+      setLoading(false)
+      return
+    }
+    if(!isEqual(file, currentNode.data.content)){
       setFile(() => ({
         ...currentNode.data.content!
       }))
       setLoading(currentNode.data.stylEasing!)
       setPreviewGenerated(true)
+    }
+
+  }, [reactflow.getNodes()])
+
+  const restoreImages = async () => {
+    const flow = await db.flow.get(1)
+
+    if (!flow) return
+
+    flow.nodes.map((node): void => {
+      if (node.id === nodeId) {
+        if (node.data.content) {
+          setFile(() => ({
+            ...node.data.content!
+          }))
+          setPreviewGenerated(true)
+        }
+      }
     })
-  }, [globalNodeState.value])
+  }
 
   React.useEffect(() => {
-    globalNodeState.subscribe((val) => {
-      val.map((node) => {
-        if (node.id === nodeId) {
-          setLoading(node.data.stylEasing!)
-        }
-      })
-    })
-  }, [globalNodeState.value])
+    restoreImages()
+  }, [])
+
+  // React.useEffect(() => {
+  //   reactflow.getNodes().map((node) => {
+  //       if (node.id === nodeId) {
+  //         setLoading(node.data.stylEasing!)
+  //       }
+  //     })
+  // }, [reactflow.getNodes()])
 
   React.useEffect(() => {
     if (!file) {

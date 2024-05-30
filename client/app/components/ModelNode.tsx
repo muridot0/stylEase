@@ -62,29 +62,25 @@ export default React.memo(function ModelNode({
   const toastRef = React.useRef<Id | null>(null)
 
   React.useEffect(() => {
-    globalNodeState.subscribe((nodes) => {
-      const currentNode = nodes.find((node) => node.id === props.id)
-      setStyleNodeConnected(currentNode?.data.styleNodeConnected!)
-      setContentNodeConnected(currentNode?.data.contentNodeConnected!)
-      setDisplayNodeConnected(currentNode?.data.displayNodeConnected!)
-    })
+    const currentNode = reactflow.getNodes().find(node => node.id === props.id)
+    setStyleNodeConnected(currentNode?.data.styleNodeConnected!)
+    setContentNodeConnected(currentNode?.data.contentNodeConnected!)
+    setDisplayNodeConnected(currentNode?.data.displayNodeConnected!)
+
   }, [
-    globalNodeState.value,
+    reactflow.getNodes(),
     styleNodeConnected,
     contentNodeConnected,
     displayNodeConnected,
   ])
   React.useEffect(() => {
-    globalNodeState.subscribe((nodes) => {
-      const currentNode = nodes.find((node) => node.id === props.id)
-      setStyleImage(currentNode?.data.styleImage)
-      setContentImage(currentNode?.data.contentImage)
-
-    })
+    const currentNode = reactflow.getNodes().find(node => node.id === props.id)
+    setStyleImage(currentNode?.data.styleImage)
+    setContentImage(currentNode?.data.contentImage)
   }, [
-    globalNodeState.value,
-    styleImage,
-    contentImage
+    reactflow.getNodes(),
+    // styleImage,
+    // contentImage
   ])
 
   const restoreImages = async () => {
@@ -103,18 +99,6 @@ export default React.memo(function ModelNode({
   React.useEffect(() => {
     restoreImages()
   }, [])
-
-  React.useEffect(() => {
-    globalNodeState.subscribe((nodes) => {
-      const currentNode = nodes.find((node) => node.id === props.id)
-      setStyleImage(currentNode?.data.styleImage)
-      setContentImage(currentNode?.data.contentImage)
-    })
-  }, [
-    globalNodeState.value,
-    setStyleImage,
-    setContentImage
-  ])
 
   React.useEffect(() => {
     const outgoers = getOutgoers(
@@ -142,6 +126,14 @@ export default React.memo(function ModelNode({
     const uint8ClampedArr = new Uint8ClampedArray(data.url)
 
     const imgData = new ImageData(uint8ClampedArr, data.width, data.height)
+    reactflow.setNodes(nodes => {
+      return nodes.map(node => {
+        if(node.id === props.id){
+          node.data.stylEasing = false
+        }
+        return node
+      })
+    })
 
     outgoers.map((displayNode) => {
       return reactflow.setNodes((nodes) => {
@@ -204,6 +196,19 @@ export default React.memo(function ModelNode({
       reactflow.getNodes(),
       reactflow.getEdges()
     )
+
+    reactflow.setNodes(nodes => {
+      return nodes.map((flowNode) => {
+        if (flowNode.id === props.id) {
+          console.log('found', flowNode)
+          flowNode.data.stylEasing = true
+        }
+        return flowNode
+      })
+    })
+
+    console.log(reactflow.getNodes())
+
 
     outgoers.map((displayNode) => {
       return reactflow.setNodes((nodes) => {
@@ -303,7 +308,8 @@ export default React.memo(function ModelNode({
           disabled={
             !contentNodeConnected ||
             !styleNodeConnected ||
-            !displayNodeConnected
+            !displayNodeConnected ||
+            stylEasing
           }
         ></Slider>
       </WrapperNode>
