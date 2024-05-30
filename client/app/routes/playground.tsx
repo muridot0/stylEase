@@ -11,7 +11,8 @@ import {
   Edge,
   ReactFlowProvider,
   ReactFlowInstance,
-  Controls
+  Controls,
+  getIncomers
 } from 'reactflow'
 
 import isEqual from 'lodash.isequal'
@@ -32,6 +33,7 @@ import {
   initialEdges,
   initialNodes
 } from '~/state/nodesState'
+import randomStr from '~/lib/randomStr'
 
 export default function Playground() {
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNode>([])
@@ -134,63 +136,28 @@ export default function Playground() {
     })
   }, [nodes])
 
-  React.useEffect(() => {
-    setNodes((globalNodes) => {
-      globalNodes.forEach((node) => {
-        if (node.type === MODEL_NODE_TYPE) {
-          const styleNode = globalNodes.find(
-            (val) => node.data.styleNodeId === val.id
-          )
-          const contentNode = globalNodes.find(
-            (val) => node.data.contentNodeId === val.id
-          )
-          if (!isEqual(node.data.styleImage, styleNode?.data.content)) {
-            setNodes((nodes) => {
-              return nodes.map((flowNode) => {
-                if (flowNode.id === node.id) {
-                  console.log(flowNode)
-                  console.log('theres a match')
-                  return {
-                    ...flowNode,
-                    data: {
-                      ...flowNode.data,
-                      styleImage:
-                        styleNode?.data.content === undefined
-                          ? undefined
-                          : {...styleNode.data.content}
-                    }
-                  }
-                }
-                return flowNode
-              })
-            })
-          }
-
-          if (!isEqual(node.data.contentImage, contentNode?.data.content)) {
-            setNodes((nodes) => {
-              return nodes.map((flowNode) => {
-                if (flowNode.id === node.id) {
-                  console.log('theres another match')
-                  return {
-                    ...flowNode,
-                    data: {
-                      ...flowNode.data,
-                      contentImage:
-                        contentNode?.data.content === undefined
-                          ? undefined
-                          : { ...contentNode.data.content }
-                    }
-                  }
-                }
-                return flowNode
-              })
-            })
-          }
-        }
-      })
-      return globalNodes
-    })
-  }, [nodes])
+  // React.useEffect(() => {
+  //   setNodes((localNodes) => {
+  //     return localNodes.map((node) => {
+  //       if(node.type === DISPLAY_NODE_TYPE) {
+  //         console.log('herer')
+  //         const incommers = getIncomers(node, nodes, edges)
+  //         console.log(incommers)
+  //         if(incommers.length !== 0 && !incommers[0].data.stylEasing && incommers[0].data.content !== undefined){
+  //           console.log('i go in')
+  //           return {
+  //             ...node,
+  //             data: {
+  //               ...node.data,
+  //               content: {...incommers[0].data.content}
+  //             }
+  //           }
+  //         }
+  //       }
+  //       return node
+  //     })
+  //   })
+  // }, [setNodes])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))
@@ -200,18 +167,19 @@ export default function Playground() {
   }
 
   const addNode = (data: CustomNode) => {
+    let id = randomStr(10)
     setNodes((nodes) => [
       ...nodes,
       {
         data: {
-          id: data.id,
+          id: data.type+'-'+id,
           title: data.title,
           icon: data.icon,
           uploadMsg: data.uploadMsg
         },
         position: { x: 300, y: 200 },
         type: data.type,
-        id: data.id.split('-')[2]
+        id: id
       }
     ])
   }

@@ -1,9 +1,8 @@
 import randomStr from '~/lib/randomStr'
 import { CONTENT_NODE_TYPE, DISPLAY_NODE_TYPE, MODEL_NODE_TYPE, STYLE_NODE_TYPE, type CustomNode } from '~/state/nodesState'
 
-export const nodeData: CustomNode[] = [
+export const nodeData = [
   {
-    id: `style-node-${randomStr(10)}`,
     title: 'Style Node',
     type: STYLE_NODE_TYPE,
     icon: 'i-lucide-paintbrush',
@@ -11,7 +10,6 @@ export const nodeData: CustomNode[] = [
     uploadMsg: 'Upload a reference image'
   },
   {
-    id: `content-node-${randomStr(10)}`,
     title: 'Content Node',
     type: CONTENT_NODE_TYPE,
     icon: 'i-lucide-image-plus',
@@ -19,7 +17,6 @@ export const nodeData: CustomNode[] = [
     uploadMsg: 'Upload image to stylEase'
   },
   {
-    id: `model-node-${randomStr(10)}`,
     title: 'Style Transfer Model',
     type: MODEL_NODE_TYPE,
     icon: 'i-lucide-brain-cog',
@@ -27,7 +24,6 @@ export const nodeData: CustomNode[] = [
     styleNodeConnected: false,
   },
   {
-    id: `display-node-${randomStr(10)}`,
     title: 'Display Node',
     type: DISPLAY_NODE_TYPE,
     icon: 'i-lucide-aperture',

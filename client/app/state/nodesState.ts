@@ -2,10 +2,10 @@ import { signal } from '@preact/signals'
 import { Node } from 'reactflow'
 import randomStr from '~/lib/randomStr'
 
-const STYLE_NODE_TYPE = 'style-node-type'
-const CONTENT_NODE_TYPE = 'content-node-type'
-const DISPLAY_NODE_TYPE = 'display-node-type'
-const MODEL_NODE_TYPE = 'model-node-type'
+const STYLE_NODE_TYPE = 'style-node'
+const CONTENT_NODE_TYPE = 'content-node'
+const DISPLAY_NODE_TYPE = 'display-node'
+const MODEL_NODE_TYPE = 'model-node'
 
 interface CustomNode {
   id: string

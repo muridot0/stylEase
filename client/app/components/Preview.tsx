@@ -80,7 +80,7 @@ export default function Preview({ className, nodeId }: Props) {
       setPreviewGenerated(true)
     }
 
-  }, [reactflow.getNodes()])
+  })
 
   const restoreImages = async () => {
     const flow = await db.flow.get(1)

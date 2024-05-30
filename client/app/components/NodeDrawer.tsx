@@ -4,6 +4,7 @@ import { nodeData } from '~/data/nodeData'
 import React from 'react'
 import clsx from 'clsx'
 import { CustomNode } from '~/state/nodesState'
+import randomStr from '~/lib/randomStr'
 
 interface Props {
   onSelect: (data: CustomNode) => void | null
@@ -16,7 +17,7 @@ export default function NodeDrawer({ onSelect }: Props) {
     setCollapsed(!collapsed)
   }
 
-  const addNode = (data: CustomNode) => {
+  const addNode = (data: any) => {
     onSelect(data)
   }
 
@@ -42,7 +43,7 @@ export default function NodeDrawer({ onSelect }: Props) {
           ? nodeData.map((data) => (
               <li
                 className='[&:not(:last-child)]:mr-4'
-                key={data.id}
+                key={randomStr(10)}
                 onClick={() => addNode(data)}
               >
                 <button className='flex p-3 border border-[--node-border-color] rounded-[4px] hover:bg-[--hover-bg-color] hover:text-[--hover-color]' title={data.title}>
@@ -55,7 +56,7 @@ export default function NodeDrawer({ onSelect }: Props) {
             ))
           : nodeData.map((data) => (
               <li
-                key={data.id}
+                key={randomStr(10)}
                 className='cursor-pointer border border-[--node-border-color] rounded-[4px] [&:not(:last-child)]:mb-4 p-2 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
                 onClick={() => addNode(data)}
               >
