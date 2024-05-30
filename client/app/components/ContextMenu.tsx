@@ -71,8 +71,8 @@ export default React.forwardRef(function ContextMenu(
       >
         <div className='mb-2'>
           <div className="flex items-center mb-2 gap-2">
-            <h2 className='font-semibold text-sm text-[--node-border-color]'>Background</h2>
-            <hr className='border-t-[--node-border-color] w-full' />
+            <h2 className='font-semibold text-sm opacity-50'>Background</h2>
+            <hr className='w-full border-t-[--primary] opacity-40' />
           </div>
           {(Object.keys(BackgroundVariant) as Array<BackgroundVariant>).map(
             (key) => (
@@ -82,8 +82,8 @@ export default React.forwardRef(function ContextMenu(
         </div>
         <div className='overflow-hidden'>
         <div className="flex items-center mb-2 gap-2">
-            <h2 className='font-semibold text-sm text-[--node-border-color]'>Actions</h2>
-            <hr className='border-t-[--node-border-color] w-full' />
+            <h2 className='font-semibold text-sm opacity-50'>Actions</h2>
+            <hr className='w-full border-t-[--primary] opacity-40' />
           </div>
           <li className='mt-2'>
             <button className='flex items-center gap-2' onClick={resetCanvas}>
@@ -98,7 +98,7 @@ export default React.forwardRef(function ContextMenu(
               <span className='i-lucide-unlink flex' /> Clear connections
             </button>
           </li>
-          <hr className='border-t-[--node-border-color]' />
+          <hr className='border-t-[--primary] opacity-40' />
         </div>
         <div className='overflow-hidden'>
           <li

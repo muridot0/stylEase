@@ -37,7 +37,7 @@ export default function Slider({ className, onChange, disabled }: Props) {
           <span className='i-iconoir-gym flex' />
           <p>Style strength</p>
         </div>
-          <div className={clsx('overflow-hidden h-[16px]', {'text-[--disabled]': disabled})}>
+          <div className={clsx('overflow-hidden h-[16px]',{'opacity-10': disabled})}>
             <div className='flex'>
               <div
                 ref={rangeRef}

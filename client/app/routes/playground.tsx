@@ -11,8 +11,7 @@ import {
   Edge,
   ReactFlowProvider,
   ReactFlowInstance,
-  Controls,
-  getIncomers
+  Controls
 } from 'reactflow'
 
 import isEqual from 'lodash.isequal'
@@ -24,12 +23,9 @@ import { NodeDrawer, Header } from '~/components'
 import { db } from '~/lib/db'
 import nodeTypes from '~/lib/nodetypes'
 import backgroundState from '~/state/backgroundState'
-import {
-  CONTENT_NODE_TYPE,
+import globalNodeState, {
   CustomNode,
-  DISPLAY_NODE_TYPE,
   MODEL_NODE_TYPE,
-  STYLE_NODE_TYPE,
   initialEdges,
   initialNodes
 } from '~/state/nodesState'
@@ -50,9 +46,9 @@ export default function Playground() {
     })
   }, [backgroundState.value])
 
-  // React.useEffect(() => {
-  //   globalNodeState.value = nodes
-  // }, [nodes, setNodes])
+  React.useEffect(() => {
+    globalNodeState.value = nodes
+  }, [nodes])
 
   React.useEffect(() => {
     if (!flowInstance) return
@@ -135,29 +131,6 @@ export default function Playground() {
       return globalNodes
     })
   }, [nodes])
-
-  // React.useEffect(() => {
-  //   setNodes((localNodes) => {
-  //     return localNodes.map((node) => {
-  //       if(node.type === DISPLAY_NODE_TYPE) {
-  //         console.log('herer')
-  //         const incommers = getIncomers(node, nodes, edges)
-  //         console.log(incommers)
-  //         if(incommers.length !== 0 && !incommers[0].data.stylEasing && incommers[0].data.content !== undefined){
-  //           console.log('i go in')
-  //           return {
-  //             ...node,
-  //             data: {
-  //               ...node.data,
-  //               content: {...incommers[0].data.content}
-  //             }
-  //           }
-  //         }
-  //       }
-  //       return node
-  //     })
-  //   })
-  // }, [setNodes])
 
   const onConnect = (params: Connection) => {
     setEdges((eds) => addEdge(params, eds))

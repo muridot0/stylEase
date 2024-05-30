@@ -94,7 +94,7 @@ const initialNodes = [
       title: 'Display Node',
       icon: 'i-lucide-aperture',
       id: `display-node-4`,
-      stylEasing: false
+      stylEasing: false,
     }
   }
 ]

@@ -61,55 +61,32 @@ export default function Preview({ className, nodeId }: Props) {
     }
   }, [isModalOpen, file])
 
-  const incommers = getIncomers(reactflow.getNode(nodeId)!, reactflow.getNodes(), reactflow.getEdges())
-
   React.useEffect(() => {
-    const currentNode = reactflow.getNodes().find(node => node.id === nodeId)
-
-    if (!currentNode?.data.content) {
-      setPreviewGenerated(false)
-      setFile(null)
-      setLoading(false)
-      return
-    }
-    if(!isEqual(file, currentNode.data.content)){
+    globalNodeState.subscribe((nodes) => {
+      const currentNode = nodes.find((node) => node.id === nodeId)
+      if (!currentNode?.data.content) {
+        setPreviewGenerated(false)
+        setFile(null)
+        setLoading(false)
+        return
+      }
       setFile(() => ({
         ...currentNode.data.content!
       }))
       setLoading(currentNode.data.stylEasing!)
       setPreviewGenerated(true)
-    }
-
-  })
-
-  const restoreImages = async () => {
-    const flow = await db.flow.get(1)
-
-    if (!flow) return
-
-    flow.nodes.map((node): void => {
-      if (node.id === nodeId) {
-        if (node.data.content) {
-          setFile(() => ({
-            ...node.data.content!
-          }))
-          setPreviewGenerated(true)
-        }
-      }
     })
-  }
+  }, [globalNodeState.value])
 
   React.useEffect(() => {
-    restoreImages()
-  }, [])
-
-  // React.useEffect(() => {
-  //   reactflow.getNodes().map((node) => {
-  //       if (node.id === nodeId) {
-  //         setLoading(node.data.stylEasing!)
-  //       }
-  //     })
-  // }, [reactflow.getNodes()])
+    globalNodeState.subscribe((val) => {
+      val.map((node) => {
+        if (node.id === nodeId) {
+          setLoading(node.data.stylEasing!)
+        }
+      })
+    })
+  }, [globalNodeState.value])
 
   React.useEffect(() => {
     if (!file) {
@@ -200,25 +177,27 @@ export default function Preview({ className, nodeId }: Props) {
     return (
       <dialog
         ref={dialogRef}
-        className='px-10 pt-6 pb-10 rounded-[8px] bg-[--modal-color] backdrop-blur-[--blur]'
+        className='px-10 py-10 rounded-[8px] bg-[--modal-color] backdrop-blur-[--blur]'
       >
-        <div className='justify-end flex'>
-          <button
-            className='flex'
-            onClick={() => {
-              dialogRef.current?.close()
-              setIsModalOpen(false)
-            }}
-          >
-            <span className='i-lucide-circle-x text-3xl text-[--node-icons-color]'></span>
-          </button>
-        </div>
-        <div className='flex justify-center items-center gap-2 mb-4 '>
-          <span className='i-lucide-aperture text-2xl text-[--node-icons-color]'></span>
-          <h1 className='text-2xl'>Preview Image</h1>
-        </div>
         <div className=''>
           <img className='rounded-[4px]' ref={previewRef}></img>
+          <div className='justify-between flex pt-6 items-center'>
+            <button title="Download" className='flex text-xl items-center gap-2 border border-[--node-border-color] bg-white dark:bg-[--node-icons-color] rounded-[6px] p-1.5 hover:brightness-95'>
+              <span className='i-lucide-download text-[--node-icons-color] dark:text-neutral-300' />
+              Download
+            </button>
+            <button
+              className='flex text-xl items-center gap-2 border border-[--node-border-color] bg-white dark:bg-[--node-icons-color] rounded-[6px] p-1.5 hover:brightness-95'
+              onClick={() => {
+                dialogRef.current?.close()
+                setIsModalOpen(false)
+              }}
+              title='Close'
+            >
+              <span className='i-lucide-minimize-2 text-[--node-icons-color] dark:text-neutral-300' />
+              Close
+            </button>
+          </div>
         </div>
       </dialog>
     )

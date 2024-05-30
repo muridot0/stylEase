@@ -135,23 +135,27 @@ export default React.memo(function ModelNode({
       })
     })
 
-    outgoers.map((displayNode) => {
-      return reactflow.setNodes((nodes) => {
-        nodes.map((node: Node<CustomNode>) => {
-          if (displayNode.id === node.id) {
-            node.data.content = {
-              url: imgData,
-              name: `stylEased_${name}`,
-              size: imgData.data.byteLength,
-              width: imgData.width,
-              height: imgData.height
-            }
-            node.data.stylEasing = false
+    reactflow.setNodes((nodes) => {
+      nodes.map((node: Node<CustomNode>) => {
+        if (outgoers[0].id === node.id) {
+          console.log('setting')
+          node.data.content = {
+            url: imgData,
+            name: `stylEased_${name}`,
+            size: imgData.data.byteLength,
+            width: imgData.width,
+            height: imgData.height
           }
-        })
-        return nodes
+          node.data.stylEasing = false
+          return {
+            ...node
+          }
+        }
       })
+      console.log(nodes)
+      return nodes
     })
+
     setStylEasing(false)
     resetFetcher(fetcher)
   }, [fetcher])
