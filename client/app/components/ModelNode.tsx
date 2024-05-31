@@ -138,7 +138,6 @@ export default React.memo(function ModelNode({
     reactflow.setNodes((nodes) => {
       nodes.map((node: Node<CustomNode>) => {
         if (outgoers[0].id === node.id) {
-          console.log('setting')
           node.data.content = {
             url: imgData,
             name: `stylEased_${name}`,
@@ -152,7 +151,6 @@ export default React.memo(function ModelNode({
           }
         }
       })
-      console.log(nodes)
       return nodes
     })
 
@@ -204,15 +202,11 @@ export default React.memo(function ModelNode({
     reactflow.setNodes(nodes => {
       return nodes.map((flowNode) => {
         if (flowNode.id === props.id) {
-          console.log('found', flowNode)
           flowNode.data.stylEasing = true
         }
         return flowNode
       })
     })
-
-    console.log(reactflow.getNodes())
-
 
     outgoers.map((displayNode) => {
       return reactflow.setNodes((nodes) => {

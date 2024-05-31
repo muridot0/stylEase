@@ -88,8 +88,6 @@ export default function Playground() {
             setNodes((nodes) => {
               return nodes.map((flowNode) => {
                 if (flowNode.id === node.id) {
-                  console.log(flowNode)
-                  console.log('theres a match')
                   return {
                     ...flowNode,
                     data: {
@@ -110,7 +108,6 @@ export default function Playground() {
             setNodes((nodes) => {
               return nodes.map((flowNode) => {
                 if (flowNode.id === node.id) {
-                  console.log('theres another match')
                   return {
                     ...flowNode,
                     data: {
