@@ -6,6 +6,7 @@ import globalNodeState from '~/state/nodesState'
 import { imageDataToBase64 } from '~/lib/imageDataToBase64'
 import isEqual from 'lodash.isequal'
 import { db } from '~/lib/db'
+import { b64toBlob } from '~/lib/b64toBlob'
 
 interface Props {
   className?: string
@@ -61,6 +62,40 @@ export default function Preview({ className, nodeId }: Props) {
     }
   }, [isModalOpen, file])
 
+  const handleDownload = () => {
+    if(!file) return
+
+
+    const downloadLink = document.createElement('a');
+
+
+    const b64String = imageDataToBase64(file.url as ImageData)
+
+    const blob = b64toBlob(b64String)
+
+    const url = URL.createObjectURL(blob)
+
+    downloadLink.download = file.name
+
+    downloadLink.href = url;
+
+    document.body.appendChild(downloadLink);
+
+    downloadLink.click();
+
+    URL.revokeObjectURL(url)
+    document.body.removeChild(downloadLink);
+    if(isModalOpen && dialogRef.current) {
+      dialogRef.current.close()
+    }
+  }
+
+  const handlePreview = () => {
+    if (!dialogRef.current) return
+    dialogRef.current.showModal()
+    setIsModalOpen(true)
+  }
+
   React.useEffect(() => {
     globalNodeState.subscribe((nodes) => {
       const currentNode = nodes.find((node) => node.id === nodeId)
@@ -106,14 +141,6 @@ export default function Preview({ className, nodeId }: Props) {
 
     ctx?.putImageData(data as ImageData, 0, 0)
   }, [previewGenerated])
-
-  const handleDownload = () => {}
-
-  const handlePreview = () => {
-    if (!dialogRef.current) return
-    dialogRef.current.showModal()
-    setIsModalOpen(true)
-  }
 
   const renderPreviewJSX = () => {
     return (
@@ -182,7 +209,7 @@ export default function Preview({ className, nodeId }: Props) {
         <div className=''>
           <img className='rounded-[4px]' ref={previewRef}></img>
           <div className='justify-between flex pt-6 items-center'>
-            <button title="Download" className='flex text-xl items-center gap-2 border border-[--node-border-color] bg-white dark:bg-[--node-icons-color] rounded-[6px] p-1.5 hover:brightness-95'>
+            <button onClick={handleDownload} title="Download" className='flex text-xl items-center gap-2 border border-[--node-border-color] bg-white dark:bg-[--node-icons-color] rounded-[6px] p-1.5 hover:brightness-95'>
               <span className='i-lucide-download text-[--node-icons-color] dark:text-neutral-300' />
               Download
             </button>
