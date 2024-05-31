@@ -53,7 +53,7 @@ export default function Attachment({
 
   React.useEffect(() => {
     reactflow.setNodes((nodes) => {
-      return nodes.map((node) => {
+      nodes.map((node) => {
         if (node.data.id === dataId) {
           node.data = {
             ...node.data,
@@ -61,8 +61,8 @@ export default function Attachment({
           }
           file ? setFileAttached(true) : setFileAttached(false)
         }
-        return node
       })
+      return nodes
     }
     )
   }, [file, fetcher])

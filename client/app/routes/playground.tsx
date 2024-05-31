@@ -25,11 +25,11 @@ import nodeTypes from '~/lib/nodetypes'
 import backgroundState from '~/state/backgroundState'
 import globalNodeState, {
   CustomNode,
-  DISPLAY_NODE_TYPE,
   MODEL_NODE_TYPE,
   initialEdges,
   initialNodes
 } from '~/state/nodesState'
+import randomStr from '~/lib/randomStr'
 
 export default function Playground() {
   const [nodes, setNodes, onNodesChange] = useNodesState<CustomNode>([])
@@ -48,7 +48,7 @@ export default function Playground() {
 
   React.useEffect(() => {
     globalNodeState.value = nodes
-  }, [nodes, setNodes])
+  }, [nodes])
 
   React.useEffect(() => {
     if (!flowInstance) return
@@ -73,42 +73,62 @@ export default function Playground() {
     restoreNodes()
   }, [restoreNodes])
 
-  //Sets the image data for model node
+  //Sets the images data for model nodes
   React.useEffect(() => {
-    globalNodeState.value.map((node): void => {
-      if (node.type === MODEL_NODE_TYPE) {
-        const styleNode = nodes.find((val) => node.data.styleNodeId === val.id)
-        const contentNode = nodes.find(
-          (val) => node.data.contentNodeId === val.id
-        )
-        if (!isEqual(node.data.styleImage, styleNode?.data.content)) {
-          setNodes((nodes) => {
-            nodes.map((flowNode) => {
-              if (flowNode.id === node.id) {
-                flowNode.data.styleImage = {
-                  ...styleNode?.data.content!
+    setNodes((globalNodes) => {
+      globalNodes.forEach((node) => {
+        if (node.type === MODEL_NODE_TYPE) {
+          const styleNode = globalNodes.find(
+            (val) => node.data.styleNodeId === val.id
+          )
+          const contentNode = globalNodes.find(
+            (val) => node.data.contentNodeId === val.id
+          )
+          if (!isEqual(node.data.styleImage, styleNode?.data.content)) {
+            setNodes((nodes) => {
+              return nodes.map((flowNode) => {
+                if (flowNode.id === node.id) {
+                  console.log(flowNode)
+                  console.log('theres a match')
+                  return {
+                    ...flowNode,
+                    data: {
+                      ...flowNode.data,
+                      styleImage:
+                        styleNode?.data.content === undefined
+                          ? undefined
+                          : {...styleNode.data.content}
+                    }
+                  }
                 }
-              }
+                return flowNode
+              })
             })
-            return nodes
-          })
-          console.log(node.data.styleImage, styleNode?.data.content)
-        }
+          }
 
-        if (!isEqual(node.data.contentImage, contentNode?.data.content)) {
-          setNodes((nodes) => {
-            nodes.map((flowNode) => {
-              if (flowNode.id === node.id) {
-                flowNode.data.contentImage = {
-                  ...contentNode?.data.content!
+          if (!isEqual(node.data.contentImage, contentNode?.data.content)) {
+            setNodes((nodes) => {
+              return nodes.map((flowNode) => {
+                if (flowNode.id === node.id) {
+                  console.log('theres another match')
+                  return {
+                    ...flowNode,
+                    data: {
+                      ...flowNode.data,
+                      contentImage:
+                        contentNode?.data.content === undefined
+                          ? undefined
+                          : { ...contentNode.data.content }
+                    }
+                  }
                 }
-              }
+                return flowNode
+              })
             })
-            return nodes
-          })
-          console.log(node.data.contentImage, contentNode?.data.content)
+          }
         }
-      }
+      })
+      return globalNodes
     })
   }, [nodes])
 
@@ -120,18 +140,19 @@ export default function Playground() {
   }
 
   const addNode = (data: CustomNode) => {
+    let id = randomStr(10)
     setNodes((nodes) => [
       ...nodes,
       {
         data: {
-          id: data.id,
+          id: data.type+'-'+id,
           title: data.title,
           icon: data.icon,
           uploadMsg: data.uploadMsg
         },
         position: { x: 300, y: 200 },
         type: data.type,
-        id: data.id.split('-')[2]
+        id: id
       }
     ])
   }

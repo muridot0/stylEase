@@ -1,9 +1,11 @@
 import React from 'react'
 import clsx from 'clsx'
 import { niceBytes } from '../lib/niceBytes'
-import { useReactFlow } from 'reactflow'
+import { getIncomers, useReactFlow } from 'reactflow'
 import globalNodeState from '~/state/nodesState'
 import { imageDataToBase64 } from '~/lib/imageDataToBase64'
+import isEqual from 'lodash.isequal'
+import { db } from '~/lib/db'
 
 interface Props {
   className?: string
@@ -11,6 +13,8 @@ interface Props {
 }
 
 export default function Preview({ className, nodeId }: Props) {
+  const reactflow = useReactFlow()
+
   const [loading, setLoading] = React.useState(false)
   const [previewGenerated, setPreviewGenerated] = React.useState(false)
   const [isModalOpen, setIsModalOpen] = React.useState(false)
@@ -173,25 +177,27 @@ export default function Preview({ className, nodeId }: Props) {
     return (
       <dialog
         ref={dialogRef}
-        className='px-10 pt-6 pb-10 rounded-[8px] bg-[--modal-color] backdrop-blur-[--blur]'
+        className='px-10 py-10 rounded-[8px] bg-[--modal-color] backdrop-blur-[--blur]'
       >
-        <div className='justify-end flex'>
-          <button
-            className='flex'
-            onClick={() => {
-              dialogRef.current?.close()
-              setIsModalOpen(false)
-            }}
-          >
-            <span className='i-lucide-circle-x text-3xl text-[--node-icons-color]'></span>
-          </button>
-        </div>
-        <div className='flex justify-center items-center gap-2 mb-4 '>
-          <span className='i-lucide-aperture text-2xl text-[--node-icons-color]'></span>
-          <h1 className='text-2xl'>Preview Image</h1>
-        </div>
         <div className=''>
           <img className='rounded-[4px]' ref={previewRef}></img>
+          <div className='justify-between flex pt-6 items-center'>
+            <button title="Download" className='flex text-xl items-center gap-2 border border-[--node-border-color] bg-white dark:bg-[--node-icons-color] rounded-[6px] p-1.5 hover:brightness-95'>
+              <span className='i-lucide-download text-[--node-icons-color] dark:text-neutral-300' />
+              Download
+            </button>
+            <button
+              className='flex text-xl items-center gap-2 border border-[--node-border-color] bg-white dark:bg-[--node-icons-color] rounded-[6px] p-1.5 hover:brightness-95'
+              onClick={() => {
+                dialogRef.current?.close()
+                setIsModalOpen(false)
+              }}
+              title='Close'
+            >
+              <span className='i-lucide-minimize-2 text-[--node-icons-color] dark:text-neutral-300' />
+              Close
+            </button>
+          </div>
         </div>
       </dialog>
     )
