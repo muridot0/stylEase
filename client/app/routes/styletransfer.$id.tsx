@@ -16,7 +16,7 @@ const convertToBuffer = async (data: AsyncIterable<Uint8Array>) => {
 }
 
 const uploadFileHandler = unstable_composeUploadHandlers(
-  async ({ name, contentType, data, filename }) => {
+  async ({ name, data }) => {
     if (
       name === 'style-ratio' ||
       name === 'display-name' ||
@@ -28,6 +28,9 @@ const uploadFileHandler = unstable_composeUploadHandlers(
     const uint8Array = new Uint8Array(await convertToBuffer(data))
 
     const tensor = tf.node.decodeImage(uint8Array)
+    tf.cast(tensor, 'int32').arraySync()
+
+    console.log(tensor)
 
     return JSON.stringify({ data: tensor.arraySync(), shape: tensor.shape })
   }
@@ -55,23 +58,23 @@ export const action: ActionFunction = async ({ request }) => {
   const displayName = formData.get('display-name') as string
 
   async function startStyling() {
-    function predictStyleParameters(style: []): tf.Tensor4D {
+    function predictStyleParameters(style: []): tf.Tensor3D {
       return tf.tidy(() => {
-        return styleNet.predict(
-          tf.tensor3d(style).toFloat().div(tf.scalar(255)).expandDims()
+        return styleNet.execute(
+          tf.tensor(style).toFloat().div(tf.scalar(255)).expandDims()
         )
-      }) as tf.Tensor4D
+      }) as tf.Tensor3D
     }
 
     function produceStylized(
       content: [],
-      bottleneck: tf.Tensor4D
+      bottleneck: tf.Tensor3D
     ): tf.Tensor3D {
       return tf.tidy(() => {
-        const image: tf.Tensor4D = transformNet.predict([
-          tf.tensor3d(content).toFloat().div(tf.scalar(255)).expandDims(),
+        const image: tf.Tensor3D = transformNet.execute([
+          tf.tensor(content).toFloat().div(tf.scalar(255)).expandDims(),
           bottleneck
-        ]) as tf.Tensor4D
+        ]) as tf.Tensor3D
         return image.squeeze()
       })
     }
@@ -87,7 +90,9 @@ export const action: ActionFunction = async ({ request }) => {
         )
     }
     const stylized = produceStylized(contentImg['data'], styleRepresentation)
-    const res = await tf.browser.toPixels(stylized)
+    //convert to scalar and cast to int32 link here: https://arc.net/l/quote/fhclbjir
+    const res = await tf.browser.toPixels(tf.cast(stylized, 'int32'))
+    console.log(stylized.print())
     styleRepresentation.dispose()
     stylized.dispose()
 
