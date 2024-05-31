@@ -79,8 +79,8 @@ export default React.memo(function ModelNode({
     setContentImage(currentNode?.data.contentImage)
   }, [
     reactflow.getNodes(),
-    // styleImage,
-    // contentImage
+    styleImage,
+    contentImage
   ])
 
   const restoreImages = async () => {
