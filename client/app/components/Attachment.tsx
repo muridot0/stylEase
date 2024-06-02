@@ -37,17 +37,20 @@ export default function Attachment({
   const fetcher = useFetcher()
   const fileRef = React.useRef(null)
   const [fileAttached, setFileAttached] = React.useState(false)
-  const [file, setFile] = React.useState<{
-    url: string | ImageData
-    name: string
-    size: number
-    width: number
-    height: number
-  } | undefined>(undefined)
+  const [file, setFile] = React.useState<
+    | {
+        url: string | ImageData
+        name: string
+        size: number
+        width: number
+        height: number
+      }
+    | undefined
+  >(undefined)
   const [fileSizeExceeded, setFileSizeExceeded] = React.useState<{
     size: number
     exceeded: boolean
-  }>()
+  }>({ size: 0, exceeded: false })
   const [loading, setLoading] = React.useState(false)
   const reactflow = useReactFlow()
 
@@ -57,14 +60,13 @@ export default function Attachment({
         if (node.data.id === dataId) {
           node.data = {
             ...node.data,
-            content: file ? {...file} : undefined
+            content: file ? { ...file } : undefined
           }
           file ? setFileAttached(true) : setFileAttached(false)
         }
       })
       return nodes
-    }
-    )
+    })
   }, [file, fetcher])
 
   const restoreImages = async () => {
@@ -103,6 +105,7 @@ export default function Attachment({
   }, [fetcher])
 
   const handleFileAttached = async (e: React.FormEvent<HTMLInputElement>) => {
+    setFileSizeExceeded({size: 0, exceeded: false})
     const { files } = e.currentTarget
     if (!files) {
       setLoading(false)
@@ -112,6 +115,7 @@ export default function Attachment({
       setFileSizeExceeded({ size: files[0].size, exceeded: true })
       setFileAttached(false)
       setLoading(false)
+      e.currentTarget.value = ''
       return
     }
 
@@ -153,15 +157,15 @@ export default function Attachment({
             </fetcher.Form>
             <div
               className={clsx('flex flex-col items-center gap-1', {
-                'text-red-600 dark:text-red-600': fileSizeExceeded?.exceeded
+                'text-red-600 dark:text-red-600': fileSizeExceeded.exceeded
               })}
             >
               <span
                 className={clsx('i-lucide-file-up flex text-[45px]', {
-                  'text-[--node-icons-color]': !fileSizeExceeded?.exceeded
+                  'text-[--node-icons-color]': !fileSizeExceeded.exceeded
                 })}
               ></span>
-              {!fileSizeExceeded?.exceeded ? (
+              {!fileSizeExceeded.exceeded ? (
                 <p className='mt-4 w[10rem]'>{uploadMessage}</p>
               ) : (
                 <>
@@ -201,7 +205,9 @@ export default function Attachment({
               title={file.name}
               className='rounded-[4px]'
             />
-            <div className='mt-2 mb-0 truncate ...' title={file.name}>{file.name}</div>
+            <div className='mt-2 mb-0 truncate ...' title={file.name}>
+              {file.name}
+            </div>
             <aside className='flex items-center justify-between mt-auto cursor-default top-4 relative pb-3'>
               <p className='border font-medium rounded-md border-zinc-200 bg-zinc-100 text-zinc-800 dark:border-neutral-200 dark:bg-neutral-200 dark:text-neutral-800 px-1 text-sm'>
                 {niceBytes(file.size)}
@@ -227,7 +233,7 @@ export default function Attachment({
         className,
         'border-[--node-border-color] border text-center p-[1.75rem] rounded-[4px] relative max-w-[200px]',
         { 'p-0 !border-none': fileAttached && !loading },
-        { shake: fileSizeExceeded?.exceeded }
+        { 'shake border-red-600 shadow-sm': fileSizeExceeded.exceeded }
       )}
     >
       {renderUploadedPhoto()}
