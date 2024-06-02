@@ -68,11 +68,9 @@ export const action: ActionFunction = async ({ request }) => {
     })
 
     const bufferSize = (
-      await resized.getBufferAsync(Jimp.AUTO as unknown as string)
+      await resized.getBufferAsync(resized.getMIME())
     ).length
-    const base64 = await resized.getBase64Async(Jimp.AUTO)
-
-    resized.getMIME()
+    const base64 = await resized.getBase64Async(resized.getMIME())
 
     return {
       url: base64,

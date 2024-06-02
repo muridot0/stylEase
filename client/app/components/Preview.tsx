@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { niceBytes } from '../lib/niceBytes'
 import { getIncomers, useReactFlow } from 'reactflow'
 import globalNodeState from '~/state/nodesState'
-import { imageDataToBase64 } from '~/lib/imageDataToBase64'
+import { imageDataToBase64, imageDataToBlob } from '~/lib/imageDataToBase64'
 import isEqual from 'lodash.isequal'
 import { db } from '~/lib/db'
 import { b64toBlob } from '~/lib/b64toBlob'
@@ -66,25 +66,25 @@ export default function Preview({ className, nodeId }: Props) {
     if(!file) return
 
 
-    const downloadLink = document.createElement('a');
 
+    imageDataToBlob(file.url as ImageData, function (blob) {
+      if (blob) {
+        const downloadLink = document.createElement('a');
+        const url = URL.createObjectURL(blob)
 
-    const b64String = imageDataToBase64(file.url as ImageData)
+        downloadLink.download = file.name
 
-    const blob = b64toBlob(b64String)
+        downloadLink.href = url;
 
-    const url = URL.createObjectURL(blob)
+        document.body.appendChild(downloadLink);
 
-    downloadLink.download = file.name
+        downloadLink.click();
 
-    downloadLink.href = url;
+        URL.revokeObjectURL(url)
+        document.body.removeChild(downloadLink);
+      }
+    })
 
-    document.body.appendChild(downloadLink);
-
-    downloadLink.click();
-
-    URL.revokeObjectURL(url)
-    document.body.removeChild(downloadLink);
     if(isModalOpen && dialogRef.current) {
       dialogRef.current.close()
     }

@@ -27,7 +27,7 @@ const uploadFileHandler = unstable_composeUploadHandlers(
     }
     const uint8Array = new Uint8Array(await convertToBuffer(data))
 
-    const tensor = tf.node.decodeImage(uint8Array)
+    const tensor = tf.node.decodeImage(uint8Array, 3)
     tf.cast(tensor, 'int32').arraySync()
 
     console.log(tensor)
@@ -90,9 +90,7 @@ export const action: ActionFunction = async ({ request }) => {
         )
     }
     const stylized = produceStylized(contentImg['data'], styleRepresentation)
-    //convert to scalar and cast to int32 link here: https://arc.net/l/quote/fhclbjir
-    const res = await tf.browser.toPixels(tf.cast(stylized, 'int32'))
-    console.log(stylized.print())
+    const res = await tf.browser.toPixels(stylized)
     styleRepresentation.dispose()
     stylized.dispose()
 
