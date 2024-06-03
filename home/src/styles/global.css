@@ -7,7 +7,7 @@
   src: url(/Hyperwave.otf);
 }
 
-::view-transition-old(root) {
+/* ::view-transition-old(root) {
   z-index: -1;
   animation: none;
 }
@@ -23,6 +23,40 @@
   }
   100% {
     clip-path: inset(0 0 0 0);
+  }
+} */
+
+::view-transition-new(body),
+::view-transition-old(body) {
+  animation: pan 1s ease-in-out;
+  backface-visibility: hidden;
+  box-shadow: 2.2px 61.3px 73.1px -2px hsl(0 0% 0% / 0.58);
+}
+
+::view-transition-new(body) {
+  --sr: 180deg;
+  background: canvas;
+}
+
+::view-transition-old(body) {
+  --sr: 0deg;
+  backface-visibility: hidden;
+}
+
+@keyframes pan {
+  0% {
+    transform: scale(1) rotateY(var(--sr));
+  }
+  25% {
+    transform: scale(0.5) rotateY(var(--sr));
+    box-shadow: 1.8px 50.7px 51.4px -3.2px hsl(0 0% 0% / 0.32);
+  }
+  75% {
+    transform: scale(0.5) rotateY(calc(var(--sr) + 180deg));
+    box-shadow: 1.8px 50.7px 51.4px -3.2px hsl(0 0% 0% / 0.32);
+  }
+  100% {
+    transform: scale(1) rotateY(calc(var(--sr) + 180deg));
   }
 }
 
@@ -46,6 +80,17 @@
   --button-drop-shadow-light: #dbdbdb;
   --gradient-top: #2186e3;
   --gradient-bottom: #1c7ad0;
+
+  --size: 45px;
+  --line: color-mix(in lch, white, transparent 85%);
+  background: linear-gradient(
+        90deg,
+        var(--line) 1px,
+        transparent 1px var(--size)
+      )
+      50% 50% / var(--size) var(--size),
+    linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% /
+      var(--size) var(--size), hsl(210, 2%, 63%);
 }
 
 :root[data-theme='dark'] {
@@ -73,6 +118,7 @@ body {
   background-color: var(--home-bg-color);
   color: var(--home-font-color);
   min-height: 100vh;
+  view-transition-name: body;
 }
 
 h1 {
@@ -101,4 +147,18 @@ h1 {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.get-started:not(:active) {
+  background: linear-gradient(var(--gradient-top), var(--gradient-bottom));
+  --tw-shadow: inset 0 -5px 1px -1px var(--button-inner-shadow),0px 0px 0px 2px var(--button-drop-shadow),0px 4px 6px 0px var(--button-drop-shadow-light);
+  --tw-shadow-colored: inset 0 -5px 1px -1px var(--tw-shadow-color), 0px 0px 0px 2px var(--tw-shadow-color), 0px 4px 6px 0px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  /* not(:active):bg-gradient-to-b from-[var(--gradient-top)] to-[var(--gradient-bottom)] px-2 py-1 pt-2 font-medium text-[#eeefef] shadow-[inset_0_-5px_1px_-1px_var(--button-inner-shadow),0px_0px_0px_2px_var(--button-drop-shadow),0px_4px_6px_0px_var(--button-drop-shadow-light)] */
+}
+
+.get-started:active {
+  box-shadow: none;
+  background-color: var(--button-inner-shadow);
+  border: 2px solid var(--button-drop-shadow)
 }

@@ -3,12 +3,20 @@ import '../styles/global.css'
 import Layout from '../layouts/Layout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
+import {DreamyGradient} from '@muridot0/dreamy-gradients'
 ---
 
 <Layout title='stylEase'>
   <Header />
   <main class='container h-dvh'>
     <div class='mt-4 text-center'>
+      <DreamyGradient
+          size={{ height: '10rem', width: '10rem' }}
+          color='linear-gradient(180deg, #7D40FF 0%, #F58A25 100%, #7230FF 100%)'
+          position={{ top: '50%', right: '50%', bottom: '50%', left: '50%'}}
+          blur={5}
+          client:only="react"
+        />
       <div class='flex justify-center text-[3rem]'>
         <h1 class='gradient'>
           <div>
@@ -26,7 +34,7 @@ import Footer from '../components/Footer.astro'
         </h2>
 
         <button
-          class='mt-4 inline-flex items-center gap-2 rounded-lg bg-gradient-to-b from-[var(--gradient-top)] to-[var(--gradient-bottom)] px-2 py-1 pt-2 font-medium text-[#eeefef] shadow-[inset_0_-5px_1px_-1px_var(--button-inner-shadow),0px_0px_0px_2px_var(--button-drop-shadow),0px_4px_6px_0px_var(--button-drop-shadow-light)] hover:brightness-[110%] active:brightness-100'>
+          class='mt-4 relative inline-flex get-started items-center gap-2 rounded-lg px-2 py-1 pt-2 font-medium text-[#eeefef] hover:brightness-[110%] active:brightness-100'>
           Get started
         </button>
       </div>

@@ -21,19 +21,3 @@ const { title } = Astro.props;
 		<slot />
 	</body>
 </html>
-
-<script is:inline>
-  let theme = (() => {
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "light";
-  })();
-
-  if (theme === "dark") {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  } else {
-    document.documentElement.removeAttribute('data-theme');
-  }
-  window.localStorage.setItem("theme", theme);
-</script>

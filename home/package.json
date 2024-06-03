@@ -10,8 +10,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/preact": "^3.1.0",
+    "@astrojs/react": "^3.4.0",
+    "@iconify-json/carbon": "^1.1.34",
     "@iconify-json/lucide": "^1.1.152",
+    "@muridot0/dreamy-gradients": "^0.1.35",
     "@unocss/reset": "^0.58.3",
     "astro": "^4.1.1",
     "preact": "^10.19.3",

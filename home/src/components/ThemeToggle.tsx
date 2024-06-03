@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect, useState } from 'react'
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') ?? 'light')
+  const [theme, setTheme] = useState(window.matchMedia("(prefers-color-scheme: dark)").matches ? 'dark' : 'light')
 
   const handleClick = () => {
     if (!document.startViewTransition) {
@@ -9,6 +9,14 @@ export default function ThemeToggle() {
     }
     document.startViewTransition(() => setTheme(theme === 'light' ? 'dark' : 'light'))
   }
+
+  useEffect(() => {
+    const localTheme = localStorage.getItem('theme')
+
+    if(localTheme) {
+      setTheme(localTheme)
+    }
+  }, [])
 
   useEffect(() => {
     const updateSourceMedia = (colorPreference: 'light' | 'dark'): void => {
@@ -51,11 +59,11 @@ export default function ThemeToggle() {
   }, [theme])
 
   return (
-    <button type="button" class="rounded-full border border-[var(--text-muted)] p-1 mr-4 flex items-center" onClick={handleClick}>
+    <button type="button" className="rounded-full border border-[var(--text-muted)] p-1 mr-4 flex items-center" onClick={handleClick}>
       {theme === 'light' ? (
-          <span class="i-lucide-lightbulb-off" />
+          <span className="i-lucide-lightbulb-off" />
       ) : (
-          <span class="i-lucide-lightbulb" />
+          <span className="i-lucide-lightbulb" />
       )}
     </button>
   )
