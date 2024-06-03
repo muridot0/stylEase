@@ -8,7 +8,7 @@ import { DreamyGradient } from '@muridot0/dreamy-gradients'
 
 <Layout title='stylEase'>
   <Header />
-  <main class='container h-dvh'>
+  <main class=''>
     <DreamyGradient
       size={{ height: '5rem', width: '5rem' }}
       color='linear-gradient(#FF512F, #DD2476)'
@@ -17,6 +17,7 @@ import { DreamyGradient } from '@muridot0/dreamy-gradients'
       blur={2}
       client:only='react'
     />
+
     <DreamyGradient
       size={{ height: '3rem', width: '3rem' }}
       color='linear-gradient(#11998E, #38EF7D)'
@@ -24,7 +25,7 @@ import { DreamyGradient } from '@muridot0/dreamy-gradients'
       blur={2}
       client:only='react'
     />
-    <div class='mt-4 text-center'>
+    <div class='mt-4 text-center container'>
       <div class='flex justify-center text-[3rem]'>
         <DreamyGradient
           size={{ height: '15rem', width: '15rem' }}
@@ -40,20 +41,73 @@ import { DreamyGradient } from '@muridot0/dreamy-gradients'
               stylEase
             </span>:
           </div>
+
           Transform Your Photos intos
           <div>Masterpieces</div>
         </h1>
       </div>
+
       <div class='mt-4'>
         <h2 class='text-[1.25rem]'>
           Achieve easy artistry for everyday photos using styleEase!
         </h2>
 
         <button
-          class='get-started relative mt-4 inline-flex items-center gap-2 rounded-lg px-2 py-1 pt-2 font-medium text-[#eeefef] hover:brightness-[110%] active:brightness-100'>
+          class='get-started relative mt-20 inline-flex items-center gap-2 rounded-lg px-2 py-1 pt-2 font-medium text-[#eeefef] hover:brightness-[110%] active:brightness-100'>
           Get started
         </button>
       </div>
+    </div>
+
+    <div class="justify-center container flex relative mt-15 top-10 z-0">
+      <DreamyGradient
+        size={{ height: '25rem', width: '50rem' }}
+        color='linear-gradient(to right, #5edeef, #dce956, #e98fc0)'
+        position={{ top: '18rem', bottom: '10rem'}}
+        blur={10}
+        client:only='react'
+      />
+
+      <!-- <DreamyGradient
+        size={{ height: '8rem', width: '8rem' }}
+        color='linear-gradient(#11998E, #38EF7D)'
+        position={{ top: '0rem', right: '10rem' }}
+        blur={2}
+        client:only='react'
+      /> -->
+
+      <picture class="mr-4">
+        <source srcset="/app-image-dark.jpg" media="(prefers-color-scheme: dark)" />
+        <img src="/app-image.png" class="rounded-[12px] max-w-[992px] w-full relative" alt="">
+      </picture>
+    </div>
+
+    <div class="bg-[--home-bg-color] relative text-center mb-10">
+      <hr class="w-full border-t-neutral-400">
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
+      <p>skdjfdksjfds</p>
     </div>
   </main>
   <Footer />

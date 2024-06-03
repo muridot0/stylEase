@@ -156,7 +156,7 @@ h1 {
 }
 
 .get-started:active {
+  transition: all ease-in-out;
   box-shadow: none;
   background-color: var(--button-inner-shadow);
-  border: 2px solid var(--button-drop-shadow)
 }

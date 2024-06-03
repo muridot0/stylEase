@@ -5,7 +5,7 @@ const date = new Date()
 let year = date.getFullYear()
 ---
 
-<footer class="w-full bottom-0 relative">
+<footer class="w-full bottom-0 relative z-1">
   <div class="border-t border-t-slate-400 sm:hidden w-full" />
     <div class="sm:(flex items-center justify-center) max-sm:container">
       <svg class="w-full hidden sm:block" xmlns="http://www.w3.org/2000/svg" width="1512" height="119" viewBox="0 0 1512 119" fill="none">
@@ -15,10 +15,11 @@ let year = date.getFullYear()
 
     <div class="sm:absolute sm:(flex items-center flex-col mt-8) max-sm:m-4">
       <DreamyGradient
-          size={{ height: '20rem', width: '20rem' }}
+          size={{ height: '15rem', width: '15rem' }}
           color='linear-gradient(to top, #D4145A, #FBB03B)'
           position={{ bottom: '0rem'  }}
-          blur={10}
+          blur={8}
+          classN
           client:only='react'
         />
       <p>Copyright © {year} stylEase.</p>
