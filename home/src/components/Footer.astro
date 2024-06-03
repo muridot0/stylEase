@@ -1,4 +1,6 @@
 ---
+import { DreamyGradient } from "@muridot0/dreamy-gradients"
+
 const date = new Date()
 let year = date.getFullYear()
 ---
@@ -12,6 +14,13 @@ let year = date.getFullYear()
     <div />
 
     <div class="sm:absolute sm:(flex items-center flex-col mt-8) max-sm:m-4">
+      <DreamyGradient
+          size={{ height: '20rem', width: '20rem' }}
+          color='linear-gradient(to top, #D4145A, #FBB03B)'
+          position={{ bottom: '0rem'  }}
+          blur={10}
+          client:only='react'
+        />
       <p>Copyright © {year} stylEase.</p>
       <p>All Rights Reserved.</p>
       <div class="rounded-full border border-[var(--text-muted)] gap-2 px-2 py-1 flex items-center w-max">

@@ -3,21 +3,37 @@ import '../styles/global.css'
 import Layout from '../layouts/Layout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
-import {DreamyGradient} from '@muridot0/dreamy-gradients'
+import { DreamyGradient } from '@muridot0/dreamy-gradients'
 ---
 
 <Layout title='stylEase'>
   <Header />
   <main class='container h-dvh'>
+    <DreamyGradient
+      size={{ height: '5rem', width: '5rem' }}
+      color='linear-gradient(#FF512F, #DD2476)'
+      animate='true'
+      position={{ right: '0rem', top: '0rem' }}
+      blur={2}
+      client:only='react'
+    />
+    <DreamyGradient
+      size={{ height: '3rem', width: '3rem' }}
+      color='linear-gradient(#11998E, #38EF7D)'
+      position={{ top: '0rem', left: '0rem' }}
+      blur={2}
+      client:only='react'
+    />
     <div class='mt-4 text-center'>
-      <DreamyGradient
-          size={{ height: '10rem', width: '10rem' }}
-          color='linear-gradient(180deg, #7D40FF 0%, #F58A25 100%, #7230FF 100%)'
-          position={{ top: '50%', right: '50%', bottom: '50%', left: '50%'}}
-          blur={5}
-          client:only="react"
-        />
       <div class='flex justify-center text-[3rem]'>
+        <DreamyGradient
+          size={{ height: '15rem', width: '15rem' }}
+          color='linear-gradient(#EA8D8D, #A890FE)'
+          animate='true'
+          position={{ top: '10rem' }}
+          blur={3}
+          client:only='react'
+        />
         <h1 class='gradient'>
           <div>
             Introducing <span class='font-[Chilanka] font-normal'>
@@ -29,12 +45,12 @@ import {DreamyGradient} from '@muridot0/dreamy-gradients'
         </h1>
       </div>
       <div class='mt-4'>
-        <h2 class='text-[1.25rem] text-[color:var(--text-muted)]'>
+        <h2 class='text-[1.25rem]'>
           Achieve easy artistry for everyday photos using styleEase!
         </h2>
 
         <button
-          class='mt-4 relative inline-flex get-started items-center gap-2 rounded-lg px-2 py-1 pt-2 font-medium text-[#eeefef] hover:brightness-[110%] active:brightness-100'>
+          class='get-started relative mt-4 inline-flex items-center gap-2 rounded-lg px-2 py-1 pt-2 font-medium text-[#eeefef] hover:brightness-[110%] active:brightness-100'>
           Get started
         </button>
       </div>
