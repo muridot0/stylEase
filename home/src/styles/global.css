@@ -90,6 +90,8 @@
       50% 50% / var(--size) var(--size),
     linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% /
       var(--size) var(--size), hsl(210, 2%, 63%);
+
+  --border: rgb(212, 212, 212);
 }
 
 :root[data-theme='dark'] {
@@ -107,6 +109,7 @@
   --button-drop-shadow-light: #272727;
   --gradient-top: #161a22;
   --gradient-bottom: #6b7077;
+  --border: rgba(115, 115, 115, 1);
 }
 
 * {

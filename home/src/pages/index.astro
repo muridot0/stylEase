@@ -9,22 +9,24 @@ import { DreamyGradient } from '@muridot0/dreamy-gradients'
 <Layout title='stylEase'>
   <Header />
   <main class=''>
-    <DreamyGradient
-      size={{ height: '5rem', width: '5rem' }}
-      color='linear-gradient(#FF512F, #DD2476)'
-      animate='true'
-      position={{ right: '0rem', top: '0rem' }}
-      blur={2}
-      client:only='react'
-    />
+    <div id="gradient-dark">
+      <DreamyGradient
+        size={{ height: '5rem', width: '5rem' }}
+        color='linear-gradient(#FF512F, #DD2476)'
+        animate='true'
+        position={{ right: '0rem', top: '0rem' }}
+        blur={2}
+        client:only='react'
+      />
 
-    <DreamyGradient
-      size={{ height: '3rem', width: '3rem' }}
-      color='linear-gradient(#11998E, #38EF7D)'
-      position={{ top: '0rem', left: '0rem' }}
-      blur={2}
-      client:only='react'
-    />
+      <DreamyGradient
+        size={{ height: '3rem', width: '3rem' }}
+        color='linear-gradient(#11998E, #38EF7D)'
+        position={{ top: '0rem', left: '0rem' }}
+        blur={2}
+        client:only='react'
+      />
+    </div>
     <div class='mt-4 text-center container'>
       <div class='flex justify-center text-[3rem]'>
         <DreamyGradient
@@ -59,31 +61,44 @@ import { DreamyGradient } from '@muridot0/dreamy-gradients'
       </div>
     </div>
 
-    <div class="justify-center container flex relative mt-15 top-10 z-0">
+    <div class="justify-center container flex relative mt-15">
       <DreamyGradient
         size={{ height: '25rem', width: '50rem' }}
-        color='linear-gradient(to right, #5edeef, #dce956, #e98fc0)'
+        color='linear-gradient(to right, #0e0725, #5c03bc, #e536ab, #f4e5f0)'
         position={{ top: '18rem', bottom: '10rem'}}
-        blur={10}
+        animate='true'
+        blur={13}
         client:only='react'
       />
 
-      <!-- <DreamyGradient
+      <DreamyGradient
         size={{ height: '8rem', width: '8rem' }}
-        color='linear-gradient(#11998E, #38EF7D)'
+        color='linear-gradient(#00ee6e, #0c75e6)'
         position={{ top: '0rem', right: '10rem' }}
+        blur={5}
+        client:only='react'
+      />
+
+      <DreamyGradient
+        size={{ height: '8rem', width: '8rem' }}
+        color='linear-gradient(#00ee6e, #0c75e6)'
+        position={{ top: '0rem', left: '10rem' }}
+        animate={{
+          '0%, 100%': {transform: 'translateY(0)'},
+          '50%': {transform: 'translateY(200px)'},
+        }}
         blur={2}
         client:only='react'
-      /> -->
+      />
 
       <picture class="mr-4">
-        <source srcset="/app-image-dark.jpg" media="(prefers-color-scheme: dark)" />
-        <img src="/app-image.png" class="rounded-[12px] max-w-[992px] w-full relative" alt="">
+        <source srcset="/app-image-dark.png" media="(prefers-color-scheme: dark)" />
+        <img src="/app-image.png" class="rounded-t-[8px] max-w-[992px] w-full relative border-t border-l border-r border-[--border] shadow-2xl" alt="">
       </picture>
     </div>
 
     <div class="bg-[--home-bg-color] relative text-center mb-10">
-      <hr class="w-full border-t-neutral-400">
+      <hr class="w-full border-t-[--border]">
       <p>skdjfdksjfds</p>
       <p>skdjfdksjfds</p>
       <p>skdjfdksjfds</p>
