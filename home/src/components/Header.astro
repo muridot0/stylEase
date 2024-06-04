@@ -1,17 +1,36 @@
 ---
+import { DreamyGradient } from "@muridot0/dreamy-gradients";
 import ThemeToggle from "./ThemeToggle";
 ---
 
-<header class="container flex items-center justify-between">
-  <div class="flex items-center">
-    <picture class="mr-4">
-      <source srcset="stylEase-dark.svg" media="(prefers-color-scheme: dark)" />
-      <img src="/stylEase-light.svg" alt="stylEase" />
-    </picture>
-    <h2 class="mt-1">stylEase</h2>
-  </div>
+<header class="sticky top-0 backdrop-blur-100 z-2">
+  <DreamyGradient
+  size={{ height: '5rem', width: '5rem' }}
+  color='linear-gradient(#FF512F, #DD2476)'
+  animate='true'
+  position={{ right: '0rem', top: '2rem' }}
+  blur={2}
+  client:only='react'
+  />
 
-  <div class="flex">
-    <ThemeToggle client:only="react" />
+  <DreamyGradient
+  size={{ height: '3rem', width: '3rem' }}
+  color='linear-gradient(#11998E, #38EF7D)'
+  position={{ top: '2rem', left: '0rem' }}
+  blur={2}
+  client:only='react'
+  />
+  <div class="mx-8 py-2 px-4 rounded-[8px] relative top-4 flex bg-[--home-bg-color] items-center justify-between">
+    <div class="flex items-center">
+      <picture class="mr-4">
+        <source srcset="stylEase-dark.svg" media="(prefers-color-scheme: dark)" />
+        <img src="/stylEase-light.svg" alt="stylEase" />
+      </picture>
+      <h2 class="mt-1">stylEase</h2>
+    </div>
+
+    <div class="flex">
+      <ThemeToggle client:only="react" />
+    </div>
   </div>
 </header>
