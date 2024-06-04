@@ -7,7 +7,7 @@
   src: url(/Hyperwave.otf);
 }
 
-/* ::view-transition-old(root) {
+::view-transition-old(root) {
   z-index: -1;
   animation: none;
 }
@@ -23,40 +23,6 @@
   }
   100% {
     clip-path: inset(0 0 0 0);
-  }
-} */
-
-::view-transition-new(body),
-::view-transition-old(body) {
-  animation: pan 1s ease-in-out;
-  backface-visibility: hidden;
-  box-shadow: 2.2px 61.3px 73.1px -2px hsl(0 0% 0% / 0.58);
-}
-
-::view-transition-new(body) {
-  --sr: 180deg;
-  background: canvas;
-}
-
-::view-transition-old(body) {
-  --sr: 0deg;
-  backface-visibility: hidden;
-}
-
-@keyframes pan {
-  0% {
-    transform: scale(1) rotateY(var(--sr));
-  }
-  25% {
-    transform: scale(0.5) rotateY(var(--sr));
-    box-shadow: 1.8px 50.7px 51.4px -3.2px hsl(0 0% 0% / 0.32);
-  }
-  75% {
-    transform: scale(0.5) rotateY(calc(var(--sr) + 180deg));
-    box-shadow: 1.8px 50.7px 51.4px -3.2px hsl(0 0% 0% / 0.32);
-  }
-  100% {
-    transform: scale(1) rotateY(calc(var(--sr) + 180deg));
   }
 }
 
@@ -120,7 +86,8 @@ body {
   background-color: var(--home-bg-color);
   color: var(--home-font-color);
   min-height: 100vh;
-  view-transition-name: body;
+  position: relative;
+  z-index: 1
 }
 
 h1 {

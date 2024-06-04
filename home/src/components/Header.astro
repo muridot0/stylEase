@@ -3,7 +3,7 @@ import { DreamyGradient } from "@muridot0/dreamy-gradients";
 import ThemeToggle from "./ThemeToggle";
 ---
 
-<header class="sticky top-0 backdrop-blur-100 z-2">
+<header class="sticky bg-transparent backdrop-blur-10 top-0 z-2 mx-8 py-2 px-4 rounded-b-[8px] flex  items-center justify-between">
   <DreamyGradient
   size={{ height: '5rem', width: '5rem' }}
   color='linear-gradient(#FF512F, #DD2476)'
@@ -20,7 +20,6 @@ import ThemeToggle from "./ThemeToggle";
   blur={2}
   client:only='react'
   />
-  <div class="mx-8 py-2 px-4 rounded-[8px] relative top-4 flex bg-[--home-bg-color] items-center justify-between">
     <div class="flex items-center">
       <picture class="mr-4">
         <source srcset="stylEase-dark.svg" media="(prefers-color-scheme: dark)" />
@@ -32,5 +31,4 @@ import ThemeToggle from "./ThemeToggle";
     <div class="flex">
       <ThemeToggle client:only="react" />
     </div>
-  </div>
 </header>
