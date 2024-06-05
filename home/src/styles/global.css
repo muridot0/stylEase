@@ -128,5 +128,8 @@ h1 {
 .get-started:active {
   transition: all ease-in-out;
   box-shadow: none;
-  background-color: var(--button-inner-shadow);
+  background: linear-gradient(var(--gradient-top), var(--gradient-bottom));
+  --tw-shadow: inset 0px 0px 0px 2px var(--button-drop-shadow),0px 4px 6px 0px var(--button-drop-shadow-light);
+  --tw-shadow-colored: 0px 0px 0px 2px var(--tw-shadow-color), 0px 4px 6px 0px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
