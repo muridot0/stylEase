@@ -1,3 +1,14 @@
-{
-  {}
-}
+[
+  {
+    "title": "Node Drawer",
+    "content": ""
+  },
+  {
+    "title": "Preview Image",
+    "content": ""
+  },
+  {
+    "title": "Stylization strength",
+    "content": "Adjust the strength of stylization to control how strong the generated image should be influenced by the reference image"
+  }
+]

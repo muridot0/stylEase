@@ -2,7 +2,7 @@
 const props = Astro.props
 ---
 
-<div class:list={[props.class]}>
+<div class:list={[props.class, 'md:(block) flex mb-4']}>
   <picture>
     <source
       srcset={props.darkSrc}
@@ -10,8 +10,8 @@ const props = Astro.props
     />
     <img class="border border-[--border] rounded-[12px] shadow-lg w-full" src={props.src} alt={props.alt}>
   </picture>
-  <div class="text-left py-4">
+  <div class="md:(py-4) max-md:pl-4">
     <h2>{props.title}</h2>
-    <p>{props.content}</p>
+    <p class="text-[--text-muted]">sdfkdsfkdsjfkdsf dksfjdskfjdskf ksjdfkd s</p>
   </div>
 </div>

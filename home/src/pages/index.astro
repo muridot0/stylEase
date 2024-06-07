@@ -34,7 +34,7 @@ import Card from '../components/Card.astro'
       </div>
 
       <div class='mt-4'>
-        <h2 class='text-[1.25rem]'>
+        <h2 class='text-lg'>
           Achieve easy artistry for everyday photos using styleEase!
         </h2>
 
@@ -144,7 +144,7 @@ import Card from '../components/Card.astro'
         />
         <img
           src='/app-image.png'
-          class='relative w-full max-w-[992px] rounded-t-[12px] border-l border-r border-t border-[--border] shadow-2xl'
+          class='relative w-full max-w-[992px] rounded-t-[12px] border-l border-r border-t border-[--border] shadow-xl'
           alt=''
         />
       </picture>
@@ -152,10 +152,35 @@ import Card from '../components/Card.astro'
 
     <hr class='w-full border-t-[--border]' />
 
-    <div class='block p-8 md:(flex justify-center gap-4 relative w-full bg-[--home-bg-color] py-8 px-24)'>
-      <Card class='relative w-full max-w-[400px]' src='node-drawer-light.jpeg' darkSrc='node-drawer-dark.jpeg' />
-      <Card class='relative w-full max-w-[400px]' src='/preview-light.jpeg' darkSrc='/preview-dark.jpeg'/>
-      <Card class='relative w-full max-w-[400px]' src='model-node-light.jpeg'  darkSrc='model-node-dark.jpeg' />
+    <div class='bg-[--home-bg-color] px-10 py-8'>
+      <div class='flex flex-col items-center'>
+        <h2 class='pb-2 text-lg text-left font-bold'>Welcome to the home of stylEase - let’s create something beautiful together!</h2>
+        <p class='max-w-[38rem] text-left text-[--text-muted]'>
+          Where anyone can achieve artistry <i><u>easily</u></i>. Try countless
+          image combinations and watch as your photos come to life with vibrant
+          colors and unique textures while exploring your creativity.
+        </p>
+        <h3 class="pt-10 underline">Tips</h3>
+      </div>
+
+      <div
+        class='md:(flex bg-[--home-bg-color]) relative block w-full justify-center gap-4 pt-4'>
+        <Card
+          class='relative w-full max-w-[400px]'
+          src='node-drawer-light.jpeg'
+          darkSrc='node-drawer-dark.jpeg'
+        />
+        <Card
+          class='relative w-full max-w-[400px]'
+          src='/preview-light.jpeg'
+          darkSrc='/preview-dark.jpeg'
+        />
+        <Card
+          class='relative w-full max-w-[400px]'
+          src='model-node-light.jpeg'
+          darkSrc='model-node-dark.jpeg'
+        />
+      </div>
     </div>
   </main>
   <Footer />

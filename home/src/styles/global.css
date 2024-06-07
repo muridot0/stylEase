@@ -64,7 +64,7 @@
 :root[data-theme='dark'] {
   --home-bg-color: #222428;
   --home-font-color: #eeefef;
-  --text-muted: white;
+  --text-muted: #6b7077;
   --linear-gradient: linear-gradient(
     180deg,
     #fff 0%,
