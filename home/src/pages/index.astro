@@ -47,9 +47,9 @@ import Card from '../components/Card.astro'
 
     <div class='mt-15 container relative flex justify-center'>
       <DreamyGradient
-        size={{ height: '25rem', width: '50rem' }}
+        size={{ height: '25rem', width: '25rem' }}
         color='linear-gradient(to right, #0e0725, #5c03bc, #e536ab, #f4e5f0)'
-        position={{ top: '18rem', bottom: '10rem' }}
+        position={{ top: '25rem', bottom: '10rem' }}
         animate='true'
         blur={13}
         client:only='react'
@@ -58,7 +58,7 @@ import Card from '../components/Card.astro'
       <DreamyGradient
         size={{ height: '8rem', width: '8rem' }}
         color='linear-gradient(#00ee6e, #0c75e6)'
-        position={{ top: '0rem', right: '10rem' }}
+        position={{ top: '0rem', right: '15rem' }}
         blur={5}
         client:only='react'
       />
@@ -66,7 +66,7 @@ import Card from '../components/Card.astro'
       <DreamyGradient
         size={{ height: '8rem', width: '8rem' }}
         color='linear-gradient(#764BA2, #667EEA)'
-        position={{ top: '0rem', left: '7rem' }}
+        position={{ top: '0rem', left: '16rem' }}
         animate={{
           '0%': {
             transform: 'translateY(0) translateX(0) scale(0.25)',
@@ -85,7 +85,7 @@ import Card from '../components/Card.astro'
       <DreamyGradient
         size={{ height: '8rem', width: '8rem' }}
         color='yellow'
-        position={{ top: '2rem', left: '7rem' }}
+        position={{ top: '2rem', left: '16rem' }}
         animate={{
           '0%': {
             transform: 'translateY(0) translateX(0) scale(0.15)',
@@ -103,7 +103,7 @@ import Card from '../components/Card.astro'
       <DreamyGradient
         size={{ height: '8rem', width: '8rem' }}
         color='blue'
-        position={{ top: '4rem', left: '7rem' }}
+        position={{ top: '4rem', left: '16rem' }}
         animate={{
           '0%': {
             transform: 'translateY(0) translateX(0) scale(0.15)',
@@ -121,7 +121,7 @@ import Card from '../components/Card.astro'
       <DreamyGradient
         size={{ height: '8rem', width: '8rem' }}
         color='red'
-        position={{ top: '6rem', left: '7rem' }}
+        position={{ top: '6rem', left: '16rem' }}
         animate={{
           '0%': {
             transform: 'translateY(0) translateX(0) scale(0.15)',
@@ -152,14 +152,10 @@ import Card from '../components/Card.astro'
 
     <hr class='w-full border-t-[--border]' />
 
-    <div class='flex justify-center gap-4 relative w-full bg-[--home-bg-color] py-8 text-center'>
-      <div>
-        <Card class='item w-full max-w-[500px]' src='/preview-dark.jpeg' />
-      </div>
-      <div class="flex flex-col h-full gap-4">
-        <Card class='max-w-[500px]' src='node-drawer-dark.jpeg' />
-        <Card class='max-w-[500px]' src='model-node-dark.jpeg' />
-      </div>
+    <div class='block p-8 md:(flex justify-center gap-4 relative w-full bg-[--home-bg-color] py-8 px-24)'>
+      <Card class='relative w-full max-w-[400px]' src='node-drawer-light.jpeg' darkSrc='node-drawer-dark.jpeg' />
+      <Card class='relative w-full max-w-[400px]' src='/preview-light.jpeg' darkSrc='/preview-dark.jpeg'/>
+      <Card class='relative w-full max-w-[400px]' src='model-node-light.jpeg'  darkSrc='model-node-dark.jpeg' />
     </div>
   </main>
   <Footer />
