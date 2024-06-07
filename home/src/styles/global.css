@@ -49,15 +49,16 @@
   --size: 45px;
   --line: color-mix(in lch, white, transparent 85%);
   background: linear-gradient(
-        90deg,
-        var(--line) 1px,
-        transparent 1px var(--size)
-      )
-      50% 50% / var(--size) var(--size),
-    linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% /
-      var(--size) var(--size), hsl(210, 2%, 63%);
+      90deg,
+      var(--line) 1px,
+      transparent 1px var(--size)
+    )
+    50% 50% / var(--size) var(--size),
+  linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% /
+    var(--size) var(--size), hsl(210, 2%, 63%);
 
   --border: rgb(212, 212, 212);
+  --card-bg: rgba(237,237,238, 0.15);
 }
 
 :root[data-theme='dark'] {
@@ -76,6 +77,7 @@
   --gradient-top: #161a22;
   --gradient-bottom: #6b7077;
   --border: rgba(115, 115, 115, 1);
+  --card-bg: rgba(59,64,69, 0.2);
 }
 
 * {
