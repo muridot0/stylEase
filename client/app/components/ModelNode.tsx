@@ -315,7 +315,7 @@ export default React.memo(function ModelNode({
         <button
           onClick={stylEase}
           className={clsx(
-            'mt-2 flex gap-2 items-center bg-[--node-bg-color] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[12.65rem] hover:bg-[--hover-bg-color] hover:text-[--hover-color]',
+            'mt-2 flex gap-2 items-center bg-[--drawer-color] backdrop-blur-[--blur] border border-[--node-border-color] p-1 rounded-[4px] absolute top-[12.65rem] hover:(bg-[--hover-bg-color] text-[--hover-color])',
             {
               '!bg-[--disabled] !text-[--node-border-color]':
                 !contentImage?.url || !styleImage?.url || stylEasing

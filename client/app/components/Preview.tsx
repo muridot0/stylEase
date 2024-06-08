@@ -86,6 +86,7 @@ export default function Preview({ className, nodeId }: Props) {
     })
 
     if(isModalOpen && dialogRef.current) {
+      setIsModalOpen(false)
       dialogRef.current.close()
     }
   }
@@ -200,7 +201,7 @@ export default function Preview({ className, nodeId }: Props) {
     )
   }
 
-  const showDialog = () => {
+  const showDialog = React.useCallback(() => {
     return (
       <dialog
         ref={dialogRef}
@@ -228,7 +229,7 @@ export default function Preview({ className, nodeId }: Props) {
         </div>
       </dialog>
     )
-  }
+  }, [isModalOpen, handleDownload])
 
   return (
     <section

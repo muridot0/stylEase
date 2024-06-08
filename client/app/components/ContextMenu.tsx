@@ -56,7 +56,7 @@ export default React.forwardRef(function ContextMenu(
   return (
     <div ref={contextRef}>
       <button
-        className='border bg-[--drawer-color] backdrop-blur-[--blur] border-[--node-border-color] hover:bg-[--hover-bg-color] hover:text-[--hover-color] p-2 rounded-[50%]'
+        className='border bg-[--drawer-color] backdrop-blur-[--blur] border-[--node-border-color] hover:(bg-[--hover-bg-color] text-[--hover-color]) p-2 rounded-[50%]'
         onClick={showMenu}
         title='Toggle menu'
       >

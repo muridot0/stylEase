@@ -133,7 +133,7 @@ function WrapperNode({
       {hovering && (
         <div className='flex gap-2 bg-transparent w-fit mt-[0.3rem] rounded-[8px] pt-1'>
           <button
-            className='flex border items-center bg-[--node-bg-color] border-[--node-border-color] p-1 rounded-1 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
+            className='flex border items-center bg-[--drawer-color] backdrop-blur-[--blur] border-[--node-border-color] p-1 rounded-1 hover:(bg-[--hover-bg-color] text-[--hover-color])'
             onClick={deleteEdges}
             title='Delete connections'
           >
@@ -141,7 +141,7 @@ function WrapperNode({
             <span className='sr-only'>Delete node connections</span>
           </button>
           <button
-            className='flex border items-center bg-[--node-bg-color] border-[--node-border-color] p-1 rounded-1 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
+            className='flex border items-center bg-[--drawer-color] backdrop-blur-[--blur] border-[--node-border-color] p-1 rounded-1 hover:(bg-[--hover-bg-color] text-[--hover-color])'
             onClick={deleteNode}
             title='Delete node'
           >

@@ -46,7 +46,7 @@ export default function NodeDrawer({ onSelect }: Props) {
                 key={randomStr(10)}
                 onClick={() => addNode(data)}
               >
-                <button className='flex p-3 border border-[--node-border-color] rounded-[4px] hover:bg-[--hover-bg-color] hover:text-[--hover-color]' title={data.title}>
+                <button className='flex p-3 border border-[--node-border-color] rounded-[4px] hover:(bg-[--hover-bg-color] text-[--hover-color])' title={data.title}>
                   <span
                     className={clsx(`${data.icon} text-3xl flex`)}
                   ></span>
@@ -57,7 +57,7 @@ export default function NodeDrawer({ onSelect }: Props) {
           : nodeData.map((data) => (
               <li
                 key={randomStr(10)}
-                className='cursor-pointer border border-[--node-border-color] rounded-[4px] [&:not(:last-child)]:mb-4 p-2 hover:bg-[--hover-bg-color] hover:text-[--hover-color]'
+                className='cursor-pointer border border-[--node-border-color] rounded-[4px] [&:not(:last-child)]:mb-4 p-2 hover:(bg-[--hover-bg-color] text-[--hover-color])'
                 onClick={() => addNode(data)}
               >
                 <div className='flex items-center justify-between text-xl'>
