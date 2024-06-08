@@ -210,12 +210,12 @@ export default function Preview({ className, nodeId }: Props) {
         <div className=''>
           <img className='rounded-[4px]' ref={previewRef}></img>
           <div className='justify-between flex pt-6 items-center'>
-            <button onClick={handleDownload} title="Download" className='flex text-xl items-center gap-2 border border-[--node-border-color] bg-white dark:bg-[--node-icons-color] rounded-[6px] p-1.5 hover:brightness-95'>
+            <button onClick={handleDownload} title="Download" className='flex text-xl items-center gap-2 border border-[--node-border-color] light:(bg-[rgba(204, 204, 204, 1)] backdrop-blur-[--blur]) dark:bg-[--node-icons-color] rounded-[6px] p-1.5 hover:brightness-95'>
               <span className='i-lucide-download text-[--node-icons-color] dark:text-neutral-300' />
               Download
             </button>
             <button
-              className='flex text-xl items-center gap-2 border border-[--node-border-color] bg-white dark:bg-[--node-icons-color] rounded-[6px] p-1.5 hover:brightness-95'
+              className='flex text-xl items-center gap-2 border border-[--node-border-color] light:(bg-[rgba(204, 204, 204, 1)] backdrop-blur-[--blur]) dark:bg-[--node-icons-color] rounded-[6px] p-1.5 hover:brightness-95'
               onClick={() => {
                 dialogRef.current?.close()
                 setIsModalOpen(false)
