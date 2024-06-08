@@ -3,8 +3,10 @@ import '../styles/global.css'
 import Layout from '../layouts/Layout.astro'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
-import { DreamyGradient } from '@muridot0/dreamy-gradients'
+
 import Card from '../components/Card.astro'
+import {data} from '../data/card-data'
+import {DreamyGradient} from '@muridot0/dreamy-gradients'
 ---
 
 <Layout title='stylEase'>
@@ -156,30 +158,47 @@ import Card from '../components/Card.astro'
       <div class='flex flex-col items-center'>
         <h2 class='pb-2 text-lg text-left font-bold'>Welcome to the home of stylEase - let’s create something beautiful together!</h2>
         <p class='max-w-[38rem] text-left text-[--text-muted]'>
-          Where anyone can achieve artistry <i><u>easily</u></i>. Try countless
+          Come and achieve artistry <i><u>easily</u></i>. Try countless
           image combinations and watch as your photos come to life with vibrant
           colors and unique textures while exploring your creativity.
         </p>
-        <h3 class="pt-10 underline">Tips</h3>
+        <h3 class="pt-6 underline">Tips</h3>
       </div>
 
       <div
-        class='md:(flex bg-[--home-bg-color]) relative block w-full justify-center gap-4 pt-4'>
-        <Card
-          class='relative w-full max-w-[400px]'
-          src='node-drawer-light.jpeg'
-          darkSrc='node-drawer-dark.jpeg'
+        class='flex bg-[--home-bg-color] max-md:(flex-col items-center) relative w-full justify-center gap-8 pt-4'>
+        <DreamyGradient
+          size={{ height: '15rem', width: '15rem' }}
+          color='linear-gradient(-225deg, #231557 0%, #44107A 29%, #FF1361 67%, #FFF800 100%)'
+          animate='true'
+          position={{ top: "8rem", left: "0rem"}}
+          blur={5}
+          borderRadius='50%'
+          zIndex={0}
+          client:only='react'
         />
-        <Card
-          class='relative w-full max-w-[400px]'
-          src='/preview-light.jpeg'
-          darkSrc='/preview-dark.jpeg'
+        <DreamyGradient
+          size={{ height: '10rem', width: '10rem' }}
+          color='linear-gradient(-225deg, #AC32E4 0%, #7918F2 48%, #4801FF 100%)'
+          animate={{
+            "0%,100%": { opacity: 1 },
+            "50%": { opacity: 0.5 }
+          }}
+          position={{ top: "3rem", right: "0rem"}}
+          blur={3}
+          borderRadius='50%'
+          zIndex={0}
+          client:only='react'
         />
-        <Card
-          class='relative w-full max-w-[400px]'
-          src='model-node-light.jpeg'
-          darkSrc='model-node-dark.jpeg'
-        />
+        {data.map((data) => (
+          <Card class="relative w-full max-w-[400px]"
+            src={data.src}
+            darkSrc={data.darkSrc}
+            content={data.content}
+            title={data.title}
+            icon={data.icon}
+          />
+        ))}
       </div>
     </div>
   </main>

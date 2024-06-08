@@ -1540,10 +1540,10 @@
     unist-util-visit "^4.0.0"
     vfile "^5.0.0"
 
-"@muridot0/dreamy-gradients@^0.1.35":
-  version "0.1.35"
-  resolved "https://registry.yarnpkg.com/@muridot0/dreamy-gradients/-/dreamy-gradients-0.1.35.tgz#2f8beeb74648fcf7556a8f16c713b907740cf50f"
-  integrity sha512-+UMIXhbwJJjTVAJNZyYmXJiH1ovAShMAwc7x2a60rLYrvJQe+CiYpOdBojMXk8H7lxvKn/2XgYBi8wvVaZBKJQ==
+"@muridot0/dreamy-gradients@^0.1.38":
+  version "0.1.38"
+  resolved "https://registry.yarnpkg.com/@muridot0/dreamy-gradients/-/dreamy-gradients-0.1.38.tgz#1494940616815f2908f27da2b07a83580f884238"
+  integrity sha512-Cb7mXVCrV8/U1QxwDodxmeXjOi6oLWOZUmbA1yTT2De8lheyXNopOuD58Bni/UivBuKOVIJfCY2YaIFnigkPKg==
   dependencies:
     styled-components "^6.1.1"
 

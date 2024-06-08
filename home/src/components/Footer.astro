@@ -12,13 +12,27 @@ let year = date.getFullYear()
         <path d="M0 119C195.097 45.9997 462.134 1 756.657 1C1050.52 1 1317.02 45.798 1512 118.509" stroke="#6B7077"/>
       </svg>
     <div />
+    <DreamyGradient
+          size={{ height: '3rem', width: '3rem' }}
+          color='linear-gradient(to top, #30cfd0 0%, #330867 100%)'
+          position={{ bottom: '0rem', left:"-2rem"  }}
+          blur={2}
+          client:only='react'
+        />
+      <DreamyGradient
+          size={{ height: '5rem', width: '5rem' }}
+          color='linear-gradient(to top, #fcc5e4 0%, #fda34b 15%, #ff7882 35%, #c8699e 52%, #7046aa 71%, #0c1db8 87%, #020f75 100%)'
+          position={{ bottom: '0rem', right:"0rem" }}
+          blur={3}
+          client:only='react'
+        />
 
     <div class="sm:absolute sm:(flex items-center flex-col mt-8) max-sm:m-4">
       <DreamyGradient
-          size={{ height: '15rem', width: '15rem' }}
+          size={{ height: '5rem', width: '5rem' }}
           color='linear-gradient(to top, #D4145A, #FBB03B)'
           position={{ bottom: '0rem'  }}
-          blur={8}
+          blur={3}
           client:only='react'
         />
       <p>Copyright © {year} stylEase.</p>
