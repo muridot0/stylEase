@@ -36,15 +36,18 @@ const uploadFileHandler = unstable_composeUploadHandlers(
   }
 )
 
-const styleNet = await tf.loadGraphModel(
+const styleNetPromise = tf.loadGraphModel(
   'file://app/data/transfer-model-data/saved_model_style_js/model.json'
 )
-
-const transformNet = await tf.loadGraphModel(
+const transformNetPromise = tf.loadGraphModel(
   'file://app/data/transfer-model-data/saved_model_transformer_js/model.json'
 )
 
 export const action: ActionFunction = async ({ request }) => {
+  const styleNet = await styleNetPromise
+
+  const transformNet = await transformNetPromise
+
   const formData = await unstable_parseMultipartFormData(
     request,
     uploadFileHandler
