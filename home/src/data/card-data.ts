@@ -9,15 +9,15 @@ export const data = [
   {
     "title": "Preview Image",
     "content": "Inspect your images to assess their quality before downloading by using the preview feature.",
-    "src": "/preview-light.jpeg",
-    "darkSrc": "/preview-dark.jpeg",
+    "src": "/preview-light.png",
+    "darkSrc": "/preview-dark.png",
     "icon": "i-lucide-fullscreen"
   },
   {
     "title": "Stylization strength",
     "content": "Use the slider to adjust the strength of stylization to control how strong the generated image should be influenced by the reference image.",
-    "src": "/model-node-light.jpeg",
-    "darkSrc": "/model-node-dark.jpeg",
+    "src": "/model-node-light.png",
+    "darkSrc": "/model-node-dark.png",
     "icon": "i-lucide-brain-cog"
   }
 ]

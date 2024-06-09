@@ -40,10 +40,11 @@ import {DreamyGradient} from '@muridot0/dreamy-gradients'
           Achieve easy artistry for everyday photos using styleEase!
         </h2>
 
-        <button
+        <a
+          href="http://localhost:5173/playground"
           class='get-started relative mt-20 inline-flex items-center gap-2 rounded-lg px-2 py-1 pt-2 font-medium text-[#eeefef] hover:brightness-[110%] active:brightness-100'>
           Get started
-        </button>
+        </a>
       </div>
     </div>
 
@@ -141,11 +142,11 @@ import {DreamyGradient} from '@muridot0/dreamy-gradients'
 
       <picture class='mr-4'>
         <source
-          srcset='/app-image-dark.png'
+          srcset='/app-image-dark.jpeg'
           media='(prefers-color-scheme: dark)'
         />
         <img
-          src='/app-image.png'
+          src='/app-image-light.jpeg'
           class='relative w-full max-w-[992px] rounded-t-[12px] border-l border-r border-t border-[--border] shadow-xl'
           alt=''
         />
@@ -154,7 +155,7 @@ import {DreamyGradient} from '@muridot0/dreamy-gradients'
 
     <hr class='w-full border-t-[--border]' />
 
-    <div class='bg-[--home-bg-color] px-10 py-8'>
+    <div class='bg-[--home-bg-color] px-10 py-8 relative z-1'>
       <div class='flex flex-col items-center'>
         <h2 class='pb-2 text-lg text-left font-bold'>Welcome to the home of stylEase - let’s create something beautiful together!</h2>
         <p class='max-w-[38rem] text-left text-[--text-muted]'>
