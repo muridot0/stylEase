@@ -14,14 +14,23 @@ const description = "StylEase: Spice up your everyday photos with stylEase."
 		<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)}>
 
 
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content={Astro.url} />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:image" content={new URL('/app-image-dark.jpeg', Astro.url)} />
+		<!-- Facebook Meta Tags -->
+		<meta property="og:url" content="https://muri-o.com/stylease">
+		<meta property="og:type" content="website">
+		<meta property="og:title" content="stylEase">
+		<meta property="og:description" content={description}>
+		<meta property="og:image" content="https://muri-o.com/app-image-dark.jpeg">
+
+		<!-- Twitter Meta Tags -->
+		<meta name="twitter:card" content="summary_large_image">
+		<meta property="twitter:domain" content="muri-o.com">
+		<meta property="twitter:url" content="https://muri-o.com/stylease">
+		<meta name="twitter:title" content="stylEase">
+		<meta name="twitter:description" content={description}>
+		<meta name="twitter:image" content="https://muri-o.com/app-image-dark.jpeg">
 
 		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
+		<meta name="description" content={description}>
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/stylEase-dark.svg" />
 		<script src="../lib/faviswitch.js"></script>
