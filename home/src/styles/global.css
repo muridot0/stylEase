@@ -1,10 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Chilanka&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0');
-@import url('https://fonts.cdnfonts.com/css/mena-grotesk');
 
 @font-face {
   font-family: 'hyperwave';
-  src: url(/Hyperwave.otf);
+  src: url(/Hyperwave.woff) format('woff');
 }
 
 ::view-transition-old(root) {

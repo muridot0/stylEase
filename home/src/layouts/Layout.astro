@@ -4,11 +4,22 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const description = "StylEase: Spice up your everyday photos with stylEase."
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
+		<!-- Canonical URL -->
+		<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)}>
+
+
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL('/app-image-dark.jpeg', Astro.url)} />
+
 		<meta charset="UTF-8" />
 		<meta name="description" content="Astro description" />
 		<meta name="viewport" content="width=device-width" />
