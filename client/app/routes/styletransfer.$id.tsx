@@ -30,8 +30,6 @@ const uploadFileHandler = unstable_composeUploadHandlers(
     const tensor = tf.node.decodeImage(uint8Array, 3)
     tf.cast(tensor, 'int32').arraySync()
 
-    console.log(tensor)
-
     return JSON.stringify({ data: tensor.arraySync(), shape: tensor.shape })
   }
 )
